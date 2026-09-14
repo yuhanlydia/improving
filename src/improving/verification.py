@@ -88,6 +88,15 @@ def _test_code(task: Mapping[str, Any]) -> str:
     return tests
 
 
+def _task_harness(task: Mapping[str, Any], tests: str | None = None) -> dict[str, Any]:
+    """Task-local identity; independent of verifier call grouping/order."""
+    return {"task_id": task["task_id"], "tests": task.get("tests") if tests is None else tests,
+            "test_mode": task.get("test_mode"), "entry_point": task.get("entry_point"),
+            "completion_mode": task.get("completion_mode"),
+            "continuation_prefix": (task.get("code_prefix", task["prompt"])
+                                    if task.get("completion_mode") == "continuation" else None)}
+
+
 def _validate_groups(tasks: list[dict[str, Any]], records: Iterable[Mapping[str, Any]], expected_samples: int | None = None) -> list[dict[str, Any]]:
     rows = validate_completions(records, tasks)
     counts = Counter(row["task_id"] for row in rows)
@@ -230,18 +239,15 @@ def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Map
     if code_extraction not in {"strict", "first_fence"}:
         raise ValueError("code_extraction must be strict or first_fence")
     evaluation_provenance = {
+        "provenance_version": 2,
         "backend": backend,
         "code_extraction": code_extraction,
         "docker_image": docker_image,
         "memory_mb": memory_mb,
         "pids_limit": pids_limit,
-        "protocol_version": "task-tests-v1",
-        "task_harness_sha256": stable_hash({task["task_id"]: {
-            "tests": tests[task["task_id"]], "entry_point": task.get("entry_point"),
-            "completion_mode": task.get("completion_mode"),
-            "continuation_prefix": (task.get("code_prefix", task["prompt"])
-                                    if task.get("completion_mode") == "continuation" else None),
-        } for task in task_rows}),
+        "protocol_version": "task-tests-v2",
+        "runner_sha256": hashlib.sha256(_RUNNER.encode("utf-8")).hexdigest(),
+        "local_python_version": sys.version if backend == "local" else None,
         "timeout": float(timeout),
     }
     docker = shutil.which("docker") if backend == "docker" else None
@@ -253,24 +259,30 @@ def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Map
             timeout=timeout, memory_mb=memory_mb, pids_limit=pids_limit, docker_image=docker_image, docker=docker)
         return {**row, "code": code, "correct": status == "passed", "status": status,
                 "code_extraction": code_extraction,
-                "evaluation_provenance": evaluation_provenance,
-                "evaluation_backend": backend, "evaluation_protocol": "task-tests-v1"}
+                "evaluation_provenance": {**evaluation_provenance,
+                    "task_harness_sha256": stable_hash(_task_harness(task_map[row["task_id"]], tests[row["task_id"]]))},
+                "evaluation_backend": backend, "evaluation_protocol": "task-tests-v2"}
     with ThreadPoolExecutor(max_workers=workers) as executor:
         return list(executor.map(verify_one, rows))
 
 
-def export_evalplus(tasks: Iterable[Mapping[str, Any]], records: Iterable[Mapping[str, Any]], path: str | Path) -> Path:
+def export_evalplus(tasks: Iterable[Mapping[str, Any]], records: Iterable[Mapping[str, Any]], path: str | Path, *, code_extraction: str = "strict") -> Path:
     """Export every full solution plus a sample-ID manifest; return its path."""
     task_rows = validate_tasks(tasks)
     rows = _validate_groups(task_rows, records)
     task_map = {task["task_id"]: task for task in task_rows}
+    if code_extraction not in {"strict", "first_fence"}:
+        raise ValueError("code_extraction must be strict or first_fence")
     exported, manifest, counters = [], [], Counter()
     for row in rows:
-        code = _solution_code(task_map[row["task_id"]], row["completion"])
+        code = _solution_code(task_map[row["task_id"]], row["completion"], code_extraction)
         exported.append({"task_id": row["task_id"], "solution": code})
         manifest.append({"task_id": row["task_id"], "sample_id": row["sample_id"], "completion_index": counters[row["task_id"]],
             "solution": code, "completion_sha256": hashlib.sha256(row["completion"].encode("utf-8")).hexdigest(),
-            "format": "evalplus-0.3.1"})
+            "format": "evalplus-0.3.1", "manifest_version": 2,
+            "code_extraction": code_extraction,
+            "task_harness_sha256": stable_hash(_task_harness(task_map[row["task_id"]])),
+            "task_context": _task_harness(task_map[row["task_id"]])})
         counters[row["task_id"]] += 1
     manifest_path = Path(str(path) + ".manifest.jsonl")
     write_jsonl(manifest_path, manifest)
@@ -311,7 +323,16 @@ def import_evalplus_results(records: Iterable[Mapping[str, Any]], results_path: 
     for row in rows:
         task_id, sample_id = row["task_id"], row["sample_id"]
         entry = manifest.get((task_id, sample_id))
+        extraction = "strict"
+        harness_hash = None
+        export_identity = "legacy_without_manifest"
         if entry is not None:
+            manifest_version = entry.get("manifest_version", 1)
+            if manifest_version not in {1, 2} or entry.get("format") != "evalplus-0.3.1":
+                raise ValueError("Unsupported EvalPlus export manifest format/version")
+            extraction = entry.get("code_extraction", "strict")
+            if extraction not in {"strict", "first_fence"}:
+                raise ValueError("Invalid manifest code_extraction")
             index = entry.get("completion_index")
             if type(index) is not int or not 0 <= index < counts[task_id]:
                 raise ValueError("Manifest completion_index is invalid")
@@ -320,10 +341,32 @@ def import_evalplus_results(records: Iterable[Mapping[str, Any]], results_path: 
             code = entry.get("solution")
             if not isinstance(code, str):
                 raise ValueError("Manifest solution must be a string")
+            if manifest_version == 2:
+                context = entry.get("task_context")
+                harness_hash = entry.get("task_harness_sha256")
+                if not isinstance(context, dict) or context.get("task_id") != task_id or stable_hash(context) != harness_hash:
+                    raise ValueError("Manifest task harness identity is missing or changed")
+                if task_id in task_map and stable_hash(_task_harness(task_map[task_id])) != harness_hash:
+                    raise ValueError("Task harness differs from its export manifest")
+                reconstruct = {**context, "prompt": context.get("continuation_prefix") or "",
+                               "code_prefix": context.get("continuation_prefix") or ""}
+                if _solution_code(reconstruct, row["completion"], extraction) != code:
+                    raise ValueError("Manifest solution differs from its declared code_extraction")
+                export_identity = "manifest_v2_reproduced"
+            else:
+                # Old exports used strict extraction, but did not retain the
+                # task-local continuation context. Never infer v2 assurance.
+                if task_id in task_map and _solution_code(task_map[task_id], row["completion"], extraction) != code:
+                    raise ValueError("Legacy manifest solution differs from provided task/extraction")
+                export_identity = "legacy_manifest_v1"
         else:
             index = counters[task_id]
+            extraction = row.get("code_extraction", "strict")
+            if extraction not in {"strict", "first_fence"}:
+                raise ValueError("Invalid record code_extraction")
             if task_id in task_map:
-                code = _solution_code(task_map[task_id], row["completion"])
+                code = _solution_code(task_map[task_id], row["completion"], extraction)
+                harness_hash = stable_hash(_task_harness(task_map[task_id]))
             elif isinstance(row.get("code"), str):
                 code = row["code"]
             else:
@@ -343,10 +386,20 @@ def import_evalplus_results(records: Iterable[Mapping[str, Any]], results_path: 
         for field, status in zip(("base_status", "plus_status"), statuses):
             if status not in {"pass", "fail", "timeout"}:
                 raise ValueError(f"Unsupported or missing EvalPlus {field}: {status!r}")
+        plus_status = result.get("plus_status")
+        if plus_status is not None and plus_status not in {"pass", "fail", "timeout"}:
+            raise ValueError(f"Unsupported EvalPlus plus_status: {plus_status!r}")
         correct = all(status == "pass" for status in statuses)
         status = "passed" if correct else "timeout" if "timeout" in statuses else "failed"
         output.append({**row, "code": code, "correct": correct, "status": status,
+            "code_extraction": extraction,
+            "base_correct": result.get("base_status") == "pass",
+            "plus_correct": (result.get("base_status") == "pass" and plus_status == "pass") if plus_status is not None else None,
             "evaluation_backend": "evalplus", "evaluation_protocol": "evalplus-0.3.1-plus" if require_plus else "evalplus-0.3.1-base",
+            "evaluation_provenance": {"provenance_version": 2, "backend": "evalplus",
+                "protocol_version": "evalplus-0.3.1-plus" if require_plus else "evalplus-0.3.1-base",
+                "code_extraction": extraction, "dataset_hash": payload.get("hash"),
+                "export_identity": export_identity, "task_harness_sha256": harness_hash},
             "evalplus_base_status": result.get("base_status"), "evalplus_plus_status": result.get("plus_status"),
             "evalplus_dataset_hash": payload.get("hash")})
     return output

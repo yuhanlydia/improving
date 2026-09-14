@@ -12,6 +12,13 @@ def _parser():
     parser = argparse.ArgumentParser(prog='improving', description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     commands.add_parser('doctor', help='Inspect local dependencies and GPU; no downloads')
+    formal = commands.add_parser('formal', help='Formal Spectral-soft diversity experiments')
+    formal.add_argument('--config', required=True)
+    formal.add_argument('--stage', default='confirm', choices=['validate', 'confirm', 'mechanism',
+        'retention', 'transfer', 'report', 'export', 'all'])
+    formal.add_argument('--resume', action='store_true')
+    formal.add_argument('--include-programs', action='store_true', help='Include programs in the evidence archive')
+    formal.add_argument('--job-id', help='Run one compiled job in the selected training phase')
     geometry = commands.add_parser('geometry', help='Frozen-model correct-solution subspace study')
     geometry.add_argument('--config', required=True)
     geometry.add_argument('--stage', default='all', choices=['validate', 'discover', 'extract', 'analyze',
@@ -78,6 +85,8 @@ def _parser():
             sub.add_argument('--results', required=True)
             sub.add_argument('--manifest')
             sub.add_argument('--base-only', action='store_true')
+        else:
+            sub.add_argument('--code-extraction', choices=['strict', 'first_fence'], default='strict')
     return parser
 
 
@@ -96,6 +105,10 @@ def main(argv=None):
 def _dispatch(args):
     from .data import read_jsonl, write_jsonl
     command = args.command
+    if command == 'formal':
+        from .formal_study import load_formal_config, run_formal
+        return run_formal(load_formal_config(args.config), stage=args.stage, resume=args.resume,
+                          include_programs=args.include_programs, job_id=args.job_id)
     if command == 'geometry':
         from .geometry_study import load_geometry_config, run_geometry
         return run_geometry(load_geometry_config(args.config), stage=args.stage, resume=args.resume)
@@ -196,7 +209,8 @@ def _dispatch(args):
         return build_report(args.run_dir, args.output)
     if command == 'evalplus-export':
         from .verification import export_evalplus
-        manifest = export_evalplus(read_jsonl(args.tasks), read_jsonl(args.samples), args.output)
+        manifest = export_evalplus(read_jsonl(args.tasks), read_jsonl(args.samples), args.output,
+                                   code_extraction=args.code_extraction)
         return {'output': args.output, 'manifest': str(manifest)}
     if command == 'evalplus-import':
         from .verification import import_evalplus_results

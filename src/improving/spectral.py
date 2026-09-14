@@ -52,9 +52,14 @@ def make_operator(
     ``spectral_soft`` is ``(I + tau*(I-C/lambda_max(C)))^-1``.
     ``hard`` uses the top ``rank`` eigenvectors, defaulting to ``d//2``.
     ``blend`` is ``P + rho*(I-P)``; ``random`` uses a seeded random subspace
-    of the same rank. Eigenvectors for repeated eigenvalues are not unique.
+    of the same rank. ``random_soft`` preserves every soft gain with an
+    independent Haar eigenbasis. ``isotropic_soft`` and ``matched_blend``
+    match the soft operator's Frobenius distance from identity, not its
+    activation perturbation or output KL. Eigenvectors for repeated
+    eigenvalues are not unique.
     """
-    allowed = {"spectral_soft", "hard", "identity", "blend", "random"}
+    allowed = {"spectral_soft", "hard", "identity", "blend", "random",
+               "random_soft", "isotropic_soft", "matched_blend"}
     if kind not in allowed:
         raise ValueError(f"unknown operator kind {kind!r}; expected {sorted(allowed)}")
     if not math.isfinite(tau) or tau < 0:
@@ -68,11 +73,31 @@ def make_operator(
     if isinstance(rank, bool) or not isinstance(rank, Integral) or not 0 <= rank <= dimension:
         raise ValueError(f"rank must be an integer between 0 and {dimension}")
     identity = torch.eye(dimension, dtype=torch.float64)
-    if kind == "identity" or (kind == "spectral_soft" and tau == 0):
+    if kind == "identity" or (kind in {"spectral_soft", "random_soft", "isotropic_soft",
+                                        "matched_blend"} and tau == 0):
         return identity
-    if kind == "spectral_soft":
+    if kind in {"spectral_soft", "random_soft", "isotropic_soft", "matched_blend"}:
         gains = 1 / (1 + tau * (1 - eigenvalues / eigenvalues[-1]))
-        return (eigenvectors * gains.unsqueeze(0)) @ eigenvectors.T
+        target_distance = float(torch.linalg.vector_norm(1 - gains))
+        if kind == "isotropic_soft":
+            return (1 - target_distance / math.sqrt(dimension)) * identity
+        if kind == "random_soft":
+            generator = torch.Generator(device="cpu").manual_seed(seed)
+            basis, triangular = torch.linalg.qr(torch.randn(
+                dimension, dimension, generator=generator, dtype=torch.float64))
+            # Correct QR signs to sample Haar O(d), without changing global RNG.
+            signs = torch.where(triangular.diagonal() < 0, -1.0, 1.0)
+            eigenvectors = basis * signs.unsqueeze(0)
+        if kind != "matched_blend":
+            return (eigenvectors * gains.unsqueeze(0)) @ eigenvectors.T
+        capacity = math.sqrt(dimension - rank)
+        if target_distance > capacity + 1e-12:
+            raise ValueError("matched_blend cannot match the spectral_soft Frobenius "
+                             f"distance {target_distance:.8g} with rank {rank} in "
+                             f"dimension {dimension}; maximum is {capacity:.8g}")
+        if capacity == 0:
+            return identity
+        rho = max(0.0, 1 - target_distance / capacity)
     if rank == 0:
         projector = torch.zeros_like(identity)
     elif rank == dimension:
@@ -85,7 +110,7 @@ def make_operator(
         else:
             basis = eigenvectors[:, -rank:]
         projector = basis @ basis.T
-    return projector + rho * (identity - projector) if kind == "blend" else projector
+    return projector + rho * (identity - projector) if kind in {"blend", "matched_blend"} else projector
 
 
 def _native_linear(model: nn.Module, name: str) -> nn.Linear:

@@ -307,6 +307,8 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
     groups: dict[str, list[Mapping[str, Any]]] = {}
     seen = set()
     evaluation_protocols: list[str | None] = []
+    task_harnesses: dict[str, str | None] = {}
+    provenance_versions: set[int] = set()
     for record in records:
         task = record.get("task_id")
         if not isinstance(task, str) or not task.strip():
@@ -323,6 +325,31 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
         provenance = record.get("evaluation_provenance")
         if provenance is not None and not isinstance(provenance, Mapping):
             raise ValueError("evaluation provenance must be a mapping")
+        if provenance is not None:
+            provenance = dict(provenance)
+            version = provenance.get("provenance_version", 1)
+            if version not in {1, 2}:
+                raise ValueError("unsupported evaluation provenance version")
+            provenance_versions.add(version)
+            if version == 2:
+                if "task_harness_sha256" not in provenance:
+                    raise ValueError("task-local evaluation provenance requires task_harness_sha256")
+                harness = provenance.pop("task_harness_sha256")
+                if harness is not None and (not isinstance(harness, str) or len(harness) != 64):
+                    raise ValueError("invalid evaluation task harness hash")
+                if harness is None and provenance.get("backend") != "evalplus":
+                    raise ValueError("task-tests evaluation provenance requires a task harness hash")
+                if task in task_harnesses and task_harnesses[task] != harness:
+                    raise ValueError(f"mixed evaluation provenance: changed task harness for {task}")
+                task_harnesses[task] = harness
+            if (record.get("code_extraction") is not None and provenance.get("code_extraction") is not None
+                    and record["code_extraction"] != provenance["code_extraction"]):
+                raise ValueError("record code_extraction differs from evaluation provenance")
+        elif any(record.get(field) is not None for field in ("code_extraction", "evaluation_backend", "evaluation_protocol", "evalplus_dataset_hash")):
+            # Old records can be analyzed, but their partial identity remains
+            # explicit and is never equated with a fully recorded verifier.
+            provenance = {"legacy_unverified": True, **{field: record.get(field)
+                for field in ("code_extraction", "evaluation_backend", "evaluation_protocol", "evalplus_dataset_hash")}}
         evaluation_protocols.append(None if provenance is None else json.dumps(
             provenance, sort_keys=True, ensure_ascii=False, allow_nan=False))
         groups.setdefault(task, []).append(record)
@@ -422,6 +449,10 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
                 "bootstrap_samples": int(bootstrap_samples), "seed": int(seed)}
     if explicit_protocols:
         protocol["evaluation"] = json.loads(next(iter(explicit_protocols)))
+    if task_harnesses:
+        protocol["evaluation_task_harnesses"] = dict(sorted(task_harnesses.items()))
+    protocol["evaluation_provenance_status"] = ("task_local_v2" if provenance_versions == {2}
+        else "legacy_flat" if explicit_protocols else "unavailable")
     return {
         "schema_version": 1,
         "protocol": protocol,
@@ -465,7 +496,9 @@ def compare_summaries(previous: Mapping[str, Any], current: Mapping[str, Any],
     for the task-macro correct fraction and the supplied absolute margin. Null
     means unavailable, including disabled bootstrap or any empty task. Shared
     seeds/completion pairing are not required; the resampling unit is the task.
-    This cannot verify that generation or evaluation protocols were identical.
+    Declared evaluator identities and per-task harness hashes must match.
+    Provenance-free legacy summaries can only be compared with each other and
+    are explicitly marked unverified; no evaluator identity is inferred.
     """
     if (isinstance(correctness_margin, bool) or not isinstance(correctness_margin, Real)
             or not math.isfinite(correctness_margin) or not 0 <= correctness_margin <= 1):
@@ -475,6 +508,9 @@ def compare_summaries(previous: Mapping[str, Any], current: Mapping[str, Any],
                   "metric_versions", "sampling"):
         if previous["protocol"].get(field) != current["protocol"].get(field):
             raise ValueError(f"summaries have different metric protocol: {field}")
+    for field in ("evaluation", "evaluation_task_harnesses"):
+        if previous["protocol"].get(field) != current["protocol"].get(field):
+            raise ValueError(f"summaries have different evaluation provenance: {field}")
     for task in tasks:
         if previous["per_task"][task]["sample_count"] != current["per_task"][task]["sample_count"]:
             raise ValueError(f"task {task!r} has different sampling budgets")
@@ -498,7 +534,9 @@ def compare_summaries(previous: Mapping[str, Any], current: Mapping[str, Any],
                         "delta": correctness, "noninferior": noninferior},
         "pass_at_k": {str(k): delta(lambda data, k=k: data["pass_at_k"][str(k)]) for k in ks},
         "bootstrap": {"samples": int(bootstrap_samples), "seed": int(seed), "unit": "paired_tasks"},
-        "caveat": "Metric and sampling budgets were checked. Identical prompts, verifier, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain.",
+        "evaluation_identity_check": ("declared_provenance_equal" if previous["protocol"].get("evaluation")
+                                      else "legacy_unverified_no_provenance"),
+        "caveat": "Metric, sampling budgets and available declared evaluator/task harness identities were checked. Missing legacy provenance is explicitly unverified. Identical prompts, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain.",
     }
     for label in ("implementation_proxy", "exact_program", "control_flow_proxy", "strategy"):
         result[label] = {

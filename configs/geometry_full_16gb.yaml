@@ -52,6 +52,7 @@ selection:
 final:
   samples: 32
 evaluation:
+  code_extraction: first_fence
   backend: docker
   docker_image: python:3.11-slim
   workers: 4

@@ -34,6 +34,50 @@ def test_projector_blend_and_seeded_random_controls():
     torch.testing.assert_close(random, make_operator(covariance, kind="random", rank=2, seed=19))
 
 
+def test_soft_controls_match_known_frobenius_distance_and_spectrum():
+    covariance = torch.diag(torch.tensor([4., 1., 0., 0.], dtype=torch.float64))
+    identity = torch.eye(4, dtype=torch.float64)
+    soft = make_operator(covariance, tau=1)
+    expected_gains = torch.tensor([1., 4 / 7, .5, .5], dtype=torch.float64)
+    torch.testing.assert_close(soft.diagonal(), expected_gains)
+    distance = torch.linalg.vector_norm(1 - expected_gains)
+    for kind in ('random_soft', 'isotropic_soft', 'matched_blend'):
+        op = make_operator(covariance, kind=kind, tau=1, rank=2)
+        torch.testing.assert_close(torch.linalg.vector_norm(op - identity), distance)
+        torch.testing.assert_close(op, op.T)
+        assert float(torch.linalg.eigvalsh(op).min()) >= 0
+    random_soft = make_operator(covariance, kind='random_soft', tau=1, seed=31)
+    torch.testing.assert_close(torch.linalg.eigvalsh(random_soft), expected_gains.sort().values)
+    assert not torch.allclose(random_soft, soft)
+    isotropic = make_operator(covariance, kind='isotropic_soft', tau=1)
+    torch.testing.assert_close(isotropic, identity * (1 - distance / 2))
+    matched = make_operator(covariance, kind='matched_blend', rank=2, tau=1)
+    rho = 1 - distance / (2 ** .5)
+    torch.testing.assert_close(matched.diagonal(), torch.tensor([1., 1., rho, rho], dtype=torch.float64))
+
+
+def test_random_soft_is_seeded_covariance_basis_independent_and_preserves_rng():
+    covariance = torch.diag(torch.tensor([4., 2., 1., 0.], dtype=torch.float64))
+    permuted = covariance.roll(1, 0).roll(1, 1)
+    before = torch.random.get_rng_state().clone()
+    first = make_operator(covariance, kind='random_soft', tau=2, seed=8)
+    torch.testing.assert_close(first, make_operator(covariance, kind='random_soft', tau=2, seed=8))
+    torch.testing.assert_close(first, make_operator(permuted, kind='random_soft', tau=2, seed=8))
+    assert not torch.allclose(first, make_operator(covariance, kind='random_soft', tau=2, seed=9))
+    assert torch.equal(before, torch.random.get_rng_state())
+
+
+def test_matching_feasibility_and_identity_endpoints():
+    covariance = torch.diag(torch.tensor([4., 1., 0., 0.], dtype=torch.float64))
+    with pytest.raises(ValueError, match='cannot match'):
+        make_operator(covariance, kind='matched_blend', rank=4, tau=1)
+    with pytest.raises(ValueError, match='cannot match'):
+        make_operator(covariance, kind='matched_blend', rank=3, tau=100)
+    for kind in ('random_soft', 'isotropic_soft', 'matched_blend'):
+        torch.testing.assert_close(make_operator(covariance, kind=kind, tau=0, rank=4), torch.eye(4, dtype=torch.float64))
+        torch.testing.assert_close(make_operator(torch.eye(4), kind=kind, tau=3, rank=4), torch.eye(4, dtype=torch.float64))
+
+
 @pytest.mark.parametrize("covariance,kwargs", [
     (torch.ones(2, 3), {}),
     (torch.zeros(2, 2), {}),

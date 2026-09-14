@@ -224,6 +224,23 @@ def test_summary_preserves_one_explicit_evaluation_protocol_and_rejects_mixed_pr
         summary(rows)
 
 
+def test_comparison_rejects_evaluator_changes_and_marks_legacy_missing_identity():
+    protocol = {"backend": "docker", "code_extraction": "first_fence", "protocol_version": "fixture"}
+    rows = [dict(record("a", 0, True), evaluation_provenance=protocol)]
+    baseline = summary(rows)
+    changed = summary([dict(rows[0], evaluation_provenance={**protocol, "code_extraction": "strict"})])
+    with pytest.raises(ValueError, match="evaluation provenance"):
+        compare_summaries(baseline, changed)
+    legacy = summary([record("a", 0, True)])
+    assert legacy['protocol']['evaluation_provenance_status'] == 'unavailable'
+    assert compare_summaries(legacy, legacy)['evaluation_identity_check'] == 'legacy_unverified_no_provenance'
+    with pytest.raises(ValueError, match="evaluation provenance"):
+        compare_summaries(baseline, legacy)
+    with pytest.raises(ValueError, match="evaluation provenance"):
+        summary([dict(record("a", 0, True), code_extraction="strict"),
+                 dict(record("a", 1, True), code_extraction="first_fence")])
+
+
 def test_comparison_checks_noninferiority_with_paired_task_deltas():
     previous = summary([record("a", 0, False), record("a", 1, False),
                         record("b", 0, True, "a"), record("b", 1, False)])

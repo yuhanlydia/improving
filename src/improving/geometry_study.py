@@ -27,7 +27,7 @@ from .modeling import load_model
 from .pipeline import file_sha, checkpoint_fingerprint, record_stage, _preflight_verification
 from .spectral import folded_operators
 from .utils import atomic_json, stable_hash
-from .verification import verify_completions, extract_python_code
+from .verification import verify_completions
 
 STAGES = ('discover', 'extract', 'analyze', 'relations', 'select', 'evaluate', 'report')
 
@@ -92,6 +92,8 @@ def validate_geometry_config(config):
         raise ValueError('Geometry requires verification; backend must be docker or explicitly trusted local')
     if ev.get('backend') == 'local' and not ev.get('allow_unsafe_local', False):
         raise ValueError('Local execution requires evaluation.allow_unsafe_local')
+    if ev.get('code_extraction', 'strict') not in {'strict', 'first_fence'}:
+        raise ValueError('evaluation.code_extraction must be strict or first_fence')
     return config
 
 
@@ -236,6 +238,8 @@ class GeometryStudy:
                 verified = verify_completions([task], rows, backend=ev.get('backend', 'docker'),
                     docker_image=ev.get('docker_image', 'python:3.11-slim'),
                     timeout=ev.get('timeout', 5), workers=ev.get('workers', 4),
+                    memory_mb=ev.get('memory_mb', 512), pids_limit=ev.get('pids_limit', 64),
+                    code_extraction=ev.get('code_extraction', 'strict'),
                     allow_unsafe_local=ev.get('allow_unsafe_local', False), expected_samples=len(rows))
                 write_jsonl(path, verified)
                 _seal(path, identity)
@@ -283,7 +287,9 @@ class GeometryStudy:
             elif selected and format_controls:
                 base = selected[0]
                 try:
-                    formatted = ast.unparse(ast.parse(extract_python_code(base['completion']))) + '\n'
+                    # Use exactly the executable program verified above. In
+                    # first_fence mode the completion may also contain prose.
+                    formatted = ast.unparse(ast.parse(base['code'])) + '\n'
                 except (SyntaxError, ValueError):
                     formatted = None
                 if formatted and formatted != base['completion']:

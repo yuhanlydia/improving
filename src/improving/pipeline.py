@@ -6,6 +6,7 @@ import gc
 import hashlib
 import importlib.metadata
 import json
+import math
 from pathlib import Path
 import platform
 import random
@@ -21,7 +22,8 @@ from .generation import atomic_json, generate_to_file, stable_hash
 from .modeling import collate_examples, encode_example, load_model, render_prompt
 from .training import train_on_records
 
-METHODS = {'plain', 'ssd', 'spd_hard', 'spectral_soft', 'residual_blend', 'random_hard'}
+METHODS = {'plain', 'ssd', 'spd_hard', 'spectral_soft', 'residual_blend', 'random_hard',
+           'random_soft', 'isotropic_soft', 'matched_blend'}
 
 
 def file_sha(path):
@@ -90,8 +92,29 @@ def validate_config(config):
         raise ValueError('rounds must be a positive integer')
     gen = config.get('generation', {})
     n = gen.get('eval_samples', 64)
-    if type(n) is not int or n < 1 or gen.get('train_samples', 1) < 1:
+    if (type(n) is not int or n < 1 or type(gen.get('train_samples', 1)) is not int
+            or gen.get('train_samples', 1) < 1):
         raise ValueError('Generation sample counts must be positive integers')
+    diagnostics = config.get('diagnostics', {})
+    if not isinstance(diagnostics, dict):
+        raise ValueError('diagnostics must be a mapping')
+    if type(diagnostics.get('evaluate_generation_policy', True)) is not bool:
+        raise ValueError('diagnostics.evaluate_generation_policy must be boolean')
+    for key in ('eval_task_limit', 'eval_samples'):
+        value = diagnostics.get(key)
+        if value is not None and (type(value) is not int or value < 1):
+            raise ValueError(f'diagnostics.{key} must be a positive integer or null')
+    calibration = config.get('calibration', {})
+    if calibration.get('rank') is not None and (type(calibration['rank']) is not int
+                                               or calibration['rank'] < 0):
+        raise ValueError('calibration.rank must be a nonnegative integer or null')
+    for key, default, lower, upper in [('tau', 1.0, 0, math.inf), ('rho', .5, 0, 1),
+                                       ('rank_fraction', .5, 0, 1)]:
+        value = calibration.get(key, default)
+        if (isinstance(value, bool) or not isinstance(value, (int, float))
+                or not math.isfinite(value) or not lower <= value <= upper
+                or (key == 'rank_fraction' and value == 0)):
+            raise ValueError(f'Invalid calibration.{key}')
     evaluation = config.get('evaluation', {})
     if any(type(k) is not int or not 1 <= k <= n for k in evaluation.get('ks', [1, 8, 32, 64])):
         raise ValueError('All evaluation ks must fit the declared per-task sample budget')
@@ -175,7 +198,9 @@ def _calibrate(model, tokenizer, tasks, settings, path, model_identity):
 def _operators(covariances, method, settings, seed):
     from .spectral import make_operator
     kinds = {'spd_hard': 'hard', 'spectral_soft': 'spectral_soft',
-             'residual_blend': 'blend', 'random_hard': 'random'}
+             'residual_blend': 'blend', 'random_hard': 'random',
+             'random_soft': 'random_soft', 'isotropic_soft': 'isotropic_soft',
+             'matched_blend': 'matched_blend'}
     output = {}
     for name, record in covariances.items():
         dimension = record['covariance'].shape[0]
@@ -186,6 +211,114 @@ def _operators(covariances, method, settings, seed):
                                      tau=float(settings.get('tau', 1)), rho=float(settings.get('rho', .5)),
                                      seed=int(stable_hash([seed, name])[:8], 16))
     return output
+
+
+def _operator_diagnostics(model, operators, covariances, method, settings):
+    """Record actual parameter effects as well as the operator matching contract."""
+    from .spectral import make_operator
+    matched = method in {'random_soft', 'isotropic_soft', 'matched_blend'}
+    diagnostics = {}
+    for name, op in operators.items():
+        dimension = op.shape[0]
+        rank = settings.get('rank')
+        if rank is None:
+            rank = max(1, int(dimension * float(settings.get('rank_fraction', .5))))
+        reference = make_operator(covariances[name]['covariance'], tau=float(settings.get('tau', 1)))
+        identity = torch.eye(dimension, dtype=op.dtype)
+        distance = float(torch.linalg.vector_norm(op - identity))
+        target = float(torch.linalg.vector_norm(reference - identity))
+        module = model.get_submodule(name)
+        # Mirror folded_operators' actual float32 multiply and original-dtype cast.
+        weight = module.weight.detach()
+        transform = op.to(device=weight.device, dtype=torch.float32)
+        folded = (transform.T @ weight.float()).to(weight.dtype)
+        weight64 = weight.to(device='cpu', dtype=torch.float64)
+        delta = folded.to(device='cpu', dtype=torch.float64) - weight64
+        weight_norm = float(torch.linalg.vector_norm(weight64))
+        spectrum = torch.linalg.eigvalsh(op)
+        diagnostics[name] = {
+            'method': method, 'dimension': dimension, 'configured_hard_rank': rank,
+            'eigenvalue_min': float(spectrum.min()), 'eigenvalue_max': float(spectrum.max()),
+            'operator_frobenius_norm': float(torch.linalg.vector_norm(op)),
+            'frobenius_distance_from_identity': distance,
+            'spectral_soft_distance_from_identity': target,
+            'matching_contract': 'operator_distance_from_identity_frobenius' if matched else 'none',
+            'matching_absolute_error': abs(distance - target) if matched else None,
+            'matches_soft_eigenvalues': method == 'random_soft',
+            'activation_rms_matched': False, 'output_kl_matched': False,
+            'folded_weight_delta_frobenius': float(torch.linalg.vector_norm(delta)),
+            'folded_weight_relative_delta': float(torch.linalg.vector_norm(delta)) / weight_norm
+                if weight_norm > 0 else None,
+            'folding_arithmetic': 'float32_product_then_original_parameter_dtype',
+        }
+        if method == 'matched_blend':
+            diagnostics[name]['matched_rho'] = 1 - target / math.sqrt(dimension - rank) if rank < dimension else 1.0
+        if method == 'isotropic_soft':
+            diagnostics[name]['isotropic_gain'] = float(op[0, 0])
+        if module.bias is not None:
+            bias = module.bias.detach()
+            folded_bias = (transform.T @ bias.float()).to(bias.dtype)
+            diagnostics[name]['folded_bias_delta_frobenius'] = float(torch.linalg.vector_norm(
+                folded_bias.to(device='cpu', dtype=torch.float64) - bias.to(device='cpu', dtype=torch.float64)))
+    return diagnostics
+
+
+def _diagnostic_protocol(config, tasks):
+    """Fixed held-out diagnostic subset; never used for model or operator fitting."""
+    settings = config.get('diagnostics', {})
+    selected = list(tasks)
+    limit = settings.get('eval_task_limit')
+    if limit is not None:
+        selected = sorted(selected, key=lambda row: row['task_id'])
+        random.Random(config.get('data_seed', 42)).shuffle(selected)
+        selected = selected[:limit]
+    samples = settings.get('eval_samples') or config.get('generation', {}).get('eval_samples', 64)
+    evaluation = dict(config.get('evaluation', {}))
+    evaluation['ks'] = [k for k in evaluation.get('ks', [1, 8, 32, 64]) if k <= samples]
+    if not evaluation['ks']:
+        evaluation['ks'] = [1]
+    evaluation['correct_budget'] = min(evaluation.get('correct_budget', 8), samples)
+    if 'correct_budgets' in evaluation:
+        evaluation['correct_budgets'] = [k for k in evaluation['correct_budgets'] if k <= samples]
+        if not evaluation['correct_budgets']:
+            evaluation['correct_budgets'] = [evaluation['correct_budget']]
+    return selected, samples, evaluation
+
+
+def _base_output_hashes(path, evaluation):
+    outputs = [path]
+    budget_path = path.with_suffix(path.suffix + '.budget.json')
+    if budget_path.exists():
+        outputs.append(budget_path)
+    if evaluation.get('backend', 'docker') != 'none':
+        outputs.extend([path.with_suffix('.verified.jsonl'), path.with_suffix('.metrics.json')])
+    return {item.name: file_sha(item) for item in outputs}
+
+
+def _validate_base_outputs(done, path, tasks, evaluation, expected_samples, seed):
+    """Upgrade legacy markers by reverification instead of trusting unhashed outputs."""
+    state = json.loads(done.read_text())
+    if not path.exists() or state['evaluation_sha'] != file_sha(path):
+        raise ValueError('Base samples changed since completion')
+    if 'files' in state:
+        expected_names = {path.name}
+        if evaluation.get('backend', 'docker') != 'none':
+            expected_names.update([path.with_suffix('.verified.jsonl').name, path.with_suffix('.metrics.json').name])
+        allowed_names = expected_names | {path.with_suffix(path.suffix + '.budget.json').name}
+        if not expected_names <= set(state['files']) <= allowed_names or any(
+                not (path.parent / name).exists() or file_sha(path.parent / name) != digest
+                for name, digest in state['files'].items()):
+            raise ValueError('Base verification or metrics integrity failure')
+        return
+    # Old schema protected raw generation only. Recompute from that immutable
+    # source once, explicitly documenting the migration, rather than blessing
+    # possibly edited historical verified records or metrics.
+    with record_stage(path.parent, 'legacy_reverification'):
+        evaluate_file(tasks, read_jsonl(path), path, evaluation,
+                      expected_samples=expected_samples, seed=seed)
+    state.update({'files': _base_output_hashes(path, evaluation), 'integrity_schema': 2,
+                  'integrity_migration': 'legacy_raw_marker_reverified_before_hashing'})
+    atomic_json(done, state)
 
 
 def _preflight_verification(settings):
@@ -213,6 +346,7 @@ def run_experiment(config, *, resume=False):
         ordered = sorted(splits[name], key=lambda row: row['task_id'])
         random.Random(config.get('data_seed', 42)).shuffle(ordered)
         splits[name] = ordered[:count]
+    diagnostic_tasks, diagnostic_samples, diagnostic_evaluation = _diagnostic_protocol(config, splits['eval'])
     evaluation = config.get('evaluation', {})
     _preflight_verification(evaluation)
     root = Path(config['output_dir'])
@@ -238,9 +372,11 @@ def run_experiment(config, *, resume=False):
                     'dependencies': {p: importlib.metadata.version(p) for p in
                                      ('transformers', 'peft', 'accelerate', 'datasets', 'numpy')},
                     'selected_task_ids': {k: [t['task_id'] for t in rows] for k, rows in splits.items()},
+                    'generation_diagnostic_task_ids': [t['task_id'] for t in diagnostic_tasks],
+                    'generation_diagnostic_samples': diagnostic_samples,
                     'local_base_fingerprint': local_base_fingerprint})
     seed = int(config.get('seed', 42))
-    for name, rows in splits.items():
+    for name, rows in {**splits, 'generation_diagnostic': diagnostic_tasks}.items():
         snapshot = root / 'tasks' / f'{name}.jsonl'
         if snapshot.exists() and stable_hash(read_jsonl(snapshot)) != stable_hash(rows):
             raise ValueError(f'Selected task snapshot changed: {snapshot}')
@@ -265,13 +401,14 @@ def run_experiment(config, *, resume=False):
             evaluate_file(splits['eval'], base_records, base_path, evaluation,
                           expected_samples=eval_gen['samples'], seed=seed)
         atomic_json(base_done, {'evaluation_sha': file_sha(base_path), 'model_identity': identity,
-                                'resolved_revision': revision})
+                                'resolved_revision': revision, 'integrity_schema': 2,
+                                'files': _base_output_hashes(base_path, evaluation)})
         del model, tokenizer
         gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-    elif json.loads(base_done.read_text())['evaluation_sha'] != file_sha(base_path):
-        raise ValueError('Base samples changed since completion')
+    else:
+        _validate_base_outputs(base_done, base_path, splits['eval'], evaluation, eval_gen['samples'], seed)
     base_state = json.loads(base_done.read_text())
     base_identity = base_state['model_identity']
     model_settings = dict(config['model'])
@@ -305,12 +442,8 @@ def run_experiment(config, *, resume=False):
                         covariances = _calibrate(model, tokenizer, splits['calibration'], cal,
                                                  directory / 'calibration.pt', identity)
                     operators = _operators(covariances, method, cal, seed)
-                    atomic_json(directory / 'operator_diagnostics.json', {name: {
-                        'eigenvalue_min': float(torch.linalg.eigvalsh(op).min()),
-                        'eigenvalue_max': float(torch.linalg.eigvalsh(op).max()),
-                        'dimension': op.shape[0], 'frobenius_distance_from_identity':
-                        float(torch.linalg.vector_norm(op - torch.eye(op.shape[0], dtype=op.dtype)))}
-                        for name, op in operators.items()})
+                    atomic_json(directory / 'operator_diagnostics.json', _operator_diagnostics(
+                        model, operators, covariances, method, cal))
                 from .spectral import folded_operators
                 training_settings = dict(train_gen)
                 if method == 'ssd':
@@ -322,14 +455,14 @@ def run_experiment(config, *, resume=False):
                                                     method=method, round_index=round_index, stage='training', resume=resume)
                     if config.get('diagnostics', {}).get('evaluate_generation_policy', True):
                         diagnostic_path = directory / 'generation_policy.jsonl'
-                        diagnostic_settings = {**training_settings, 'samples': eval_gen['samples']}
+                        diagnostic_settings = {**training_settings, 'samples': diagnostic_samples}
                         with record_stage(directory, 'generation_policy'):
-                            diagnostics = generate_to_file(model, tokenizer, splits['eval'], diagnostic_path,
+                            diagnostics = generate_to_file(model, tokenizer, diagnostic_tasks, diagnostic_path,
                                                             diagnostic_settings, seed=seed, model_identity=identity,
                                                             method=method, round_index=round_index,
                                                             stage='evaluation', resume=resume)
-                            evaluate_file(splits['eval'], diagnostics, diagnostic_path, evaluation,
-                                          expected_samples=eval_gen['samples'], seed=seed)
+                            evaluate_file(diagnostic_tasks, diagnostics, diagnostic_path, diagnostic_evaluation,
+                                          expected_samples=diagnostic_samples, seed=seed)
                 # Weight folding has been restored before this function is called.
                 with record_stage(directory, 'sft'):
                     model, stats = train_on_records(model, tokenizer, splits['train'], records,

@@ -3,32 +3,41 @@
 本仓库只研究 **同一道 coding 题的不同正确实现/算法，在自蒸馏后是否被保留**。
 提供从数据准备、校准、生成、LoRA 微调到独立代码验证、同题覆盖统计、跨轮次报告的完整实验流程。
 
-## Start here: solution-subspace geometry study
+## Start here: formal Spectral-soft experiment
 
-新增当前优先实验：**冻结模型，先检查同题正确实现的 K/V 子空间是否具有相似、包含、插值和共同张成关系。**
-不预设“10 个候选 = 10 个正确算法 = 10 个生成子空间”。逐正确实现提取诊断子空间；生成使用的秩与数量 `m ∈ {1,2,4,8}` 在验证集上选择，最终测试集锁定。
+当前主线是 **提高同一道 coding 题的正确实现多样性，同时保持准确率同水平**。
+正式版以 Spectral-soft 为候选方法；主指标是固定 4 个正确样本的 AST 覆盖，准确率采用绝对 1 个百分点的不劣容忍界。AST 是实现结构代理，不能直接当作算法类别。
 
 ```bash
-git pull
+git pull origin main
 python -m pip install -e '.[train,test,analysis]'
-docker pull python:3.11-slim
-bash scripts/run_geometry.sh configs/geometry_100_16gb.yaml
+bash scripts/run_formal.sh configs/formal_16gb.yaml
 ```
 
-- 100 题：64 discovery / 16 validation / 20 final test；每题初始生成 10 个候选。
-- 完整 MBPP：`bash scripts/run_geometry.sh configs/geometry_full_16gb.yaml`，使用所有准备后的题目，每题初始生成 32 个候选。
-- 24GB／3B 模型：对应 `geometry_100_24gb.yaml` 或 `geometry_full_24gb.yaml`。
-- 可按阶段执行并断点续跑：`python -m improving geometry --config configs/geometry_100_16gb.yaml --stage all --resume`。
-- 报告在配置的输出目录下 `report/summary.md`，同时输出 JSON、CSV 和安装 analysis extra 后的 PNG。
+这条命令默认跑 **正式确认实验**：完整 MBPP 500 道测试题，5 个新训练 seed（43–47），每题 64 次采样，`plain / ssd / spd_hard / spectral_soft`，一轮 raw-output LoRA 自蒸馏。脚本准备缺失的标准 MBPP 数据和验证容器，支持断点续跑，结束后生成报告与可复算的紧凑结果包。
 
-正式协议、每阶段预算与关系定义见 [geometry protocol](docs/geometry_protocol.md)。完整配置最多约 8.6 万个候选，16/24GB 是待机器实测的目标配置；请先看 validate 输出。算法标签不参与提取或选模型，自动 AST 指标仅是实现多样性的代理。这个新诊断**尚未运行真实模型 benchmark，也不包含新的 LoRA/co-evolution 训练**；现有 LoRA 管线在下方保留作后续吸收实验基础。
+| 后续实验 | 命令最后一个参数 | 内容 |
+|---|---|---|
+| 机制对照 | `mechanism` | 3 seeds；等强度简单软投影、相同谱随机方向、各向同性收缩 |
+| 跨轮保留 | `retention` | 3 seeds；plain / hard / soft 各 3 轮 |
+| 外部评测 | `transfer` | 5 seeds 的 base + 4 个确认检查点；完整 HumanEval+、官方 EvalPlus |
+| 全部执行 | `all` | 依次运行四个阶段并汇总 |
 
-**当前状态：geometry study 已实现实验代码和 CPU 正确性测试，但尚未运行真实模型 benchmark；既有 self-distillation pipeline 已完成一个单 seed、本地执行的探索性 MBPP pilot。该 pilot 支持继续验证，但不能声称已优于 SPD 或达到论文证据标准。**
-16/24 GB 是目标配置，显存和速度需在你的机器上实测。
+```bash
+# 确认实验之后，直接接着跑全部剩余阶段；完整阶段会复用。
+bash scripts/run_formal.sh configs/formal_16gb.yaml all
 
-See the compact [code-centric pilot results](results/pilot_seed42_codecentric/README.md)
-and the [ICLR validation roadmap](docs/iclr_roadmap.md). The original strict
-format-sensitive scores are retained locally and are not substituted silently.
+# 24GB / 3B 模型对应配置；16GB 配置使用 1.5B。
+bash scripts/run_formal.sh configs/formal_24gb.yaml
+```
+
+正式设置、机制公式、统计规则与预算见 [formal protocol](docs/formal_protocol.md)，论文证据计划见 [ICLR roadmap](docs/iclr_roadmap.md)。默认确认阶段上限 **887,740 个候选**；`all` 为 **2,652,072 个候选**。这些是候选数上限，不是 GPU 时间估计。16/24GB 是目标配置，实际峰值与速度待机器实测；启动前也可将最后参数设为 `validate` 查看数据和预算。
+
+结果默认在 `runs/formal_spectral_16gb_v1/report/summary.md`，可上传的紧凑包在 `evidence/compact.tar.gz`。紧凑包包含逐题指标与运行来源，不含权重；需要程序用于独立算法标注时执行 `python -m improving formal --config configs/formal_16gb.yaml --stage export --resume --include-programs`。
+
+**已完成的实证仍是 [64 题、seed-42 的探索性 pilot](results/pilot_seed42_codecentric/README.md)。新的正式确认、机制、三轮保留和 HumanEval+ 结果需要运行后取得；本仓库不把代码测试计为 benchmark 成绩。**
+
+独立的冻结模型 [solution-subspace geometry study](docs/geometry_protocol.md) 保留，运行入口是 `scripts/run_geometry.sh`。它用于检查正确实现的子空间相似、包含、插值和共同张成关系，是可选机制诊断，不是本次 Spectral-soft 正式实验的前置阶段。
 
 ## Existing self-distillation pipeline
 
@@ -37,9 +46,12 @@ format-sensitive scores are retained locally and are not substituted silently.
 | `plain` | Original model; common sampling | One LoRA, raw outputs | Ordinary self-training control |
 | `ssd` | Temperature 1.5, top-p .8, top-k 20 | Same LoRA budget | SSD decoding-recipe adaptation; not official large-scale reproduction |
 | `spd_hard` | Top-r capability-gradient projector | Same LoRA budget | Paper-based SPD reconstruction with explicit insertion/span assumptions |
-| `spectral_soft` | Full-spectrum proximal attenuation | Same LoRA budget | Unvalidated hook-free candidate |
+| `spectral_soft` | Full-spectrum proximal attenuation | Same LoRA budget | Candidate with exploratory pilot evidence; formal confirmation pending |
 | `residual_blend` | `P + rho (I-P)` | Same LoRA budget | Simple soft-projector control |
-| `random_hard` | Seeded rank-matched random projector | Same LoRA budget | Geometric control |
+| `random_hard` | Seeded rank-matched random projector | Same LoRA budget | Legacy geometric control |
+| `matched_blend` | Two-level soft projector matched to soft operator distance from identity | Same LoRA budget | Formal mechanism control |
+| `random_soft` | Same soft eigenvalue spectrum with independent Haar directions | Same LoRA budget | Formal direction control |
+| `isotropic_soft` | Uniform shrinkage matched to soft operator distance from identity | Same LoRA budget | Formal isotropic control |
 
 All arms train on **every raw generated completion**, including incorrect or empty outputs. No correctness filtering, algorithm labels, prompt ensembles, or strategy adapter pool enters training. Every round saves one merged model. The candidate uses no activation hooks in calibration, generation, SFT or inference. The hard reconstruction uses the same hook-free execution path; folding itself is an implementation equivalence, not a research contribution.
 
@@ -213,9 +225,9 @@ improving metrics --samples runs/humaneval/verified.jsonl --tasks data/humaneval
 
 Full MBPP and MBPP+ have different task sets. Do not submit all full-MBPP IDs and silently score only the accepted subset. A native LiveCodeBench adapter is **not implemented**; use a frozen official release externally and only compare matching task IDs and protocols.
 
-## Expand only after the first-round result
+## Legacy custom sweeps
 
-Read [the experiment protocol](docs/experiment_protocol.md) before interpreting pilot outcomes. If the correct-solution diversity signal is reproducible, generate explicit full-data, multi-seed, multi-round configs:
+The frozen formal suite above is the main experiment. The original [pilot protocol](docs/experiment_protocol.md) and custom sweep generator remain available for separate exploratory runs:
 
 ```bash
 python scripts/make_sweep.py --base configs/pilot_16gb.yaml \
@@ -232,5 +244,9 @@ This writes configs only; it never starts an unrequested job. Validation tasks a
 - `modeling.py`, `generation.py`, `training.py`: consistent serialization, retained sample streams and raw LoRA SFT.
 - `metrics.py`, `reporting.py`: exact finite-sample statistics, eligibility and paired protocol-checked reports.
 - `pipeline.py`, `cli.py`: stage lifecycle, provenance, resumability and commands.
+- `formal_study.py`: frozen formal protocol, phase compilation and seed jobs.
+- `formal_statistics.py`: paired multi-seed diversity and correctness inference.
+- `formal_reporting.py`: formal reports and evidence exports.
+- `formal_transfer.py`: official held-out HumanEval+ evaluation.
 
 Tests cover exact combinatorial enumeration, frozen-model gradients, pre-RoPE full-model logit equivalence, positional padding/EOS masks, real tiny-model LoRA updates/reload, interrupted writes, resume integrity, trusted-fixture timeouts and official-format sample mapping. GitHub Actions runs CPU tests only, not expensive research experiments.

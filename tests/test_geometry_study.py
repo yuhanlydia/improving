@@ -13,12 +13,12 @@ from improving.geometry_study import (GeometryStudy, geometry_splits, geometry_b
 from improving.cli import main
 
 
-def setup(tmp_path):
+def setup(tmp_path, tasks_per_split=1):
     paths = {}
     for index, split in enumerate(('train', 'calibration', 'validation', 'eval')):
-        tasks = [{'task_id': f'fixture/{split}', 'prompt': f'Write a function {index}',
+        tasks = [{'task_id': f'fixture/{split}' + (f'/{i}' if i else ''), 'prompt': f'Write a function {index} variant {i}',
                   'source': 'trusted-fixture', 'split': split, 'entry_point': 'f',
-                  'tests': 'assert f() == 1', 'reference': 'def f(): return 1'}]
+                  'tests': 'assert f() == 1', 'reference': 'def f(): return 1'} for i in range(tasks_per_split)]
         path = tmp_path / f'{split}.jsonl'
         write_jsonl(path, tasks)
         paths[split] = str(path)
@@ -44,9 +44,10 @@ def fixture_generator(model, tokenizer, tasks, output_path, settings, **kwargs):
     return rows
 
 
-def test_frozen_geometry_entire_flow_and_resume(tmp_path, monkeypatch):
+@pytest.mark.parametrize('tasks_per_split', [1, 2])
+def test_frozen_geometry_entire_flow_and_resume(tmp_path, monkeypatch, tasks_per_split):
     monkeypatch.setattr('improving.geometry_study.generate_to_file', fixture_generator)
-    config = setup(tmp_path)
+    config = setup(tmp_path, tasks_per_split)
     model, tokenizer = tiny_model_and_tokenizer()
     weights = {name: value.detach().clone() for name, value in model.state_dict().items()}
     result = run_geometry(config, model=model, tokenizer=tokenizer)
@@ -66,9 +67,10 @@ def test_frozen_geometry_entire_flow_and_resume(tmp_path, monkeypatch):
         assert (root / 'report' / 'generation_metrics.png').is_file()
     selected = json.loads((root / 'selection' / 'locked.json').read_text())
     assert selected['selection_split'] == 'validation'
-    assert selected['validation_task_ids'] == ['fixture/validation']
+    assert selected['validation_task_ids'] == [row['task_id'] for row in read_jsonl(config['data']['validation'])]
     bank = torch.load(root / 'selection' / 'bank.pt', weights_only=True)
-    assert all(item['task_id'] in {'fixture/train', 'fixture/calibration'} for item in bank)
+    assert all(item['task_id'] in {row['task_id'] for split in ('train', 'calibration')
+                                  for row in read_jsonl(config['data'][split])} for item in bank)
     for name, value in model.state_dict().items():
         torch.testing.assert_close(value, weights[name], rtol=0, atol=0)
     # Repeated execution reuses sealed extraction/trials and leaves weights fixed.
@@ -168,7 +170,29 @@ def test_declared_configs_validate_and_budget_is_explicit():
     for path in Path('configs').glob('geometry_*.yaml'):
         config = load_geometry_config(path)
         assert config['evaluation']['backend'] == 'docker'
+        assert config['evaluation']['code_extraction'] == 'first_fence'
         assert config['extraction']['span_mode'] == 'completion'
         splits = {name: [None] * n for name, n in [('train', 64), ('validation', 16), ('eval', 20)]}
         if '100' in path.name:
             assert geometry_budget(config, splits)['total_candidates_upper_bound'] == 8832
+
+
+def test_geometry_first_fence_controls_use_the_verified_executable_code(tmp_path, monkeypatch):
+    def prose_generator(model, tokenizer, tasks, output_path, settings, **kwargs):
+        rows = fixture_generator(model, tokenizer, tasks, output_path, settings, **kwargs)
+        for row in rows:
+            row['completion'] = 'Here:\n```python\n' + row['completion'] + '```\nExplanation.'
+        write_jsonl(output_path, rows)
+        return rows
+    monkeypatch.setattr('improving.geometry_study.generate_to_file', prose_generator)
+    config = setup(tmp_path)
+    config['evaluation']['code_extraction'] = 'first_fence'
+    model, tokenizer = tiny_model_and_tokenizer()
+    study = GeometryStudy(config, model=model, tokenizer=tokenizer)
+    study.discover()
+    study.extract()
+    controls = json.loads((study.root / 'analysis' / 'format_verification.json').read_text())
+    assert len(controls) == 2 and all(row['correct'] for row in controls)
+    artifacts = study.artifacts(include_controls=True)
+    assert sum(item['metadata']['is_format_control'] for item in artifacts) == 2
+    assert all(item['metadata']['record']['code_extraction'] == 'first_fence' for item in artifacts)

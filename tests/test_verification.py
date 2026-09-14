@@ -45,8 +45,10 @@ def test_first_fence_mode_changes_execution_and_is_recorded():
     assert fenced[0]["code_extraction"] == "first_fence"
     assert fenced[0]["evaluation_provenance"] == {
         "backend": "local", "code_extraction": "first_fence",
-        "docker_image": "python:3.11-slim", "protocol_version": "task-tests-v1",
+        "docker_image": "python:3.11-slim", "protocol_version": "task-tests-v2", "provenance_version": 2,
         "task_harness_sha256": fenced[0]["evaluation_provenance"]["task_harness_sha256"],
+        "runner_sha256": fenced[0]["evaluation_provenance"]["runner_sha256"],
+        "local_python_version": fenced[0]["evaluation_provenance"]["local_python_version"],
         "timeout": 5.0, "memory_mb": 512, "pids_limit": 64,
     }
     assert len(fenced[0]["evaluation_provenance"]["task_harness_sha256"]) == 64
@@ -200,3 +202,65 @@ def test_evalplus_rejects_missing_plus_and_changed_solution(tmp_path):
     path.write_text(json.dumps({"eval": {"Fixture/0": [row]}}))
     with pytest.raises(ValueError, match="solution"):
         verification.import_evalplus_results(rows, path, tasks=[task()])
+
+
+def test_verification_provenance_is_batching_invariant_and_detects_changed_tests():
+    from improving.metrics import summarize_records, compare_summaries
+    tasks = [task(), task(task_id="Fixture/1", prompt="Another addition problem.")]
+    rows = [completion(), completion(task_id="Fixture/1")]
+    options = dict(backend="local", allow_unsafe_local=True)
+    joint = verification.verify_completions(tasks, rows, **options)
+    separate = [verification.verify_completions([t], [r], **options)[0] for t, r in zip(tasks, rows)]
+    assert joint == separate
+    a, b = [summarize_records(value, ks=[1], bootstrap_samples=0) for value in (joint, separate)]
+    assert a == b
+    assert set(a["protocol"]["evaluation_task_harnesses"]) == {"Fixture/0", "Fixture/1"}
+    assert compare_summaries(a, b, bootstrap_samples=0)["evaluation_identity_check"] == "declared_provenance_equal"
+    changed = verification.verify_completions([task(tests="assert add(1, 2) == 3")], [rows[0]], **options)
+    c = summarize_records(changed + separate[1:], ks=[1], bootstrap_samples=0)
+    with pytest.raises(ValueError, match="evaluation provenance"):
+        compare_summaries(a, c)
+    changed[0]["sample_id"] = 1
+    with pytest.raises(ValueError, match="changed task harness"):
+        summarize_records(joint + changed)
+
+
+def test_evalplus_first_fence_manifest_reproduces_code_and_both_correctnesses(tmp_path):
+    rows = [completion("Prose.\n```python\ndef add(a,b): return a+b\n```\nExplanation.")]
+    path = tmp_path / "samples.jsonl"
+    manifest = verification.export_evalplus([task()], rows, path, code_extraction="first_fence")
+    exported = read_jsonl(path)
+    payload = {"hash": "official-fixture-hash", "eval": {"Fixture/0": [dict(exported[0], base_status="pass", plus_status="fail")]}}
+    result_path = tmp_path / "results.json"
+    result_path.write_text(json.dumps(payload))
+    imported = verification.import_evalplus_results(rows, result_path, manifest_path=manifest)
+    row = imported[0]
+    assert row["completion"] == rows[0]["completion"]
+    assert row["code"] == "def add(a,b): return a+b\n"
+    assert row["code_extraction"] == "first_fence"
+    assert row["base_correct"] is True and row["plus_correct"] is False and row["correct"] is False
+    assert row["evaluation_provenance"]["dataset_hash"] == "official-fixture-hash"
+    assert row["evaluation_provenance"]["export_identity"] == "manifest_v2_reproduced"
+    base = verification.import_evalplus_results(rows, result_path, manifest_path=manifest, require_plus=False)[0]
+    assert base["correct"] is True and base["plus_correct"] is False
+    entries = read_jsonl(manifest)
+    entries[0]["code_extraction"] = "strict"
+    from improving.data import write_jsonl
+    write_jsonl(manifest, entries)
+    with pytest.raises(ValueError, match="code_extraction"):
+        verification.import_evalplus_results(rows, result_path, manifest_path=manifest)
+
+
+def test_evalplus_manifest_rejects_changed_task_context_and_preserves_continuation(tmp_path):
+    human = task(completion_mode="continuation", code_prefix="def add(a,b):\n")
+    rows = [completion("Here:\n```python\n    return a+b\n```\nDone.")]
+    path = tmp_path / "samples.jsonl"
+    manifest = verification.export_evalplus([human], rows, path, code_extraction="first_fence")
+    exported = read_jsonl(path)
+    assert exported[0]["solution"] == "def add(a,b):\n    return a+b\n"
+    results = tmp_path / "result.json"
+    results.write_text(json.dumps({"hash": "fixture", "eval": {"Fixture/0": [dict(exported[0], base_status="pass", plus_status="pass")]}}))
+    assert verification.import_evalplus_results(rows, results, manifest_path=manifest)[0]["correct"]
+    changed = dict(human, code_prefix="def add(a,b,c=0):\n")
+    with pytest.raises(ValueError, match="Task harness"):
+        verification.import_evalplus_results(rows, results, manifest_path=manifest, tasks=[changed])
