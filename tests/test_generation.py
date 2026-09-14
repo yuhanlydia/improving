@@ -1,5 +1,5 @@
 import pytest
-from helpers import tiny_model_and_tokenizer
+from tests.helpers import tiny_model_and_tokenizer
 from improving.generation import generate_to_file
 
 

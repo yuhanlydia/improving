@@ -12,7 +12,8 @@ from pathlib import Path
 import yaml
 
 from .data import assert_disjoint_splits, read_jsonl
-from .pipeline import checkpoint_fingerprint, file_sha, run_experiment, validate_config
+from .pipeline import (checkpoint_fingerprint, execution_runtime_identity, file_sha,
+                       run_experiment, validate_config)
 from .utils import atomic_json, stable_hash
 
 PHASES = ('confirm', 'mechanism', 'retention')
@@ -53,8 +54,15 @@ def validate_formal_config(config):
     if config.get('data_limits'):
         raise ValueError('Formal profiles use all prepared tasks; use geometry/pilot for subsets')
     ev, gen, cal = (config.get(name, {}) for name in ('evaluation', 'generation', 'calibration'))
-    if ev.get('backend') != 'docker' or ev.get('code_extraction') != 'first_fence':
-        raise ValueError('Formal task-test protocol requires Docker and first_fence extraction')
+    backend = ev.get('backend')
+    transfer_backend = config['transfer'].get('backend', 'docker')
+    if backend not in {'docker', 'local'} or ev.get('code_extraction') != 'first_fence':
+        raise ValueError('Formal task-test protocol requires docker/local and first_fence extraction')
+    if transfer_backend != backend:
+        raise ValueError('MBPP and transfer must use the same execution backend')
+    if backend == 'local' and (not ev.get('allow_unsafe_local')
+                               or not config['transfer'].get('allow_unsafe_local')):
+        raise ValueError('Local formal evaluation requires allow_unsafe_local for MBPP and transfer')
     if ev.get('correctness_margin') != .01 or ev.get('correct_budget') != 4:
         raise ValueError('Formal primary endpoints fix correctness_margin=.01 and correct_budget=4')
     if ev.get('correct_budgets') != [4, 8, 16] or gen.get('eval_samples') != 64:
@@ -128,7 +136,8 @@ def _suite_identity(config):
     source.update({f'scripts/{p.name}': file_sha(p) for p in scripts.glob('*.sh')})
     return stable_hash({'config': config, 'source': source,
         'data': {k: file_sha(p) for k, p in config['data'].items()},
-        'local_model': checkpoint_fingerprint(local) if local.is_dir() else None})
+        'local_model': checkpoint_fingerprint(local) if local.is_dir() else None,
+        'evaluation_runtime': execution_runtime_identity(config.get('evaluation', {}))})
 
 
 def _resolve_model(settings):

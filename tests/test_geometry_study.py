@@ -6,7 +6,7 @@ import json
 import pytest
 import torch
 
-from helpers import tiny_model_and_tokenizer
+from tests.helpers import tiny_model_and_tokenizer
 from improving.data import write_jsonl, read_jsonl
 from improving.geometry_study import (GeometryStudy, geometry_splits, geometry_budget,
                                       run_geometry, load_geometry_config)

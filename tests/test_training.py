@@ -1,5 +1,5 @@
 import torch
-from helpers import tiny_model_and_tokenizer
+from tests.helpers import tiny_model_and_tokenizer
 from improving.training import train_on_records
 
 

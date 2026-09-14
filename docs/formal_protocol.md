@@ -53,6 +53,13 @@ python -m improving formal --config configs/formal_16gb.yaml \
 
 The Python `formal --stage validate` command itself only reads prepared data. The shell wrapper may download/prepare MBPP when its standard data directory is wholly absent. Existing partial data are an error, not an invitation to replace files.
 
+If nested containers are unavailable and the operator explicitly accepts host
+execution of generated Python, use `configs/formal_16gb_local.yaml`. Both MBPP
+and HumanEval+ provenance are then marked `local`/`local-unsafe`; the formal
+validator rejects partial opt-in or mixed Docker/local results. This fallback
+uses the official EvalPlus 0.3.1 evaluator but is not security-equivalent to
+the default bounded Docker protocol, so report it as a protocol limitation.
+
 ## Fixed data and model settings
 
 | Item | Formal setting |

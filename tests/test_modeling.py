@@ -1,5 +1,5 @@
 import pytest
-from helpers import tiny_model_and_tokenizer
+from tests.helpers import tiny_model_and_tokenizer
 from improving.modeling import encode_example, collate_examples, render_prompt
 
 

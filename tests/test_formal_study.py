@@ -118,6 +118,34 @@ def test_formal_rejects_posthoc_changes_and_resume_tampering(tmp_path, fixture_r
         open_suite(config, resume=True)
 
 
+def test_formal_accepts_only_explicit_fully_local_evaluation_opt_in(tmp_path):
+    config = config_for(tmp_path)
+    config['evaluation'].update(backend='local', allow_unsafe_local=True)
+    config['transfer'].update(backend='local', allow_unsafe_local=True)
+    assert validate_formal_config(config)['evaluation']['backend'] == 'local'
+
+    missing_mbpp_opt_in = copy.deepcopy(config)
+    missing_mbpp_opt_in['evaluation']['allow_unsafe_local'] = False
+    with pytest.raises(ValueError, match='allow_unsafe_local'):
+        validate_formal_config(missing_mbpp_opt_in)
+
+    mixed_backends = copy.deepcopy(config)
+    mixed_backends['transfer']['backend'] = 'docker'
+    with pytest.raises(ValueError, match='same execution backend'):
+        validate_formal_config(mixed_backends)
+
+
+def test_local_suite_resume_rejects_changed_python_runtime(tmp_path, fixture_runtime, monkeypatch):
+    config = config_for(tmp_path)
+    config['evaluation'].update(backend='local', allow_unsafe_local=True)
+    config['transfer'].update(backend='local', allow_unsafe_local=True)
+    open_suite(config)
+    monkeypatch.setattr('improving.formal_study.execution_runtime_identity',
+                        lambda _: {'backend': 'local', 'python': 'changed'})
+    with pytest.raises(ValueError, match='changed'):
+        open_suite(config, resume=True)
+
+
 def test_formal_confirm_report_export_and_immutable_evidence(tmp_path, fixture_runtime):
     config = config_for(tmp_path)
     result = run_formal(config, stage='confirm')

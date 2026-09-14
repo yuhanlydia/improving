@@ -1,6 +1,6 @@
 import json
 import pytest
-from helpers import tiny_model_and_tokenizer
+from tests.helpers import tiny_model_and_tokenizer
 from improving.pipeline import (run_experiment, load_config, checkpoint_fingerprint,
                                 record_stage, evaluate_file, validate_config,
                                 _diagnostic_protocol, _validate_base_outputs)
@@ -185,6 +185,7 @@ def test_diagnostic_budget_real_training_and_verification_preserve_final_budget(
     manifest = json.loads((root / 'manifest.json').read_text())
     assert manifest['generation_diagnostic_task_ids'] == selected
     assert manifest['generation_diagnostic_samples'] == 2
+    assert manifest['evaluation_runtime']['backend'] == 'local'
     assert set(selected).isdisjoint(manifest['selected_task_ids']['train'])
     assert len(read_jsonl(directory / 'train.jsonl')) == 2  # No correctness filtering.
     assert json.loads((directory / 'model' / 'training_stats.json').read_text())['examples'] == 2
@@ -199,6 +200,11 @@ def test_diagnostic_budget_real_training_and_verification_preserve_final_budget(
         assert item['matches_soft_eigenvalues']
         assert item['folded_weight_relative_delta'] > 0
         assert not item['activation_rms_matched'] and not item['output_kl_matched']
+    with monkeypatch.context() as changed_runtime:
+        changed_runtime.setattr('improving.pipeline.execution_runtime_identity',
+                                lambda _: {'backend': 'local', 'python_version': 'changed'})
+        with pytest.raises(ValueError, match='Configuration, dataset or implementation changed'):
+            run_experiment(config, resume=True)
     run_experiment(config, resume=True)
     assert len(calls) == 4
     base_done = root / 'base' / 'complete.json'

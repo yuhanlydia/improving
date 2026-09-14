@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -212,10 +213,63 @@ def test_wrapper_pins_image_and_resource_environment(tmp_path, monkeypatch):
     assert kwargs["env"]["IMPROVING_EVALPLUS_MEMORY_MB"] == "4096"
 
 
+def test_local_wrapper_records_official_result_provenance(tmp_path, monkeypatch):
+    samples = tmp_path / "samples.jsonl"
+    rows = [{"task_id": task["task_id"], "solution": task["prompt"] + task["reference"]}
+            for task in official_tasks()]
+    write_jsonl(samples, rows)
+    output = tmp_path / "output"
+    output.mkdir()
+
+    def official_cli(command, **kwargs):
+        assert command[:3] == [transfer.sys.executable, "-m", "evalplus.evaluate"]
+        source = Path(command[command.index("--samples") + 1])
+        evaluated = {}
+        for row in read_jsonl(source):
+            evaluated.setdefault(row["task_id"], []).append({
+                **row, "base_status": "pass", "plus_status": "pass"})
+        atomic_json(source.with_name("samples_eval_results.json"), {
+            "hash": "official-dataset-hash", "eval": evaluated})
+        return subprocess.CompletedProcess(command, 0)
+
+    monkeypatch.setattr(transfer.subprocess, "run", official_cli)
+    monkeypatch.setattr(transfer, "_official_dataset", lambda _: (official_tasks(), metadata()))
+    transfer._local_wrapper("evaluate", output, {
+        "backend": "local", "allow_unsafe_local": True, "parallel": 2,
+        "walltime": 60, "sample_memory_mb": 2048}, samples)
+
+    provenance = json.loads((output / "evaluation_metadata.json").read_text())
+    assert provenance["execution_backend"] == "local-unsafe"
+    assert provenance["evalplus_version"] == "0.3.1"
+    assert provenance["sample_count"] == 164
+    assert (output / "samples_eval_results.json").is_file()
+    dataset = {"release": metadata()["datasets"]["HumanEvalPlus"]}
+    assert transfer._evaluate_output(output, samples, dataset, 164, 164,
+                                     backend="local")["execution_backend"] == "local-unsafe"
+    provenance["execution_backend"] = "local"
+    atomic_json(output / "evaluation_metadata.json", provenance)
+    with pytest.raises(ValueError, match="provenance"):
+        transfer._evaluate_output(output, samples, dataset, 164, 164, backend="local")
+
+
+def test_local_wrapper_requires_explicit_unsafe_opt_in(tmp_path):
+    with pytest.raises(ValueError, match="allow_unsafe_local"):
+        transfer._wrapper("prepare", tmp_path, {"backend": "local"})
+
+
+def test_local_evalplus_identity_covers_full_package_and_dependency_versions():
+    manifest = transfer._local_runtime_manifest()
+    assert manifest["evalplus_version"] == "0.3.1"
+    assert "evalplus/evaluate.py" in manifest["evalplus_files"]
+    assert any(name.startswith("evalplus/eval/") for name in manifest["evalplus_files"])
+    assert {"numpy", "datasets", "tree-sitter", "tree-sitter-python", "psutil"} <= set(
+        manifest["dependency_versions"])
+
+
 def test_actual_native_generation_with_tiny_frozen_model(tmp_path):
     # Only trusted fixture model generation runs locally; no candidate Python
     # or reference program is executed in this test.
-    from helpers import tiny_model_and_tokenizer
+    from tests.helpers import tiny_model_and_tokenizer
     from improving.generation import generate_to_file
     model, tokenizer = tiny_model_and_tokenizer()
     before = {key: tensor.clone() for key, tensor in model.state_dict().items()}

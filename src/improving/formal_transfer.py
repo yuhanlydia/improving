@@ -8,10 +8,15 @@ from __future__ import annotations
 
 from collections import Counter
 import gc
+import hashlib
+from importlib.metadata import distribution as package_distribution, version as package_version
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
+import sys
+import tempfile
 
 from .data import read_jsonl, validate_tasks, write_jsonl, prompt_fingerprint
 from .generation import generate_to_file
@@ -43,8 +48,120 @@ def _image_identity(image):
     return identity
 
 
+def _local_identity():
+    return 'local-unsafe:' + stable_hash(_local_runtime_manifest())
+
+
+def _local_runtime_manifest():
+    """Hash all EvalPlus Python sources and pin its evaluation dependencies."""
+    distribution = package_distribution('evalplus')
+    files = {}
+    for entry in distribution.files or ():
+        name = str(entry)
+        path = Path(distribution.locate_file(entry))
+        if name.startswith('evalplus/') and path.suffix == '.py' and path.is_file():
+            files[name] = file_sha(path)
+    dependencies = ('numpy', 'datasets', 'tree-sitter', 'tree-sitter-python',
+                    'psutil', 'multipledispatch', 'fire')
+    return {'evalplus_version': package_version('evalplus'),
+            'evalplus_files': files,
+            'dependency_versions': {name: package_version(name) for name in dependencies},
+            'python_version': sys.version,
+            'python_executable': str(Path(sys.executable).resolve()),
+            'python_executable_sha256': file_sha(Path(sys.executable).resolve())}
+
+
+def _official_dataset(dataset):
+    from evalplus.data import get_human_eval_plus, get_mbpp_plus
+    from evalplus.data.humaneval import HUMANEVAL_PLUS_VERSION
+    from evalplus.data.mbpp import MBPP_PLUS_VERSION
+    from evalplus.data.utils import get_dataset_metadata
+    if dataset == 'humaneval':
+        name, version, tasks = 'HumanEvalPlus', HUMANEVAL_PLUS_VERSION, get_human_eval_plus()
+    elif dataset == 'mbpp':
+        name, version, tasks = 'MbppPlus', MBPP_PLUS_VERSION, get_mbpp_plus()
+    else:
+        raise ValueError(f'Unsupported EvalPlus dataset: {dataset}')
+    _, cached = get_dataset_metadata(name, version, False, False)
+    release = {'version': version, 'task_count': len(tasks),
+               'sha256': hashlib.sha256(Path(cached).read_bytes()).hexdigest()}
+    return tasks, {'evalplus_version': package_version('evalplus'), 'datasets': {name: release}}
+
+
+def _local_wrapper(mode, output, settings, samples=None):
+    """Explicitly unsafe host fallback when container creation is unavailable."""
+    if not settings.get('allow_unsafe_local'):
+        raise ValueError('Local EvalPlus requires allow_unsafe_local=True')
+    output = Path(output)
+    if any(output.iterdir()):
+        raise ValueError('Local EvalPlus output directory must be empty')
+    tasks, metadata = _official_dataset('humaneval')
+    task_map = tasks if isinstance(tasks, dict) else {task['task_id']: task for task in tasks}
+    release = metadata['datasets']['HumanEvalPlus']
+    if mode == 'prepare':
+        rows = []
+        for task_id, task in sorted(task_map.items()):
+            rows.append({'task_id': task_id, 'prompt': task['prompt'],
+                'reference': task.get('canonical_solution', task.get('reference')),
+                'entry_point': task['entry_point'], 'source': 'evalplus/HumanEvalPlus',
+                'split': 'eval', 'revision': release['version'],
+                'dataset_sha256': release['sha256'], 'completion_mode': 'continuation',
+                'code_prefix': task['prompt'], 'prompt_protocol': 'evalplus-original-0.3.1',
+                'evaluation_backend': 'evalplus'})
+        write_jsonl(output / 'tasks.jsonl', rows)
+        atomic_json(output / 'dataset_metadata.json', metadata)
+        return
+    if mode != 'evaluate' or samples is None:
+        raise ValueError('Local EvalPlus evaluate requires a samples file')
+    groups = {}
+    for row in read_jsonl(samples):
+        if row.get('task_id') not in task_map or not isinstance(row.get('solution'), str):
+            raise ValueError(f'Invalid EvalPlus sample: {row.get("task_id")!r}')
+        groups.setdefault(row['task_id'], []).append(row['solution'])
+    if set(groups) != set(task_map):
+        raise ValueError(f'Incomplete humaneval+ task coverage: {len(groups)} of {len(task_map)} tasks')
+    with tempfile.TemporaryDirectory(prefix='evalplus-local-') as directory:
+        source = Path(directory) / 'samples.jsonl'
+        shutil.copyfile(samples, source)
+        environment = dict(os.environ)
+        environment['EVALPLUS_MAX_MEMORY_BYTES'] = str(
+            int(settings.get('sample_memory_mb', 2048)) * 1024 * 1024)
+        command = [sys.executable, '-m', 'evalplus.evaluate', '--dataset', 'humaneval',
+                   '--samples', str(source), '--parallel', str(settings.get('parallel', 2)),
+                   '--min_time_limit', '1.0', '--gt_time_limit_factor', '4.0']
+        subprocess.run(command, check=True, env=environment,
+                       timeout=int(settings.get('walltime', 7200)))
+        result_path = source.with_name('samples_eval_results.json')
+        results = json.loads(result_path.read_text())
+        evaluated = results.get('eval', {})
+        if set(evaluated) != set(groups):
+            raise ValueError('Evaluator omitted or added task IDs')
+        for task_id, solutions in groups.items():
+            returned = evaluated[task_id]
+            if len(returned) != len(solutions) or any(
+                    row.get('task_id') != task_id or row.get('solution') != expected
+                    for row, expected in zip(returned, solutions)):
+                raise ValueError(f'Evaluator lost or reordered samples for {task_id}')
+        shutil.copyfile(result_path, output / 'samples_eval_results.json')
+    atomic_json(output / 'evaluation_metadata.json', {
+        'evalplus_version': package_version('evalplus'), 'dataset': 'humaneval',
+        'dataset_release': release, 'dataset_hash': results.get('hash'),
+        'samples_sha256': file_sha(samples), 'task_count': len(groups),
+        'sample_count': sum(map(len, groups.values())),
+        'parallel': int(settings.get('parallel', 2)), 'min_time_limit': 1.0,
+        'gt_time_limit_factor': 4.0,
+        'max_memory_bytes_per_sample': int(settings.get('sample_memory_mb', 2048)) * 1024 * 1024,
+        'protocol': 'official-base-and-plus-tests-no-sanitization',
+        'execution_backend': 'local-unsafe'})
+    atomic_json(output / 'dataset_metadata.json', metadata)
+    (output / 'environment.txt').write_text(
+        f'evalplus=={package_version("evalplus")}\npython=={sys.version.split()[0]}\n')
+
+
 def _wrapper(mode, output, settings, samples=None):
-    """Never execute generated Python on the host and never pull/build images."""
+    """Run the default container evaluator or an explicitly authorized local fallback."""
+    if settings.get('backend', 'docker') == 'local':
+        return _local_wrapper(mode, output, settings, samples)
     command = ["bash", str(WRAPPER), mode, "humaneval"]
     if samples is not None:
         command.append(str(Path(samples).resolve()))
@@ -208,7 +325,7 @@ def _intact(marker, identity):
     return True
 
 
-def _evaluate_output(output, samples, dataset, count, sample_count):
+def _evaluate_output(output, samples, dataset, count, sample_count, *, backend='docker'):
     if not (output / "environment.txt").is_file():
         raise ValueError("Official EvalPlus output must retain its evaluation environment")
     metadata = _json(output / "evaluation_metadata.json")
@@ -220,6 +337,7 @@ def _evaluate_output(output, samples, dataset, count, sample_count):
             or metadata.get("samples_sha256") != file_sha(samples)
             or metadata.get("task_count") != count or metadata.get("sample_count") != sample_count
             or metadata.get("protocol") != "official-base-and-plus-tests-no-sanitization"
+            or (backend == 'local' and metadata.get('execution_backend') != 'local-unsafe')
             or not payload.get("hash") or metadata.get("dataset_hash") != payload["hash"]):
         raise ValueError("Official EvalPlus output provenance does not match exported samples/dataset")
     return metadata
@@ -249,7 +367,16 @@ def run_transfer(config: dict, source_jobs: list[dict], *, resume=True) -> dict:
     jobs = [job for job in source_jobs if job.get("phase") == "confirm"]
     if not jobs:
         raise ValueError("HumanEval+ transfer requires completed confirmation jobs")
-    settings["image_identity"] = _image_identity(settings.get("image", "improving-evalplus:0.3.1"))
+    backend = settings.get('backend', 'docker')
+    if backend == 'local':
+        if not settings.get('allow_unsafe_local'):
+            raise ValueError('Local EvalPlus requires allow_unsafe_local=True')
+        settings['runtime_identity'] = _local_runtime_manifest()
+        settings['image_identity'] = 'local-unsafe:' + stable_hash(settings['runtime_identity'])
+    elif backend == 'docker':
+        settings["image_identity"] = _image_identity(settings.get("image", "improving-evalplus:0.3.1"))
+    else:
+        raise ValueError(f'Unsupported transfer backend: {backend}')
     sources = _source_trials(jobs, requested)
     root = Path(config["output_dir"]) / "transfer" / "humanevalplus"
     tasks, dataset = _tasks(settings, root)
@@ -306,7 +433,7 @@ def run_transfer(config: dict, source_jobs: list[dict], *, resume=True) -> dict:
             output = _attempt(folder / "official")
             try:
                 _wrapper("evaluate", output, settings, exported)
-                official = _evaluate_output(output, exported, dataset, len(tasks), len(records))
+                official = _evaluate_output(output, exported, dataset, len(tasks), len(records), backend=backend)
                 verified = import_evalplus_results(records, output / "samples_eval_results.json",
                                                     tasks=tasks, require_plus=True, manifest_path=export_manifest)
                 write_jsonl(verified_path, verified)
@@ -316,6 +443,7 @@ def run_transfer(config: dict, source_jobs: list[dict], *, resume=True) -> dict:
                     bootstrap_samples=settings.get("bootstrap_samples", 2000), seed=source["seed"],
                     expected_samples={task["task_id"]: samples for task in tasks})
                 summary["evaluation"] = {**official, "image_identity": settings["image_identity"],
+                                          "execution_backend": official.get('execution_backend', backend),
                                           "code_extraction": code_extraction}
                 atomic_json(metrics_path, summary)
             except BaseException as error:

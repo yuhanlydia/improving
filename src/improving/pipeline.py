@@ -12,6 +12,7 @@ import platform
 import random
 import shutil
 import subprocess
+import sys
 import time
 
 import torch
@@ -43,6 +44,17 @@ def checkpoint_fingerprint(path):
     if not assets or not (path / 'config.json').exists():
         raise ValueError(f'Not a complete model directory: {path}')
     return stable_hash({p.name: file_sha(p) for p in sorted(assets)})
+
+
+def execution_runtime_identity(evaluation):
+    """Runtime identity needed to fail closed when unsafe local execution resumes."""
+    backend = evaluation.get('backend', 'docker')
+    if backend != 'local':
+        return {'backend': backend}
+    executable = Path(sys.executable).resolve()
+    return {'backend': 'local', 'python_version': sys.version,
+            'python_executable': str(executable),
+            'python_executable_sha256': file_sha(executable)}
 
 
 @contextmanager
@@ -349,11 +361,13 @@ def run_experiment(config, *, resume=False):
     diagnostic_tasks, diagnostic_samples, diagnostic_evaluation = _diagnostic_protocol(config, splits['eval'])
     evaluation = config.get('evaluation', {})
     _preflight_verification(evaluation)
+    runtime_identity = execution_runtime_identity(evaluation)
     root = Path(config['output_dir'])
     source_hashes = {p.name: file_sha(p) for p in Path(__file__).parent.glob('*.py')}
     fingerprint = stable_hash({'config': config,
                                'data': {k: file_sha(p) for k, p in config['data'].items()},
-                               'implementation': source_hashes})
+                               'implementation': source_hashes,
+                               'evaluation_runtime': runtime_identity})
     manifest_path = root / 'manifest.json'
     local_base = Path(config['model']['name'])
     local_base_fingerprint = checkpoint_fingerprint(local_base) if local_base.is_dir() else None
@@ -369,6 +383,7 @@ def run_experiment(config, *, resume=False):
         atomic_json(manifest_path, {'fingerprint': fingerprint, 'config': config,
                     'implementation_hashes': source_hashes, 'python': platform.python_version(),
                     'torch': torch.__version__, 'status': 'initialized',
+                    'evaluation_runtime': runtime_identity,
                     'dependencies': {p: importlib.metadata.version(p) for p in
                                      ('transformers', 'peft', 'accelerate', 'datasets', 'numpy')},
                     'selected_task_ids': {k: [t['task_id'] for t in rows] for k, rows in splits.items()},
