@@ -3,10 +3,30 @@
 本仓库只研究 **同一道 coding 题的不同正确实现/算法，在自蒸馏后是否被保留**。
 提供从数据准备、校准、生成、LoRA 微调到独立代码验证、同题覆盖统计、跨轮次报告的完整实验流程。
 
+## Start here: solution-subspace geometry study
+
+新增当前优先实验：**冻结模型，先检查同题正确实现的 K/V 子空间是否具有相似、包含、插值和共同张成关系。**
+不预设“10 个候选 = 10 个正确算法 = 10 个生成子空间”。逐正确实现提取诊断子空间；生成使用的秩与数量 `m ∈ {1,2,4,8}` 在验证集上选择，最终测试集锁定。
+
+```bash
+git pull
+python -m pip install -e '.[train,test,analysis]'
+docker pull python:3.11-slim
+bash scripts/run_geometry.sh configs/geometry_100_16gb.yaml
+```
+
+- 100 题：64 discovery / 16 validation / 20 final test；每题初始生成 10 个候选。
+- 完整 MBPP：`bash scripts/run_geometry.sh configs/geometry_full_16gb.yaml`，使用所有准备后的题目，每题初始生成 32 个候选。
+- 24GB／3B 模型：对应 `geometry_100_24gb.yaml` 或 `geometry_full_24gb.yaml`。
+- 可按阶段执行并断点续跑：`python -m improving geometry --config configs/geometry_100_16gb.yaml --stage all --resume`。
+- 报告在配置的输出目录下 `report/summary.md`，同时输出 JSON、CSV 和安装 analysis extra 后的 PNG。
+
+正式协议、每阶段预算与关系定义见 [geometry protocol](docs/geometry_protocol.md)。完整配置最多约 8.6 万个候选，16/24GB 是待机器实测的目标配置；请先看 validate 输出。算法标签不参与提取或选模型，自动 AST 指标仅是实现多样性的代理。这个新诊断**尚未运行真实模型 benchmark，也不包含新的 LoRA/co-evolution 训练**；现有 LoRA 管线在下方保留作后续吸收实验基础。
+
 **当前状态：已实现实验代码和 CPU 正确性测试；没有真实模型 benchmark 结果，不能声称优于 SPD。**
 16/24 GB 是目标配置，显存和速度需在你的机器上实测。
 
-## What is implemented
+## Existing self-distillation pipeline
 
 | Arm | Generation policy | SFT | Interpretation |
 |---|---|---|---|
@@ -71,7 +91,7 @@ MBPP preparation uses official **full** train/test splits, not sanitized MBPP or
 
 Preparation removes exact normalized training-prompt overlaps with held-out prompts **before** splitting the training pool, while preserving the full test set. On the checked snapshot this removes training IDs 602, 704 and 872; final prepared counts are 291 train, 50 calibration, 30 validation and 500 evaluation. Every exclusion and its matching ID is recorded in `preparation_manifest.jsonl`. This hygiene applies equally to every arm and uses no outcome/strategy filtering.
 
-GPU generation/training runs only when you invoke `run`, `generate`, `calibrate` or `train`. `pytest` uses tiny randomly initialized models and explicitly trusted programs; its numbers are not benchmark results.
+Model execution occurs in the geometry generation/extraction stages and when you invoke `run`, `generate`, `calibrate` or `train`. `pytest` uses tiny randomly initialized models and explicitly trusted programs; its numbers are not benchmark results.
 
 ## What one round does
 

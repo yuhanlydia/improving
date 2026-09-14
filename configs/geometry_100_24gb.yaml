@@ -1,0 +1,62 @@
+# Same 100-question protocol as geometry_100_16gb, with the 3B model.
+# 24 GB is a target profile; peak memory must be measured on the actual GPU.
+seed: 42
+data_seed: 42
+model:
+  name: Qwen/Qwen2.5-Coder-3B-Instruct
+  device: auto
+  dtype: bfloat16
+  attn_implementation: sdpa
+data:
+  train: data/mbpp/train.jsonl
+  calibration: data/mbpp/calibration.jsonl
+  validation: data/mbpp/validation.jsonl
+  eval: data/mbpp/eval.jsonl
+data_limits:
+  train: 64
+  validation: 16
+  eval: 20
+output_dir: runs/geometry_100_24gb_seed42
+generation:
+  batch_size: 4
+  max_new_tokens: 512
+  max_prompt_tokens: 1024
+  temperature: 0.8
+  top_p: 0.95
+  top_k: 0
+discovery:
+  samples: 10
+  max_correct_per_task: 10
+  format_controls: true
+extraction:
+  max_length: 1536
+  max_rank: 32
+  energy: 0.95
+  method: randomized
+  layers: null
+  span_mode: completion
+geometry:
+  ranks: [4, 8, 16, 32]
+  bank_sizes: [1, 2, 4, 8]
+  max_pairs_per_task: 20
+relations:
+  enabled: true
+  max_tasks: 8
+  rank: 8
+  samples: 16
+  interpolation: [0.25, 0.5, 0.75]
+  strength: 1.0
+selection:
+  samples: 16
+  correctness_tolerance: 0.05
+  strength: 1.0
+  metric: ast_proxy_coverage
+final:
+  samples: 32
+evaluation:
+  backend: docker
+  docker_image: python:3.11-slim
+  workers: 4
+  timeout: 5
+  bootstrap_samples: 1000
+  correct_budget: 4

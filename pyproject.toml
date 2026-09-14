@@ -13,6 +13,7 @@ dependencies = ["numpy>=1.24,<3", "PyYAML>=6,<7"]
 train = ["torch>=2.5,<2.7", "transformers==4.51.3", "peft==0.15.2", "accelerate==1.6.0", "datasets==3.5.1", "safetensors>=0.4"]
 evalplus = ["evalplus==0.3.1"]
 test = ["pytest>=8,<9"]
+analysis = ["matplotlib>=3.8,<4"]
 
 [project.scripts]
 improving = "improving.cli:main"

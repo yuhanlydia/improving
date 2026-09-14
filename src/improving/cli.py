@@ -12,6 +12,11 @@ def _parser():
     parser = argparse.ArgumentParser(prog='improving', description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     commands.add_parser('doctor', help='Inspect local dependencies and GPU; no downloads')
+    geometry = commands.add_parser('geometry', help='Frozen-model correct-solution subspace study')
+    geometry.add_argument('--config', required=True)
+    geometry.add_argument('--stage', default='all', choices=['validate', 'discover', 'extract', 'analyze',
+                         'relations', 'select', 'evaluate', 'report', 'all'])
+    geometry.add_argument('--resume', action='store_true')
     prepare = commands.add_parser('prepare', help='Download and prepare a coding benchmark')
     prepare.add_argument('--dataset', choices=['mbpp', 'humaneval'], required=True)
     prepare.add_argument('--output-dir', required=True)
@@ -89,6 +94,9 @@ def main(argv=None):
 def _dispatch(args):
     from .data import read_jsonl, write_jsonl
     command = args.command
+    if command == 'geometry':
+        from .geometry_study import load_geometry_config, run_geometry
+        return run_geometry(load_geometry_config(args.config), stage=args.stage, resume=args.resume)
     if command == 'doctor':
         packages = {p: importlib.util.find_spec(p) is not None
                     for p in ('torch', 'transformers', 'peft', 'datasets', 'evalplus')}
