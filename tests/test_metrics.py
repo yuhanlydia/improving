@@ -6,6 +6,7 @@ import json
 import math
 
 import pytest
+from improving import metrics
 
 from improving.metrics import (
     compare_summaries,
@@ -95,6 +96,38 @@ def test_proxy_does_not_merge_shadowed_builtin_with_global_builtin():
     assert implementation_proxy(a) != implementation_proxy(b)
 
 
+def test_control_flow_proxy_tracks_algorithmic_skeleton_not_local_names():
+    loop_a = "def solve(xs):\n for x in xs:\n  if x: return x"
+    loop_b = "def solve(values):\n for value in values:\n  if value: return value"
+    branch = "def solve(xs):\n if xs: return xs[0]"
+    assert metrics.control_flow_proxy(loop_a) == metrics.control_flow_proxy(loop_b)
+    assert metrics.control_flow_proxy(loop_a) != metrics.control_flow_proxy(branch)
+
+
+def test_summary_reports_exact_control_flow_balance_and_multiple_correct_budgets():
+    codes = ["x=1", "x=1", "x=2", "for x in []:\n pass"]
+    rows = [record("a", i, True, code=code) for i, code in enumerate(codes)]
+    result = summarize_records(rows, ks=[1, 4], correct_budget=2,
+                               correct_budgets=[2, 4, 8], bootstrap_samples=0)
+    exact = result["per_task"]["a"]["exact_program"]
+    assert exact["unique_label_count"] == 3
+    assert exact["unique_fraction"] == pytest.approx(3 / 4)
+    assert exact["effective_label_count"] == pytest.approx(math.exp(-(0.5 * math.log(0.5) + 2 * 0.25 * math.log(0.25))))
+    assert exact["simpson_diversity"] == pytest.approx(5 / 6)
+    assert exact["correct_matched_coverage_at_budgets"] == {
+        "2": pytest.approx(11 / 6), "4": pytest.approx(3), "8": None}
+    control = result["per_task"]["a"]["control_flow_proxy"]
+    assert control["unique_label_count"] == 2
+    assert result["per_task"]["a"]["lexical"]["pairwise_token_jaccard_distance"] == pytest.approx(11 / 18)
+    assert result["protocol"]["correct_budgets"] == [2, 4, 8]
+    assert result["protocol"]["metric_versions"] == {
+        "implementation_proxy": "python-ast-conservative-locals-v1",
+        "exact_program": "stripped-source-sha256-v1",
+        "control_flow_proxy": "python-ast-control-flow-v1",
+        "lexical": "python-token-set-jaccard-v1",
+    }
+
+
 def test_summary_includes_zero_correct_tasks_and_task_macro_denominator():
     records = [record("a", 0, True, "loop"), record("a", 1, True, "recursion"),
                record("a", 2, False), record("a", 3, False),
@@ -179,6 +212,18 @@ def test_task_bootstrap_is_reproducible_and_uses_tasks_not_samples():
     assert a["aggregate"]["correct_fraction"]["ci95"] == [0., 1.]
 
 
+def test_summary_preserves_one_explicit_evaluation_protocol_and_rejects_mixed_protocols():
+    protocol = {"backend": "docker", "protocol_version": "task-tests-v1",
+                "code_extraction": "first_fence", "task_tests_sha256": "abc"}
+    rows = [dict(record("a", 0, True), evaluation_provenance=protocol),
+            dict(record("a", 1, False), evaluation_provenance=protocol)]
+    result = summary(rows)
+    assert result["protocol"]["evaluation"] == protocol
+    rows[1]["evaluation_provenance"] = {**protocol, "code_extraction": "strict"}
+    with pytest.raises(ValueError, match="evaluation provenance"):
+        summary(rows)
+
+
 def test_comparison_checks_noninferiority_with_paired_task_deltas():
     previous = summary([record("a", 0, False), record("a", 1, False),
                         record("b", 0, True, "a"), record("b", 1, False)])
@@ -203,6 +248,10 @@ def test_comparison_rejects_different_task_universes_or_budgets():
     other = copy.deepcopy(a)
     other["protocol"]["ks"] = [1]
     with pytest.raises(ValueError):
+        compare_summaries(a, other)
+    other = copy.deepcopy(a)
+    other["protocol"]["metric_versions"]["lexical"] = "changed"
+    with pytest.raises(ValueError, match="metric_versions"):
         compare_summaries(a, other)
 
 

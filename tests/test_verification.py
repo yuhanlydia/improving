@@ -24,6 +24,53 @@ def test_extraction_only_removes_a_single_outer_code_fence():
     assert verification.extract_python_code("    return 4\n") == "    return 4\n"
 
 
+def test_first_fence_extraction_ignores_surrounding_prose_and_accepts_unclosed_fence():
+    surrounded = "Here is the solution:\n```python\ndef add(a, b):\n    return a + b\n```\nExplanation."
+    assert verification.extract_python_code(surrounded, mode="first_fence") == "def add(a, b):\n    return a + b\n"
+    unclosed = "```py\ndef add(a, b):\n    return a + b\n"
+    assert verification.extract_python_code(unclosed, mode="first_fence") == "def add(a, b):\n    return a + b\n"
+    raw = "def add(a, b):\n    return a + b\n"
+    assert verification.extract_python_code(raw, mode="first_fence") == raw
+
+
+def test_first_fence_mode_changes_execution_and_is_recorded():
+    row = completion("Prose.\n```python\ndef add(a, b):\n    return a + b\n```\nMore prose.")
+    strict = verification.verify_completions(
+        [task()], [row], backend="local", allow_unsafe_local=True)
+    fenced = verification.verify_completions(
+        [task()], [row], backend="local", allow_unsafe_local=True,
+        code_extraction="first_fence")
+    assert strict[0]["status"] == "compile_error"
+    assert fenced[0]["status"] == "passed"
+    assert fenced[0]["code_extraction"] == "first_fence"
+    assert fenced[0]["evaluation_provenance"] == {
+        "backend": "local", "code_extraction": "first_fence",
+        "docker_image": "python:3.11-slim", "protocol_version": "task-tests-v1",
+        "task_harness_sha256": fenced[0]["evaluation_provenance"]["task_harness_sha256"],
+        "timeout": 5.0, "memory_mb": 512, "pids_limit": 64,
+    }
+    assert len(fenced[0]["evaluation_provenance"]["task_harness_sha256"]) == 64
+
+
+def test_provenance_changes_when_continuation_harness_changes():
+    base = task(completion_mode="continuation", code_prefix="def add(a, b):\n")
+    changed = task(completion_mode="continuation", code_prefix="def add(a, b, c=0):\n")
+    row = completion("    return a + b\n")
+    first = verification.verify_completions(
+        [base], [row], backend="local", allow_unsafe_local=True)[0]
+    second = verification.verify_completions(
+        [changed], [row], backend="local", allow_unsafe_local=True)[0]
+    assert (first["evaluation_provenance"]["task_harness_sha256"] !=
+            second["evaluation_provenance"]["task_harness_sha256"])
+
+
+def test_unknown_code_extraction_mode_is_rejected():
+    with pytest.raises(ValueError, match="code_extraction"):
+        verification.verify_completions(
+            [task()], [completion()], backend="local", allow_unsafe_local=True,
+            code_extraction="guess")
+
+
 def test_local_execution_requires_explicit_trust():
     with pytest.raises(ValueError, match="allow_unsafe_local"):
         verification.verify_completions([task()], [completion()], backend="local")

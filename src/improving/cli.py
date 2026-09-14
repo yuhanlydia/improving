@@ -51,12 +51,14 @@ def _parser():
     verify.add_argument('--workers', type=int, default=4)
     verify.add_argument('--expected-samples', type=int)
     verify.add_argument('--docker-image', default='python:3.11-slim')
+    verify.add_argument('--code-extraction', choices=['strict', 'first_fence'], default='strict')
     metrics = commands.add_parser('metrics')
     metrics.add_argument('--samples', required=True, help='Verified completion JSONL')
     metrics.add_argument('--tasks', required=True, help='Full intended evaluation task universe')
     metrics.add_argument('--output', required=True)
     metrics.add_argument('--ks', default='1,8,32,64')
     metrics.add_argument('--correct-budget', type=int, default=8)
+    metrics.add_argument('--correct-budgets', default='2,4,8')
     metrics.add_argument('--expected-samples', type=int, required=True)
     metrics.add_argument('--bootstrap-samples', type=int, default=1000)
     metrics.add_argument('--seed', type=int, default=42)
@@ -167,7 +169,8 @@ def _dispatch(args):
         rows = verify_completions(read_jsonl(args.tasks), read_jsonl(args.samples),
                                   backend=args.backend, timeout=args.timeout, workers=args.workers,
                                   allow_unsafe_local=args.allow_unsafe_local, docker_image=args.docker_image,
-                                  expected_samples=args.expected_samples)
+                                  expected_samples=args.expected_samples,
+                                  code_extraction=args.code_extraction)
         write_jsonl(args.output, rows)
         return {'output': args.output, 'samples': len(rows), 'correct': sum(r['correct'] for r in rows)}
     if command == 'metrics':
@@ -178,6 +181,7 @@ def _dispatch(args):
         rows = validate_completions(read_jsonl(args.samples), tasks)
         summary = summarize_records(rows, ks=[int(x) for x in args.ks.split(',')],
                                     correct_budget=args.correct_budget,
+                                    correct_budgets=[int(x) for x in args.correct_budgets.split(',')],
                                     bootstrap_samples=args.bootstrap_samples, seed=args.seed,
                                     expected_samples={t['task_id']: args.expected_samples for t in tasks})
         atomic_json(args.output, summary)

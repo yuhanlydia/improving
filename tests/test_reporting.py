@@ -112,6 +112,11 @@ def test_report_summarizes_both_stages_and_retains_budget_training_metadata(tmp_
     assert stage["metrics"]["pass_at_1"]["mean"] == .5
     assert stage["metrics"]["pass_at_1"]["eligible_fraction"] == 1
     assert stage["metrics"]["implementation_coverage_at_k"]["4"]["coverage_status"] == "unavailable"
+    assert stage["metrics"]["exact_program_unique_fraction"]["mean"] == 1
+    assert stage["metrics"]["implementation_simpson_diversity"]["mean"] is None
+    assert stage["metrics"]["control_flow_effective_label_count"]["mean"] == 1
+    assert stage["metrics"]["lexical_pairwise_token_jaccard_distance"]["mean"] is None
+    assert set(stage["metrics"]["implementation_correct_matched_coverage_at_budgets"]) == {"2", "4", "8"}
     assert stage["budget"]["generation_tokens"] == 15
     assert stage["protocol"]["sampling"]["model_identity"] == "spectral_soft-model"
     round_data = result["rounds"]["spectral_soft/round_1"]

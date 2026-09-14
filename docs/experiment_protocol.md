@@ -138,6 +138,11 @@ as a manual training hierarchy.
   temperature, top-p/top-k, token limits, stop conditions, and prompt format for
   paired comparisons. Save every raw sample, even empty, invalid, wrong, or
   truncated outputs.
+- Freeze code extraction before evaluation and record it as verifier provenance.
+  The code-centric protocol uses the first Python/py/untagged Markdown fence,
+  including an unclosed fence through end-of-response; it never repairs the
+  extracted Python. Keep strict whole-response compilation only as a separate
+  formatting-compliance endpoint.
 - Use a single fixed task prompt through the model's chat template. No prompt
   ensemble, per-strategy instruction, or manual rewrite per method.
 - Give every method the same generation-prompt count and samples per prompt for
@@ -222,11 +227,15 @@ arm and a paired common-eligible comparison. Explicitly discuss the selection
 effect of restricting to tasks both models solve often enough. Do not hide
 zero-correct tasks; their outcomes remain in unconditional coverage and accuracy.
 
-Use two clearly separated label types:
+Use clearly separated label types:
 
 - **AST implementation proxy:** a deterministic normalized structural
   fingerprint. It is useful for tracking syntactic/structural duplication but
   does not establish algorithmic novelty or semantic equivalence.
+- **Exact-program and control-flow proxies:** stripped source identity and an
+  ordered control-node skeleton. Report unique fraction, effective label count,
+  Simpson diversity and fixed-correct coverage as exploratory complementary
+  views; none is a semantic algorithm label.
 - **Audited algorithm labels:** stable within-task labels assigned through an
   independent evaluation procedure with a fixed rubric. An annotator must be
   able to distinguish algorithm/data-structure/control-flow choices from

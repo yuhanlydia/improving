@@ -51,11 +51,14 @@ train:
   loss_scope: all
 evaluation:
   backend: docker
+  code_extraction: first_fence
   docker_image: python:3.11-slim
   workers: 4
   timeout: 5
   ks: [1, 8, 32, 64]
-  correct_budget: 8
+  correct_budget: 4
+  correct_budgets: [2, 4, 8]
+  correctness_margin: 0.01
   bootstrap_samples: 1000
 diagnostics:
   evaluate_generation_policy: true

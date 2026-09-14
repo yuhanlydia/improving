@@ -12,14 +12,26 @@ import ast
 from collections import Counter
 from collections.abc import Iterable, Mapping
 import hashlib
+import io
+import json
 import math
 from numbers import Integral, Real
+import tokenize
 from typing import Any
 
 import numpy as np
 
 
 PROXY_VERSION = "python-ast-conservative-locals-v1"
+CONTROL_FLOW_PROXY_VERSION = "python-ast-control-flow-v1"
+EXACT_PROGRAM_VERSION = "stripped-source-sha256-v1"
+LEXICAL_VERSION = "python-token-set-jaccard-v1"
+METRIC_VERSIONS = {
+    "implementation_proxy": PROXY_VERSION,
+    "exact_program": EXACT_PROGRAM_VERSION,
+    "control_flow_proxy": CONTROL_FLOW_PROXY_VERSION,
+    "lexical": LEXICAL_VERSION,
+}
 
 
 def _integer(value: Any, name: str) -> int:
@@ -163,22 +175,68 @@ def implementation_proxy(code: str) -> str | None:
     return hashlib.sha256((PROXY_VERSION + "\n" + canonical).encode("utf-8")).hexdigest()
 
 
+def control_flow_proxy(code: str) -> str | None:
+    """Hash the ordered control-flow node skeleton of valid Python source."""
+    if not isinstance(code, str):
+        return None
+    control_nodes = (ast.If, ast.For, ast.AsyncFor, ast.While, ast.Try, ast.With,
+                     ast.AsyncWith, ast.ListComp, ast.SetComp, ast.DictComp,
+                     ast.GeneratorExp, ast.BoolOp, ast.Match)
+    try:
+        skeleton = [type(node).__name__ for node in ast.walk(ast.parse(code))
+                    if isinstance(node, control_nodes)]
+    except (SyntaxError, ValueError, TypeError, RecursionError):
+        return None
+    return hashlib.sha256((CONTROL_FLOW_PROXY_VERSION + "\n" + json.dumps(skeleton)).encode()).hexdigest()
+
+
+def _token_set(code: str) -> set[str] | None:
+    try:
+        ignored = {tokenize.ENCODING, tokenize.NL, tokenize.NEWLINE, tokenize.INDENT,
+                   tokenize.DEDENT, tokenize.COMMENT, tokenize.ENDMARKER}
+        return {token.string for token in tokenize.generate_tokens(io.StringIO(code).readline)
+                if token.type not in ignored}
+    except (IndentationError, SyntaxError, tokenize.TokenError):
+        return None
+
+
+def _pairwise_token_jaccard(codes: list[str]) -> float | None:
+    sets = [_token_set(code) for code in codes]
+    if len(sets) < 2 or any(tokens is None for tokens in sets):
+        return None
+    distances = []
+    for index, left in enumerate(sets):
+        for right in sets[index + 1:]:
+            union = left | right
+            distances.append(1 - len(left & right) / len(union) if union else 0.0)
+    return math.fsum(distances) / len(distances)
+
+
 def _label_metrics(counts: Counter[str], correct_count: int, sample_count: int,
-                   ks: list[int], correct_budget: int) -> dict[str, Any]:
+                   ks: list[int], correct_budget: int, correct_budgets: list[int]) -> dict[str, Any]:
     labeled = sum(counts.values())
     complete = labeled == correct_count
     status = "no_correct" if correct_count == 0 else ("complete" if complete else "incomplete")
+    entropy = (-math.fsum((v / correct_count) * math.log(v / correct_count)
+                          for v in counts.values()) if complete and correct_count else None)
     return {
         "status": status,
         "counts": dict(sorted(counts.items())),
         "labeled_correct_count": labeled,
+        "unique_label_count": len(counts) if complete else None,
+        "unique_fraction": len(counts) / correct_count if complete and correct_count else None,
+        "effective_label_count": math.exp(entropy) if entropy is not None else None,
+        "simpson_diversity": (1 - math.fsum(v * (v - 1) for v in counts.values()) /
+                              (correct_count * (correct_count - 1)))
+                             if complete and correct_count >= 2 else None,
         "coverage_at_k": {str(k): coverage_at_k(counts, sample_count, k)
                            if complete and k <= sample_count else None for k in ks},
         "correct_matched_coverage": coverage_at_k(counts, correct_count, correct_budget)
                                     if complete and correct_budget <= correct_count else None,
-        "correct_label_entropy": -math.fsum((v / correct_count) * math.log(v / correct_count)
-                                            for v in counts.values())
-                                 if complete and correct_count else None,
+        "correct_matched_coverage_at_budgets": {
+            str(budget): coverage_at_k(counts, correct_count, budget)
+            if complete and budget <= correct_count else None for budget in correct_budgets},
+        "correct_label_entropy": entropy,
     }
 
 
@@ -218,7 +276,8 @@ def _macro(values: Mapping[str, float | None], indices: np.ndarray,
 
 def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = (1, 8, 32, 64),
                       correct_budget: int = 8, bootstrap_samples: int = 1000,
-                      seed: int = 42, expected_samples: int | Mapping[str, int] | None = None) -> dict[str, Any]:
+                      seed: int = 42, expected_samples: int | Mapping[str, int] | None = None,
+                      correct_budgets: Iterable[int] | None = None) -> dict[str, Any]:
     """Summarize one run; records must have unique (task_id, sample_id) keys.
 
     ``correct`` must be an actual bool, not a truthy string/integer. Every task
@@ -242,8 +301,12 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
         raise ValueError("ks must be nonempty and contain no duplicates")
     ks.sort()
     correct_budget = _integer(correct_budget, "correct_budget")
+    correct_budgets = [2, 4, 8] if correct_budgets is None else [
+        _integer(value, "correct budget") for value in correct_budgets]
+    correct_budgets = sorted(set([*correct_budgets, correct_budget]))
     groups: dict[str, list[Mapping[str, Any]]] = {}
     seen = set()
+    evaluation_protocols: list[str | None] = []
     for record in records:
         task = record.get("task_id")
         if not isinstance(task, str) or not task.strip():
@@ -257,7 +320,15 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
         strategy = record.get("strategy_id")
         if strategy is not None and not isinstance(strategy, str):
             raise ValueError("strategy_id must be a string or null")
+        provenance = record.get("evaluation_provenance")
+        if provenance is not None and not isinstance(provenance, Mapping):
+            raise ValueError("evaluation provenance must be a mapping")
+        evaluation_protocols.append(None if provenance is None else json.dumps(
+            provenance, sort_keys=True, ensure_ascii=False, allow_nan=False))
         groups.setdefault(task, []).append(record)
+    explicit_protocols = {value for value in evaluation_protocols if value is not None}
+    if explicit_protocols and (len(explicit_protocols) != 1 or None in evaluation_protocols):
+        raise ValueError("records have missing or mixed evaluation provenance")
     expected: int | dict[str, int] | None = None
     if isinstance(expected_samples, Mapping):
         expected = {}
@@ -284,11 +355,19 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
         correct = [row for row in rows if row["correct"]]
         n, c = len(rows), len(correct)
         proxies: Counter[str] = Counter()
+        exact_programs: Counter[str] = Counter()
+        control_flows: Counter[str] = Counter()
         strategies: Counter[str] = Counter()
         for row in correct:
-            proxy = implementation_proxy(row.get("code", row.get("completion")))
+            code = row.get("code", row.get("completion"))
+            proxy = implementation_proxy(code)
             if proxy is not None:
                 proxies[proxy] += 1
+            if isinstance(code, str):
+                exact_programs[hashlib.sha256(code.strip().encode()).hexdigest()] += 1
+            control = control_flow_proxy(code)
+            if control is not None:
+                control_flows[control] += 1
             strategy = row.get("strategy_id")
             if strategy is not None and strategy.strip():
                 strategies[strategy] += 1
@@ -297,8 +376,12 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
             "correct_count": c,
             "correct_fraction": c / n if n else None,
             "pass_at_k": {str(k): pass_at_k(n, c, k) if k <= n else None for k in ks},
-            "implementation_proxy": _label_metrics(proxies, c, n, ks, correct_budget),
-            "strategy": _label_metrics(strategies, c, n, ks, correct_budget),
+            "implementation_proxy": _label_metrics(proxies, c, n, ks, correct_budget, correct_budgets),
+            "exact_program": _label_metrics(exact_programs, c, n, ks, correct_budget, correct_budgets),
+            "control_flow_proxy": _label_metrics(control_flows, c, n, ks, correct_budget, correct_budgets),
+            "strategy": _label_metrics(strategies, c, n, ks, correct_budget, correct_budgets),
+            "lexical": {"pairwise_token_jaccard_distance": _pairwise_token_jaccard(
+                [row.get("code", row.get("completion")) for row in correct])},
         }
     indices = _bootstrap_indices(len(per_task), bootstrap_samples, seed)
     def macro(getter, population="tasks_with_available_estimates"):
@@ -310,25 +393,49 @@ def summarize_records(records: Iterable[Mapping[str, Any]], ks: Iterable[int] = 
         "correct_fraction": macro(lambda data: data["correct_fraction"]),
         "pass_at_k": {str(k): macro(lambda data, k=k: data["pass_at_k"][str(k)]) for k in ks},
     }
-    for label in ("implementation_proxy", "strategy"):
+    for label in ("implementation_proxy", "exact_program", "control_flow_proxy", "strategy"):
         aggregate[label] = {
             "coverage_at_k": {str(k): macro(lambda data, k=k: data[label]["coverage_at_k"][str(k)]) for k in ks},
             "correct_matched_coverage": macro(lambda data: data[label]["correct_matched_coverage"],
                                                "tasks_with_complete_labels_and_at_least_correct_budget_correct_samples"),
             "correct_label_entropy": macro(lambda data: data[label]["correct_label_entropy"],
                                            "tasks_with_complete_labels_and_positive_correct_count"),
+            "unique_fraction": macro(lambda data: data[label]["unique_fraction"],
+                                     "tasks_with_complete_labels_and_positive_correct_count"),
+            "effective_label_count": macro(lambda data: data[label]["effective_label_count"],
+                                           "tasks_with_complete_labels_and_positive_correct_count"),
+            "simpson_diversity": macro(lambda data: data[label]["simpson_diversity"],
+                                       "tasks_with_complete_labels_and_at_least_two_correct_samples"),
+            "correct_matched_coverage_at_budgets": {
+                str(budget): macro(lambda data, budget=budget:
+                                   data[label]["correct_matched_coverage_at_budgets"][str(budget)],
+                                   f"tasks_with_complete_labels_and_at_least_{budget}_correct_samples")
+                for budget in correct_budgets},
         }
+    aggregate["lexical"] = {"pairwise_token_jaccard_distance": macro(
+        lambda data: data["lexical"]["pairwise_token_jaccard_distance"],
+        "tasks_with_at_least_two_correct_tokenizable_samples")}
+    protocol = {"ks": ks, "correct_budget": correct_budget, "correct_budgets": correct_budgets,
+                "expected_samples": expected,
+                "proxy_version": PROXY_VERSION, "metric_versions": METRIC_VERSIONS,
+                "sampling": "without_replacement",
+                "bootstrap_samples": int(bootstrap_samples), "seed": int(seed)}
+    if explicit_protocols:
+        protocol["evaluation"] = json.loads(next(iter(explicit_protocols)))
     return {
         "schema_version": 1,
-        "protocol": {"ks": ks, "correct_budget": correct_budget, "expected_samples": expected,
-                     "proxy_version": PROXY_VERSION, "sampling": "without_replacement",
-                     "bootstrap_samples": int(bootstrap_samples), "seed": int(seed)},
+        "protocol": protocol,
         "per_task": per_task,
         "aggregate": aggregate,
         "definitions": {
             "pass_at_k": "1 - C(n-c,k)/C(n,k); n includes all completions, c is correct count.",
             "coverage_at_k": "Sum over correct labels of 1 - C(n-n_j,k)/C(n,k); incorrect draws remain in n.",
             "implementation_proxy": "Conservative normalized Python AST hash; neither algorithm identity nor semantic equivalence.",
+            "exact_program": "SHA-256 of stripped executable source; formatting differences remain distinct.",
+            "control_flow_proxy": "Ordered Python AST control-flow node skeleton; an exploratory structural proxy, not an algorithm identity.",
+            "effective_label_count": "exp(Shannon entropy) of correct-label frequencies.",
+            "simpson_diversity": "Probability that two distinct correct samples drawn without replacement have different labels.",
+            "pairwise_token_jaccard_distance": "Mean pairwise Jaccard distance between Python token sets of correct samples.",
             "strategy": "Externally supplied strategy_id labels; a task is unavailable unless every correct sample has a label. Zero-correct coverage is zero.",
             "correct_matched_coverage": "Expected distinct labels in correct_budget draws without replacement from the correct samples only; eligible-task population reported.",
             "correct_label_entropy": "Natural-log Shannon entropy of correct-label frequencies; null for zero correct samples or incomplete labels.",
@@ -364,7 +471,8 @@ def compare_summaries(previous: Mapping[str, Any], current: Mapping[str, Any],
             or not math.isfinite(correctness_margin) or not 0 <= correctness_margin <= 1):
         raise ValueError("correctness_margin must be finite and between 0 and 1")
     tasks = _same_tasks(previous, current)
-    for field in ("ks", "correct_budget", "proxy_version", "sampling"):
+    for field in ("ks", "correct_budget", "correct_budgets", "proxy_version",
+                  "metric_versions", "sampling"):
         if previous["protocol"].get(field) != current["protocol"].get(field):
             raise ValueError(f"summaries have different metric protocol: {field}")
     for task in tasks:
@@ -392,12 +500,21 @@ def compare_summaries(previous: Mapping[str, Any], current: Mapping[str, Any],
         "bootstrap": {"samples": int(bootstrap_samples), "seed": int(seed), "unit": "paired_tasks"},
         "caveat": "Metric and sampling budgets were checked. Identical prompts, verifier, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain.",
     }
-    for label in ("implementation_proxy", "strategy"):
+    for label in ("implementation_proxy", "exact_program", "control_flow_proxy", "strategy"):
         result[label] = {
             "coverage_at_k": {str(k): delta(lambda data, k=k: data[label]["coverage_at_k"][str(k)]) for k in ks},
             "correct_matched_coverage": delta(lambda data: data[label]["correct_matched_coverage"]),
             "correct_label_entropy": delta(lambda data: data[label]["correct_label_entropy"]),
+            "unique_fraction": delta(lambda data: data[label]["unique_fraction"]),
+            "effective_label_count": delta(lambda data: data[label]["effective_label_count"]),
+            "simpson_diversity": delta(lambda data: data[label]["simpson_diversity"]),
+            "correct_matched_coverage_at_budgets": {
+                str(budget): delta(lambda data, budget=budget:
+                                   data[label]["correct_matched_coverage_at_budgets"][str(budget)])
+                for budget in previous["protocol"]["correct_budgets"]},
         }
+    result["lexical"] = {"pairwise_token_jaccard_distance": delta(
+        lambda data: data["lexical"]["pairwise_token_jaccard_distance"])}
     return result
 
 

@@ -110,10 +110,21 @@ def _overview(summary: Mapping[str, Any]) -> dict[str, Any]:
         "pass_at_1": _estimate(aggregate["pass_at_k"].get("1", aggregate["correct_fraction"])),
         "correct_budget": summary["protocol"]["correct_budget"],
     }
-    for source, name in (("implementation_proxy", "implementation"), ("strategy", "strategy")):
+    for source, name in (("implementation_proxy", "implementation"),
+                         ("exact_program", "exact_program"),
+                         ("control_flow_proxy", "control_flow"),
+                         ("strategy", "strategy")):
         output[f"{name}_coverage_at_k"] = {k: _estimate(value) for k, value in aggregate[source]["coverage_at_k"].items()}
         output[f"{name}_correct_matched_coverage"] = _estimate(aggregate[source]["correct_matched_coverage"])
         output[f"{name}_correct_label_entropy"] = _estimate(aggregate[source]["correct_label_entropy"])
+        output[f"{name}_unique_fraction"] = _estimate(aggregate[source]["unique_fraction"])
+        output[f"{name}_effective_label_count"] = _estimate(aggregate[source]["effective_label_count"])
+        output[f"{name}_simpson_diversity"] = _estimate(aggregate[source]["simpson_diversity"])
+        output[f"{name}_correct_matched_coverage_at_budgets"] = {
+            budget: _estimate(value) for budget, value in
+            aggregate[source]["correct_matched_coverage_at_budgets"].items()}
+    output["lexical_pairwise_token_jaccard_distance"] = _estimate(
+        aggregate["lexical"]["pairwise_token_jaccard_distance"])
     output["strategy_annotation_status"] = {
         status: sorted(task for task, data in summary["per_task"].items() if data["strategy"]["status"] == status)
         for status in ("complete", "incomplete", "no_correct")

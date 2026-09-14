@@ -95,10 +95,15 @@ def validate_config(config):
     evaluation = config.get('evaluation', {})
     if any(type(k) is not int or not 1 <= k <= n for k in evaluation.get('ks', [1, 8, 32, 64])):
         raise ValueError('All evaluation ks must fit the declared per-task sample budget')
+    if 'correct_budgets' in evaluation and (not evaluation['correct_budgets'] or any(
+            type(k) is not int or not 1 <= k <= n for k in evaluation['correct_budgets'])):
+        raise ValueError('All evaluation.correct_budgets must fit the declared per-task sample budget')
     if evaluation.get('backend', 'docker') not in {'docker', 'local', 'none'}:
         raise ValueError('evaluation.backend must be docker, local or none')
     if evaluation.get('backend') == 'local' and not evaluation.get('allow_unsafe_local', False):
         raise ValueError('Local generated-code execution requires explicit allow_unsafe_local')
+    if evaluation.get('code_extraction', 'strict') not in {'strict', 'first_fence'}:
+        raise ValueError('evaluation.code_extraction must be strict or first_fence')
     return config
 
 
@@ -118,22 +123,16 @@ def evaluate_file(tasks, records, path, settings, *, expected_samples, seed=42):
         timeout=float(settings.get('timeout', 5)),
         allow_unsafe_local=bool(settings.get('allow_unsafe_local', False)),
         docker_image=settings.get('docker_image', 'python:3.11-slim'),
-        workers=int(settings.get('workers', 4)), expected_samples=expected_samples
+        workers=int(settings.get('workers', 4)), expected_samples=expected_samples,
+        code_extraction=settings.get('code_extraction', 'strict')
     )
     path = Path(path)
     write_jsonl(path.with_suffix('.verified.jsonl'), verified)
     summary = summarize_records(verified, ks=settings.get('ks', [1, 8, 32, 64]),
                                 correct_budget=settings.get('correct_budget', 8),
+                                correct_budgets=settings.get('correct_budgets'),
                                 bootstrap_samples=settings.get('bootstrap_samples', 1000),
                                 seed=seed, expected_samples=expected_samples)
-    summary['protocol']['evaluation'] = {
-        'backend': settings.get('backend', 'docker'),
-        'timeout': float(settings.get('timeout', 5)),
-        'docker_image': settings.get('docker_image', 'python:3.11-slim'),
-        'task_tests_sha256': stable_hash({t['task_id']: {
-            'tests': t.get('tests'), 'entry_point': t.get('entry_point'),
-            'completion_mode': t.get('completion_mode'), 'test_mode': t.get('test_mode')
-        } for t in tasks}), 'protocol_version': 'task-tests-v1'}
     atomic_json(path.with_suffix('.metrics.json'), summary)
     return summary
 

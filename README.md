@@ -23,8 +23,12 @@ bash scripts/run_geometry.sh configs/geometry_100_16gb.yaml
 
 正式协议、每阶段预算与关系定义见 [geometry protocol](docs/geometry_protocol.md)。完整配置最多约 8.6 万个候选，16/24GB 是待机器实测的目标配置；请先看 validate 输出。算法标签不参与提取或选模型，自动 AST 指标仅是实现多样性的代理。这个新诊断**尚未运行真实模型 benchmark，也不包含新的 LoRA/co-evolution 训练**；现有 LoRA 管线在下方保留作后续吸收实验基础。
 
-**当前状态：已实现实验代码和 CPU 正确性测试；没有真实模型 benchmark 结果，不能声称优于 SPD。**
+**当前状态：geometry study 已实现实验代码和 CPU 正确性测试，但尚未运行真实模型 benchmark；既有 self-distillation pipeline 已完成一个单 seed、本地执行的探索性 MBPP pilot。该 pilot 支持继续验证，但不能声称已优于 SPD 或达到论文证据标准。**
 16/24 GB 是目标配置，显存和速度需在你的机器上实测。
+
+See the compact [code-centric pilot results](results/pilot_seed42_codecentric/README.md)
+and the [ICLR validation roadmap](docs/iclr_roadmap.md). The original strict
+format-sensitive scores are retained locally and are not substituted silently.
 
 ## Existing self-distillation pipeline
 
@@ -138,7 +142,7 @@ runs/pilot_16gb_seed42/
   report.md
 ```
 
-Set `evaluation.backend: none` if Docker verification must be performed elsewhere. Samples are still saved and report entries remain pending. This does not fabricate zero scores. The default verifier executes candidates in restricted Docker containers without network; infrastructure failure stops the run instead of scoring every candidate wrong. Local execution requires an explicit trust flag and is only for trusted fixtures; it is not a security sandbox.
+Set `evaluation.backend: none` if Docker verification must be performed elsewhere. Samples are still saved and report entries remain pending. This does not fabricate zero scores. The default verifier executes candidates in restricted Docker containers without network; infrastructure failure stops the run instead of scoring every candidate wrong. Local execution requires an explicit trust flag and is only for trusted fixtures; it is not a security sandbox. Code extraction is part of the recorded evaluation protocol: `strict` accepts only a standalone fence, while the pilot configs use `first_fence` to evaluate the first Python/py/untagged block even when the model adds surrounding prose or omits the closing fence.
 
 ## Correctness versus algorithm diversity
 
@@ -150,6 +154,13 @@ Set `evaluation.backend: none` if Docker verification must be performed elsewher
 \]
 
 Coverage is also computed at a **fixed number of correct samples**, so more correct samples alone cannot masquerade as greater strategy diversity. Eligible-task denominators, missing labels, zero-correct tasks and insufficient sampling budgets are explicit. CIs resample tasks; multiple training seeds remain necessary.
+
+The default pilot records fixed-correct coverage at budgets 2, 4 and 8, with 4
+as the primary pilot budget. Metric JSON also includes exact-program and
+control-flow proxy coverage, unique fraction, effective label count, Simpson
+diversity, and pairwise Python-token Jaccard distance. These are complementary
+implementation proxies; reporting more proxies does not turn them into audited
+algorithm identities.
 
 Automatic AST fingerprints are labeled **implementation proxies**, never true algorithm classes. True algorithm coverage requires independent, audited `strategy_id` annotations. They are evaluation-only and never used to group/filter training samples. Keep labels consistent across models/rounds for observed strategy-retention analysis; absence in 64 draws does not prove a strategy has zero probability.
 

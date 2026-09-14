@@ -34,24 +34,33 @@ from typing import Any
 import uuid
 
 from .data import read_jsonl, validate_completions, validate_tasks, write_jsonl
+from .utils import stable_hash
 
 
-def extract_python_code(completion: str) -> str:
-    """Remove a single enclosing Python/py/untagged fence, never repair code.
+def extract_python_code(completion: str, mode: str = "strict") -> str:
+    """Extract Python from a completion according to an explicit protocol.
 
-    Prose outside fences, multiple blocks, trailing explanations, and indentation
-    remain intact and can fail compilation. Function-body indentation matters.
+    ``strict`` removes only a single enclosing Python/py/untagged fence.
+    ``first_fence`` takes the first such block even with surrounding prose or a
+    missing closing fence. Neither mode repairs the extracted Python.
     """
     if not isinstance(completion, str):
         raise TypeError("completion must be a string")
-    match = re.fullmatch(r"\s*```(?:python|py)?[ \t]*\r?\n(?P<code>[\s\S]*?)\r?\n```[ \t]*\s*", completion, flags=re.IGNORECASE)
+    if mode not in {"strict", "first_fence"}:
+        raise ValueError("code_extraction must be strict or first_fence")
+    pattern = r"\s*```(?:python|py)?[ \t]*\r?\n(?P<code>[\s\S]*?)\r?\n```[ \t]*\s*"
+    if mode == "first_fence":
+        pattern = r"```(?:python|py)?[ \t]*\r?\n(?P<code>[\s\S]*?)(?:\r?\n```|\Z)"
+        match = re.search(pattern, completion, flags=re.IGNORECASE)
+        return match.group("code").rstrip() + "\n" if match else completion
+    match = re.fullmatch(pattern, completion, flags=re.IGNORECASE)
     if match and "```" not in match.group("code"):
         return match.group("code") + "\n"
     return completion
 
 
-def _solution_code(task: Mapping[str, Any], completion: str) -> str:
-    code = extract_python_code(completion)
+def _solution_code(task: Mapping[str, Any], completion: str, code_extraction: str = "strict") -> str:
+    code = extract_python_code(completion, mode=code_extraction)
     if not code.strip():
         return code
     if task.get("completion_mode") == "continuation":
@@ -195,7 +204,7 @@ def _execute(code: str, tests: str, *, backend: str, timeout: float, memory_mb: 
             process.wait()
 
 
-def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Mapping[str, Any]], backend: str = "docker", timeout: float = 5.0, allow_unsafe_local: bool = False, *, memory_mb: int = 512, pids_limit: int = 64, docker_image: str = "python:3.11-slim", expected_samples: int | None = None, workers: int = 4) -> list[dict[str, Any]]:
+def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Mapping[str, Any]], backend: str = "docker", timeout: float = 5.0, allow_unsafe_local: bool = False, *, memory_mb: int = 512, pids_limit: int = 64, docker_image: str = "python:3.11-slim", expected_samples: int | None = None, workers: int = 4, code_extraction: str = "strict") -> list[dict[str, Any]]:
     """Verify every sample with task tests and preserve all original fields.
 
     ``timeout`` is per sample wall time, including container startup. Docker
@@ -218,14 +227,33 @@ def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Map
         raise ValueError("memory_mb and pids_limit must be positive integers")
     if type(workers) is not int or workers < 1:
         raise ValueError("workers must be a positive integer")
+    if code_extraction not in {"strict", "first_fence"}:
+        raise ValueError("code_extraction must be strict or first_fence")
+    evaluation_provenance = {
+        "backend": backend,
+        "code_extraction": code_extraction,
+        "docker_image": docker_image,
+        "memory_mb": memory_mb,
+        "pids_limit": pids_limit,
+        "protocol_version": "task-tests-v1",
+        "task_harness_sha256": stable_hash({task["task_id"]: {
+            "tests": tests[task["task_id"]], "entry_point": task.get("entry_point"),
+            "completion_mode": task.get("completion_mode"),
+            "continuation_prefix": (task.get("code_prefix", task["prompt"])
+                                    if task.get("completion_mode") == "continuation" else None),
+        } for task in task_rows}),
+        "timeout": float(timeout),
+    }
     docker = shutil.which("docker") if backend == "docker" else None
     if backend == "docker" and docker is None:
         raise RuntimeError("Docker is required by default; install/start Docker and prepare its Python image. Local trusted execution requires explicit allow_unsafe_local=True")
     def verify_one(row: dict[str, Any]) -> dict[str, Any]:
-        code = _solution_code(task_map[row["task_id"]], row["completion"])
+        code = _solution_code(task_map[row["task_id"]], row["completion"], code_extraction)
         status = "empty" if not code.strip() else _execute(code, tests[row["task_id"]], backend=backend,
             timeout=timeout, memory_mb=memory_mb, pids_limit=pids_limit, docker_image=docker_image, docker=docker)
         return {**row, "code": code, "correct": status == "passed", "status": status,
+                "code_extraction": code_extraction,
+                "evaluation_provenance": evaluation_provenance,
                 "evaluation_backend": backend, "evaluation_protocol": "task-tests-v1"}
     with ThreadPoolExecutor(max_workers=workers) as executor:
         return list(executor.map(verify_one, rows))

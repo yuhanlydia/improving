@@ -1,7 +1,8 @@
 import json
 import pytest
 from helpers import tiny_model_and_tokenizer
-from improving.pipeline import run_experiment, load_config, checkpoint_fingerprint, record_stage
+from improving.pipeline import (run_experiment, load_config, checkpoint_fingerprint,
+                                record_stage, evaluate_file, validate_config)
 from improving.data import write_jsonl
 
 
@@ -10,6 +11,43 @@ def test_config_rejects_unknown_method_and_incomplete_sample_budget(tmp_path):
     path.write_text('methods: [magic]\n')
     with pytest.raises(ValueError):
         load_config(path)
+
+
+def test_config_rejects_unknown_code_extraction_mode():
+    config = {
+        'model': {'name': 'fixture'}, 'output_dir': 'run', 'methods': ['plain'],
+        'data': {name: f'{name}.jsonl' for name in ('train', 'calibration', 'validation', 'eval')},
+        'evaluation': {'code_extraction': 'guess'},
+    }
+    with pytest.raises(ValueError, match='code_extraction'):
+        validate_config(config)
+
+
+def test_config_rejects_correct_diversity_budgets_above_sample_budget():
+    config = {
+        'model': {'name': 'fixture'}, 'output_dir': 'run', 'methods': ['plain'],
+        'data': {name: f'{name}.jsonl' for name in ('train', 'calibration', 'validation', 'eval')},
+        'generation': {'eval_samples': 4},
+        'evaluation': {'ks': [1, 4], 'correct_budgets': [2, 8]},
+    }
+    with pytest.raises(ValueError, match='correct_budgets'):
+        validate_config(config)
+
+
+def test_evaluate_file_applies_and_records_first_fence_protocol(tmp_path):
+    tasks = [{'task_id': 'Fixture/0', 'prompt': 'Add.', 'source': 'fixture', 'split': 'eval',
+              'entry_point': 'add', 'tests': 'assert add(2, 3) == 5'}]
+    records = [{'task_id': 'Fixture/0', 'sample_id': 0,
+                'completion': 'Prose.\n```python\ndef add(a, b): return a + b\n```\nExplanation.'}]
+    summary = evaluate_file(
+        tasks, records, tmp_path / 'evaluation.jsonl',
+        {'backend': 'local', 'allow_unsafe_local': True, 'workers': 1,
+         'code_extraction': 'first_fence', 'ks': [1], 'correct_budget': 1,
+         'correct_budgets': [1, 3]},
+        expected_samples=1)
+    assert summary['aggregate']['correct_count'] == 1
+    assert summary['protocol']['evaluation']['code_extraction'] == 'first_fence'
+    assert summary['protocol']['correct_budgets'] == [1, 3]
 
 
 def test_checkpoint_fingerprint_hashes_shard_contents_and_tokenizer(tmp_path):
