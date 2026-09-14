@@ -10,3 +10,4 @@ runs/
 checkpoints/
 .cache/
 .superpowers/
+.worktrees/
