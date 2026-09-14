@@ -1,0 +1,155 @@
+import json
+import shutil
+import subprocess
+
+import pytest
+
+from improving import verification
+from improving.data import read_jsonl
+
+
+def task(**extra):
+    return {"task_id": "Fixture/0", "prompt": "Add two integers.", "source": "fixture", "split": "eval",
+            "entry_point": "add", "tests": "assert add(2, 3) == 5\nassert add(-1, 1) == 0", **extra}
+
+
+def completion(code="def add(a, b):\n    return a + b", sample_id=0, **extra):
+    return {"task_id": "Fixture/0", "sample_id": sample_id, "completion": code, **extra}
+
+
+def test_extraction_only_removes_a_single_outer_code_fence():
+    assert verification.extract_python_code("```python\ndef add(a, b):\n    return a+b\n```\n") == "def add(a, b):\n    return a+b\n"
+    raw = "Here is code:\n```python\npass\n```\nExplanation."
+    assert verification.extract_python_code(raw) == raw
+    assert verification.extract_python_code("    return 4\n") == "    return 4\n"
+
+
+def test_local_execution_requires_explicit_trust():
+    with pytest.raises(ValueError, match="allow_unsafe_local"):
+        verification.verify_completions([task()], [completion()], backend="local")
+
+
+def test_trusted_fixtures_preserve_correct_wrong_empty_invalid_and_timeout():
+    records = [completion(method="fixture"), completion("def add(a, b):\n    return 0", 1),
+               completion("", 2), completion("def broken(:", 3), completion("while True:\n    pass", 4),
+               completion("raise RuntimeError('boom')", 5)]
+    verified = verification.verify_completions([task()], records, backend="local", allow_unsafe_local=True, timeout=0.3)
+    assert len(verified) == len(records)
+    assert [row["correct"] for row in verified] == [True, False, False, False, False, False]
+    assert [row["status"] for row in verified] == ["passed", "failed", "empty", "compile_error", "timeout", "runtime_error"]
+    for original, row in zip(records, verified):
+        assert all(row[key] == value for key, value in original.items())
+
+
+def test_humaneval_continuation_and_full_function_both_run_check():
+    human = task(prompt='def add(a, b):\n    """Add integers."""\n',
+                 code_prefix='def add(a, b):\n    """Add integers."""\n',
+                 completion_mode="continuation", test_mode="check", tests="def check(candidate):\n    assert candidate(2, 3) == 5\n")
+    verified = verification.verify_completions([human], [completion("    return a + b\n"), completion(sample_id=1),
+        completion("    return 0\n", sample_id=2)], backend="local", allow_unsafe_local=True)
+    assert [row["correct"] for row in verified] == [True, True, False]
+
+
+def test_missing_tasks_duplicate_keys_and_incomplete_budgets_are_errors():
+    with pytest.raises(ValueError, match="Missing"):
+        verification.verify_completions([task()], [])
+    with pytest.raises(ValueError, match="Duplicate"):
+        verification.verify_completions([task()], [completion(), completion()])
+    with pytest.raises(ValueError, match="expected_samples"):
+        verification.verify_completions([task()], [completion()], expected_samples=2)
+    with pytest.raises(ValueError, match="tests"):
+        verification.verify_completions([task(tests="")], [completion()])
+
+
+def test_parallel_verification_preserves_input_order_and_rejects_bad_workers():
+    rows = [completion("import time\ntime.sleep(0.05)\ndef add(a,b): return a+b", 19), completion("def add(a,b): return 0", 3)]
+    verified = verification.verify_completions([task()], rows, backend="local", allow_unsafe_local=True, workers=2)
+    assert [(row["sample_id"], row["correct"]) for row in verified] == [(19, True), (3, False)]
+    with pytest.raises(ValueError, match="workers"):
+        verification.verify_completions([task()], rows, backend="local", allow_unsafe_local=True, workers=0)
+
+
+def test_early_clean_exit_does_not_bypass_checks():
+    rows = [completion("import os\nos._exit(0)"), completion("raise SystemExit(0)", 1)]
+    result = verification.verify_completions([task()], rows, backend="local", allow_unsafe_local=True)
+    assert [row["correct"] for row in result] == [False, False]
+    assert [row["status"] for row in result] == ["runtime_error", "runtime_error"]
+
+
+def test_evalplus_manifest_restores_mapping_after_records_reordered(tmp_path):
+    rows = [completion(sample_id=7), completion("def add(a,b): return 0", 11)]
+    path = tmp_path / "samples.jsonl"
+    manifest = verification.export_evalplus([task()], rows, path)
+    results = {"eval": {"Fixture/0": [
+        {"task_id": "Fixture/0", "solution": row["completion"], "base_status": status, "plus_status": status}
+        for row, status in zip(rows, ["pass", "fail"])]}}
+    result_path = tmp_path / "results.json"
+    result_path.write_text(json.dumps(results))
+    imported = verification.import_evalplus_results(rows[::-1], result_path, manifest_path=manifest)
+    assert [(row["sample_id"], row["correct"]) for row in imported] == [(11, False), (7, True)]
+
+
+def test_missing_docker_never_falls_back_to_host(monkeypatch):
+    monkeypatch.setattr(shutil, "which", lambda executable: None)
+    with pytest.raises(RuntimeError, match="Docker"):
+        verification.verify_completions([task()], [completion()])
+
+
+def test_docker_command_is_isolated_and_timeout_removes_container(monkeypatch):
+    commands = []
+    monkeypatch.setattr(shutil, "which", lambda executable: "/usr/bin/docker")
+
+    def run(command, **kwargs):
+        commands.append(command)
+        if command[1] == "run":
+            raise subprocess.TimeoutExpired(command, kwargs["timeout"])
+        return subprocess.CompletedProcess(command, 0)
+
+    monkeypatch.setattr(subprocess, "run", run)
+    result = verification.verify_completions([task()], [completion()], timeout=0.1)
+    assert result[0]["status"] == "timeout"
+    command = commands[0]
+    assert command[command.index("--network") + 1] == "none"
+    assert "--read-only" in command and "--pids-limit" in command and "--memory" in command
+    assert command[command.index("--cap-drop") + 1] == "ALL"
+    assert "readonly" in command[command.index("--mount") + 1]
+    container_name = command[command.index("--name") + 1]
+    assert commands[-1] == ["/usr/bin/docker", "rm", "-f", container_name]
+
+
+def test_evalplus_official_v031_bridge_preserves_noncontiguous_ids(tmp_path):
+    rows = [completion(sample_id=7), completion("", 2), completion("def add(a, b):\n    return 0", 99)]
+    export_path = tmp_path / "samples.jsonl"
+    manifest = verification.export_evalplus([task()], rows, export_path)
+    exported = read_jsonl(export_path)
+    assert len(exported) == 3
+    assert exported[1]["solution"] == ""
+    assert manifest.exists()
+    results = {"date": "fixture", "hash": "fixture-hash", "eval": {"Fixture/0": [
+        {"task_id": "Fixture/0", "solution": row["solution"], "base_status": base, "plus_status": plus,
+         "base_fail_tests": [], "plus_fail_tests": []}
+        for row, base, plus in zip(exported, ["pass", "fail", "pass"], ["pass", "fail", "fail"])]}}
+    result_path = tmp_path / "samples_eval_results.json"
+    result_path.write_text(json.dumps(results))
+    verified = verification.import_evalplus_results(rows, result_path, tasks=[task()], manifest_path=manifest)
+    assert [row["sample_id"] for row in verified] == [7, 2, 99]
+    assert [row["correct"] for row in verified] == [True, False, False]
+    assert all(row["evaluation_backend"] == "evalplus" for row in verified)
+    results["eval"]["Fixture/0"].pop()
+    result_path.write_text(json.dumps(results))
+    with pytest.raises(ValueError, match="count"):
+        verification.import_evalplus_results(rows, result_path, tasks=[task()], manifest_path=manifest)
+
+
+def test_evalplus_rejects_missing_plus_and_changed_solution(tmp_path):
+    rows = [completion()]
+    row = {"task_id": "Fixture/0", "solution": rows[0]["completion"], "base_status": "pass", "plus_status": None}
+    path = tmp_path / "results.json"
+    path.write_text(json.dumps({"eval": {"Fixture/0": [row]}}))
+    with pytest.raises(ValueError, match="plus_status"):
+        verification.import_evalplus_results(rows, path, tasks=[task()])
+    assert verification.import_evalplus_results(rows, path, tasks=[task()], require_plus=False)[0]["correct"]
+    row.update(solution="def add(a,b): return 123", plus_status="pass")
+    path.write_text(json.dumps({"eval": {"Fixture/0": [row]}}))
+    with pytest.raises(ValueError, match="solution"):
+        verification.import_evalplus_results(rows, path, tasks=[task()])
