@@ -13,6 +13,7 @@ from improving.formal_study import (compile_jobs, formal_budget, load_formal_con
 from improving.formal_reporting import build_formal_report
 from improving.metrics import summarize_records
 from improving.pipeline import file_sha
+from improving.pipeline import validate_config
 from improving.utils import atomic_json, stable_hash
 
 
@@ -190,3 +191,24 @@ def test_formal_validate_cli_loads_no_model_and_writes_nothing(tmp_path, monkeyp
     assert main(['formal', '--config', str(path), '--stage', 'validate']) == 0
     assert json.loads(capsys.readouterr().out)['valid'] is True
     assert not Path(config['output_dir']).exists()
+
+
+@pytest.mark.parametrize(('rounds', 'formal_name', 'smoke_name'), [
+    (5, 'retention_5round_32gb_local.yaml', 'retention_smoke_5round_32gb_local.yaml'),
+    (10, 'retention_10round_32gb_local.yaml', 'retention_smoke_10round_32gb_local.yaml'),
+])
+def test_extended_retention_profiles_are_isolated_and_runnable(rounds, formal_name, smoke_name):
+    """Catch missing/wrong depth profiles or output collisions with formal v1."""
+    formal = load_formal_config(Path('configs') / formal_name)
+    retention = [job for job in compile_jobs(formal) if job['phase'] == 'retention']
+    assert len(retention) == 3
+    assert {job['config']['rounds'] for job in retention} == {rounds}
+    assert formal['output_dir'] == f'runs/retention_{rounds}round_32gb_local_v1'
+    assert formal['output_dir'] != load_formal_config('configs/formal_32gb_local.yaml')['output_dir']
+
+    smoke = validate_config(yaml.safe_load((Path('configs') / smoke_name).read_text()))
+    assert smoke['rounds'] == rounds
+    assert smoke['methods'] == ['plain', 'spd_hard', 'spectral_soft']
+    assert smoke['data_limits'] == {'train': 8, 'calibration': 8, 'validation': 8, 'eval': 4}
+    assert smoke['generation']['eval_samples'] == 4
+    assert smoke['output_dir'] == f'runs/retention_smoke_{rounds}round_32gb_local_v1'

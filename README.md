@@ -37,6 +37,53 @@ bash scripts/run_formal.sh configs/formal_24gb.yaml
 
 **已完成的实证仍是 [64 题、seed-42 的探索性 pilot](results/pilot_seed42_codecentric/README.md)。新的正式确认、机制、三轮保留和 HumanEval+ 结果需要运行后取得；本仓库不把代码测试计为 benchmark 成绩。**
 
+### Five- and ten-round retention extensions
+
+The preregistered study stops at three retention rounds. Separate exploratory
+profiles extend the same local RTX 5090 protocol to five or ten rounds without
+changing or pooling with that endpoint:
+
+```bash
+# Validate without loading a model or starting GPU work.
+PYTHONPATH=src python -m improving formal \
+  --config configs/retention_5round_32gb_local.yaml --stage validate
+PYTHONPATH=src python -m improving formal \
+  --config configs/retention_10round_32gb_local.yaml --stage validate
+
+# Run one seed at a time; --resume reuses sealed rounds and atomic chunks.
+PYTHONPATH=src python -m improving formal \
+  --config configs/retention_5round_32gb_local.yaml \
+  --stage retention --job-id retention_seed43 --resume
+PYTHONPATH=src python -m improving formal \
+  --config configs/retention_10round_32gb_local.yaml \
+  --stage retention --job-id retention_seed43 --resume
+```
+
+Replace `43` with `44` or `45` for the other planned seeds. A full 500-task
+method-round generates up to 36,387 candidates, so these profiles are
+multi-day experiments on one GPU and need substantial checkpoint storage.
+Their output directories are distinct from formal v1.
+
+For a short functional check only, the following profiles use four evaluation
+tasks, four samples, eight training tasks, one SFT epoch and no generation-policy
+diagnostic. They verify that five/ten sequential rounds and resume work; they
+cannot report pass@8/32/64 and are not research evidence:
+
+```bash
+PYTHONPATH=src python -m improving validate \
+  --config configs/retention_smoke_5round_32gb_local.yaml
+PYTHONPATH=src python -m improving run \
+  --config configs/retention_smoke_5round_32gb_local.yaml --resume
+
+PYTHONPATH=src python -m improving validate \
+  --config configs/retention_smoke_10round_32gb_local.yaml
+PYTHONPATH=src python -m improving run \
+  --config configs/retention_smoke_10round_32gb_local.yaml --resume
+```
+
+The smoke runtime is a target, not a guarantee; hardware contention and program
+test time can move it beyond twenty minutes.
+
 独立的冻结模型 [solution-subspace geometry study](docs/geometry_protocol.md) 保留，运行入口是 `scripts/run_geometry.sh`。它用于检查正确实现的子空间相似、包含、插值和共同张成关系，是可选机制诊断，不是本次 Spectral-soft 正式实验的前置阶段。
 
 ## Existing self-distillation pipeline

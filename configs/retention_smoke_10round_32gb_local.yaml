@@ -1,0 +1,61 @@
+# About-20-minute functional smoke profile. Not a benchmark or paper result.
+seed: 43
+data_seed: 42
+model:
+  name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+  device: auto
+  dtype: bfloat16
+  attn_implementation: sdpa
+data:
+  train: data/mbpp/train.jsonl
+  calibration: data/mbpp/calibration.jsonl
+  validation: data/mbpp/validation.jsonl
+  eval: data/mbpp/eval.jsonl
+output_dir: runs/retention_smoke_10round_32gb_local_v1
+data_limits: {train: 8, calibration: 8, validation: 8, eval: 4}
+methods: [plain, spd_hard, spectral_soft]
+rounds: 10
+generation:
+  train_samples: 1
+  eval_samples: 4
+  batch_size: 4
+  max_new_tokens: 256
+  max_prompt_tokens: 1024
+  temperature: 0.8
+  top_p: 0.95
+  top_k: 0
+calibration:
+  max_examples: 8
+  max_length: 1024
+  span_mode: completion
+  layers: null
+  rank_fraction: 0.5
+  tau: 1.0
+  rho: 0.5
+train:
+  epochs: 1
+  batch_size: 1
+  gradient_accumulation_steps: 8
+  max_length: 1024
+  learning_rate: 0.00001
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  max_grad_norm: 1.0
+  lora_rank: 8
+  lora_alpha: 8
+  lora_dropout: 0.05
+  gradient_checkpointing: true
+  loss_scope: all
+evaluation:
+  backend: local
+  allow_unsafe_local: true
+  code_extraction: first_fence
+  workers: 8
+  timeout: 5
+  ks: [1, 4]
+  correct_budget: 2
+  correct_budgets: [2, 4]
+  correctness_margin: 0.01
+  bootstrap_samples: 1000
+diagnostics:
+  evaluate_generation_policy: false

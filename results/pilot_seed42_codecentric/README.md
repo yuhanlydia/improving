@@ -26,6 +26,29 @@ compile errors to 28--34 of 4096.
 | AST Simpson diversity | 0.864 | 0.863 | 0.869 | **0.872** |
 | expected AST coverage in four correct draws | 3.393 | 3.391 | 3.409 | **3.422** |
 
+### How to read pass@k
+
+For a task with `n=64` sampled completions of which `c` are correct, this
+report uses the finite-sample estimator
+
+\[
+\operatorname{pass@k}=1-\frac{\binom{n-c}{k}}{\binom nk}.
+\]
+
+It estimates the probability that at least one of `k` draws is correct, then
+macro-averages that value over the 64 tasks. Pass@1 is single-draw
+correctness. Pass@8, pass@32 and pass@64 measure success when a user can draw
+8, 32 or 64 candidates; they are sample budgets, not training-round counts.
+Because all 64 stored samples are drawn at pass@64, that endpoint is exactly
+the fraction of tasks with at least one correct sample: 42/64 for
+Spectral-soft, 40/64 for Plain and SSD, and 39/64 for SPD-hard.
+
+The pilot therefore shows the intended exploratory pattern: Spectral-soft is
+within 0.244 percentage points of SSD at pass@1 while exceeding it by 1.449
+points at pass@32 and 3.125 points at pass@64. Larger-k gains alone do not
+prove within-task algorithm diversity; the fixed-correct AST coverage endpoint
+addresses that separate question.
+
 Using one percentage point as a candidate margin for the confirmatory run,
 spectral-soft is correctness-noninferior to all three controls. Against SSD,
 its paired final-checkpoint deltas are:
