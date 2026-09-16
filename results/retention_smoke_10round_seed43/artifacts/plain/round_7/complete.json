@@ -1,0 +1,25 @@
+{
+  "status": "completed",
+  "model_identity": "f83f3d8c22bcc599e7b0f9bc4dd552eb1db98a6b303c34516998426f56e89bdb",
+  "files": {
+    "train.jsonl": "9631fa54f1e466c9a3deff8ad7f228df51184a00e1e013c9a55eab452f3fa0f2",
+    "train.jsonl.budget.json": "4da2a855f6e2c05b6a53f8ad36475c8a6bceb8fc946364e0f9036b94e5d03a98",
+    "training_generation.resources.json": "a5beded3bd1e238fb66af67ab528e24bb766b9c99aa8ad36f0a55e649a0e9dac",
+    "sft.resources.json": "9bf5c4125419429d633d5beaaf5f48dda19eff9b19a8f34954e091ee33d23835",
+    "evaluation.jsonl": "2e3bdcdadf1b6ef95b3a6293e67c07b88c874d19c3317f4aee7508f88c6cf648",
+    "evaluation.jsonl.budget.json": "27955b489bea1e1b63cd8ad51487d77df21d532bced4bb15d3cd995df09680b8",
+    "evaluation.verified.jsonl": "aa4612c3e0100cdcce92f050686153493da98ab22215369a191d916be7deed3f",
+    "evaluation.metrics.json": "b8a607fdaf6aab5585488afb69429b869d5a7fc1a7356667e817dca185a88934",
+    "post_training_evaluation.resources.json": "d7b9c551a9fb5006b44025b0b49b7630704e611b5dd0a451f7499243660eaf4d",
+    "model/config.json": "9da2b91e2ce53a217860678a33eca23b4113ba66f41d7986516dacf4e2d78475",
+    "model/generation_config.json": "a74797aba705d511c09cc4d12c4517653426ac5559841f0bad62aa8733e100da",
+    "model/model.safetensors": "76fc5494ab0c64cfc648d8ae0002c1edd34bea4187a8a3110cf173e84a9e5248",
+    "model/tokenizer_config.json": "74ecb08f77f4d27fdc01b86c03038bf0102b1395c28f2016334af062ce1ec5be",
+    "model/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+    "model/added_tokens.json": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b",
+    "model/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "model/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model/tokenizer.json": "9c5ae00e602b8860cbd784ba82a8aa14e8feecec692e7076590d014d7b7fdafa",
+    "model/training_stats.json": "08b0fb888ebe60ccba41c6cfca2c5d4c1be07becf337ee22b231e9eb6b9e1fd4"
+  }
+}

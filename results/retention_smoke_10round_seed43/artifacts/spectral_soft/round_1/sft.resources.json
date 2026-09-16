@@ -1,0 +1,16 @@
+{
+  "stage": "sft",
+  "elapsed_seconds": 7.800957528874278,
+  "status": "completed",
+  "cuda_peak_allocated_bytes": 3764102656,
+  "cuda_peak_reserved_bytes": 6318718976,
+  "attempts": [
+    {
+      "stage": "sft",
+      "elapsed_seconds": 7.800957528874278,
+      "status": "completed",
+      "cuda_peak_allocated_bytes": 3764102656,
+      "cuda_peak_reserved_bytes": 6318718976
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "stage": "training_generation",
+  "elapsed_seconds": 46.40722447633743,
+  "status": "completed",
+  "cuda_peak_allocated_bytes": 3127471104,
+  "cuda_peak_reserved_bytes": 4544528384,
+  "attempts": [
+    {
+      "stage": "training_generation",
+      "elapsed_seconds": 46.36378518305719,
+      "status": "completed",
+      "cuda_peak_allocated_bytes": 3127471104,
+      "cuda_peak_reserved_bytes": 4544528384
+    },
+    {
+      "stage": "training_generation",
+      "elapsed_seconds": 0.043439293280243874,
+      "status": "completed",
+      "cuda_peak_allocated_bytes": 3100276224,
+      "cuda_peak_reserved_bytes": 3313500160
+    }
+  ]
+}

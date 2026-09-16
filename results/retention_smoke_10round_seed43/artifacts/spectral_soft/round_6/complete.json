@@ -1,0 +1,28 @@
+{
+  "status": "completed",
+  "model_identity": "aabb4e0a7c692a28776b199dbfe9b688829d5a54f708516cd7fc3152f5010cec",
+  "files": {
+    "calibration.pt": "5d9c57a0a1a2188bc24dac0f544d096aead1a439b0ce2745b734b55117ba80ec",
+    "calibration.resources.json": "3877ae62b24660ec28ecee55807583d0ddcb5a6cbe729822f47c8d0c86e6376b",
+    "operator_diagnostics.json": "5b0b4e87565aaf23874cba4b6bbfd94522635d7cda2724095f13cb665a822de9",
+    "train.jsonl": "26468e8c87df04efd7fafbb123852d689f471b82438ee72a9f3831b30a032ac9",
+    "train.jsonl.budget.json": "c4f3cef3cb2fa08b119ad4bae45a8e638835fd302377e0a2c55c232d229ab48f",
+    "training_generation.resources.json": "8908915c8d6eb282bd4470e5959618299362a56c11f6aa959125fa4287ce73d1",
+    "sft.resources.json": "29962fc992a17114cf367267c504018cca38a535351e699efe882d6a493a6500",
+    "evaluation.jsonl": "75ba41a66b0f6bbf7b1e5256d81abc03ac68979f024e8adf181f0ce1beeba8f6",
+    "evaluation.jsonl.budget.json": "10a85b3947e82c1dad781c28f959403c069a14c1e467a1ab2382817affa026e1",
+    "evaluation.verified.jsonl": "e2ba3aa5dfa77cc5a58e9b1afa07eef67cd1ee0836e7886010a7258bd7c5fbe4",
+    "evaluation.metrics.json": "5f4312fb54f507a42fc54d3c3fd027091a2ed145b4c1b9879a28ce8d3911aded",
+    "post_training_evaluation.resources.json": "8eb945d96eea9d9d2124bcae0498c37603c6d13f34739c7a44380c45c981c243",
+    "model/config.json": "9da2b91e2ce53a217860678a33eca23b4113ba66f41d7986516dacf4e2d78475",
+    "model/generation_config.json": "a74797aba705d511c09cc4d12c4517653426ac5559841f0bad62aa8733e100da",
+    "model/model.safetensors": "b2db0ef5745914e28209292754eb69beaec45426fa2ba386ea206622337d9b6d",
+    "model/tokenizer_config.json": "74ecb08f77f4d27fdc01b86c03038bf0102b1395c28f2016334af062ce1ec5be",
+    "model/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+    "model/added_tokens.json": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b",
+    "model/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "model/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model/tokenizer.json": "9c5ae00e602b8860cbd784ba82a8aa14e8feecec692e7076590d014d7b7fdafa",
+    "model/training_stats.json": "8a603663203cb052067de6f87d6767d5ca2efef6e3090af1b0302b2a6d80fbe1"
+  }
+}

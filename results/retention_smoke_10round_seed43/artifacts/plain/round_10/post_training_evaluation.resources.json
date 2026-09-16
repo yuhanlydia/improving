@@ -1,0 +1,16 @@
+{
+  "stage": "post_training_evaluation",
+  "elapsed_seconds": 31.064719334244728,
+  "status": "completed",
+  "cuda_peak_allocated_bytes": 3184552448,
+  "cuda_peak_reserved_bytes": 4926210048,
+  "attempts": [
+    {
+      "stage": "post_training_evaluation",
+      "elapsed_seconds": 31.064719334244728,
+      "status": "completed",
+      "cuda_peak_allocated_bytes": 3184552448,
+      "cuda_peak_reserved_bytes": 4926210048
+    }
+  ]
+}

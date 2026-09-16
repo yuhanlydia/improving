@@ -1,0 +1,25 @@
+{
+  "samples": 8,
+  "tasks": 8,
+  "prompt_tokens": 502,
+  "generation_tokens": 1522,
+  "length_capped_samples": 2,
+  "protocol": {
+    "model_identity": "21ae03fa275820c0174dc385425a19caa60efeb9f55e07746122ce4830b65622",
+    "prompts": "1c94fc26d708daba25389fa786634c7be5fcbf8e7adee45930192e65a2cef2db",
+    "settings": {
+      "batch_size": 4,
+      "max_new_tokens": 256,
+      "max_prompt_tokens": 1024,
+      "temperature": 0.8,
+      "top_p": 0.95,
+      "top_k": 0,
+      "samples": 1
+    },
+    "seed": 43,
+    "method": "spd_hard",
+    "round": 5,
+    "stage": "training",
+    "format": 1
+  }
+}

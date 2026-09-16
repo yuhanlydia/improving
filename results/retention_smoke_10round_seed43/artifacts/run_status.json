@@ -1,0 +1,12 @@
+{
+  "status": "completed",
+  "output_dir": "runs/retention_smoke_10round_32gb_local_v1",
+  "methods": [
+    "plain",
+    "spd_hard",
+    "spectral_soft"
+  ],
+  "rounds": 10,
+  "elapsed_this_invocation_seconds": 1632.530029898975,
+  "verification": "completed"
+}

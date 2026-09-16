@@ -1,0 +1,12 @@
+{
+  "evaluation_sha": "288ade917981a9a8f7aa49aa1d15b1a0d4f4372bf56d0181c22358ea8ca15394",
+  "model_identity": "6993afd466da6e09733947d892a57ea36c5cb5fbcf571919e3cfac7b163ce251",
+  "resolved_revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+  "integrity_schema": 2,
+  "files": {
+    "evaluation.jsonl": "288ade917981a9a8f7aa49aa1d15b1a0d4f4372bf56d0181c22358ea8ca15394",
+    "evaluation.jsonl.budget.json": "d14f70f588179bf543da597500341810e0ee4ee0e9d2b549458dfaf14904f53a",
+    "evaluation.verified.jsonl": "6b897c398501f2bd13fc56b60827c2ccffe2b5e973e602fe5cf456f7c2da683c",
+    "evaluation.metrics.json": "8bd16a8bc412a4fa1f4eb0fc12243fe3fa5dccc37c204f85c71b3873b63c6e17"
+  }
+}

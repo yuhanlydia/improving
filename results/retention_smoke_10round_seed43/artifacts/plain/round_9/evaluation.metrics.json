@@ -1,0 +1,1075 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "ks": [
+      1,
+      4
+    ],
+    "correct_budget": 2,
+    "correct_budgets": [
+      2,
+      4
+    ],
+    "expected_samples": 4,
+    "proxy_version": "python-ast-conservative-locals-v1",
+    "metric_versions": {
+      "implementation_proxy": "python-ast-conservative-locals-v1",
+      "exact_program": "stripped-source-sha256-v1",
+      "control_flow_proxy": "python-ast-control-flow-v1",
+      "lexical": "python-token-set-jaccard-v1"
+    },
+    "sampling": "without_replacement",
+    "bootstrap_samples": 1000,
+    "seed": 43,
+    "evaluation": {
+      "backend": "local",
+      "code_extraction": "first_fence",
+      "docker_image": "python:3.11-slim",
+      "local_python_version": "3.11.16 (main, Sep  2 2026, 23:39:52) [GCC 15.3.0]",
+      "memory_mb": 512,
+      "pids_limit": 64,
+      "protocol_version": "task-tests-v2",
+      "provenance_version": 2,
+      "runner_sha256": "adb2c99674aaf62430aed2f3025902f095449d589b2a42dd689cafd45dd8922c",
+      "timeout": 5.0
+    },
+    "evaluation_task_harnesses": {
+      "Mbpp/141": "a9110a794c8a01853bb54a3d2cf8e1e7bfdb1dc8dd7a65a5bcf0577309c36416",
+      "Mbpp/242": "97a961a62cd68a26023d7b000fe34414e8ba508150fd053e928f50b9cb1d612a",
+      "Mbpp/25": "6bcd090409d528e4b42abfb66c89f926a594e76b3137a1661680d1d9b374280c",
+      "Mbpp/449": "fe8840d30939665ba70da71289ca275e7799ae4609630dcdd524a6187feed6c9"
+    },
+    "evaluation_provenance_status": "task_local_v2"
+  },
+  "per_task": {
+    "Mbpp/141": {
+      "sample_count": 4,
+      "correct_count": 1,
+      "correct_fraction": 0.25,
+      "pass_at_k": {
+        "1": 0.24999999999999997,
+        "4": 1.0
+      },
+      "implementation_proxy": {
+        "status": "complete",
+        "counts": {
+          "e2630143daa11399e24dacdb0f6e4696f34073aa4990396abb86072e9eccbe39": 1
+        },
+        "labeled_correct_count": 1,
+        "unique_label_count": 1,
+        "unique_fraction": 1.0,
+        "effective_label_count": 1.0,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.24999999999999997,
+          "4": 1.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": -0.0
+      },
+      "exact_program": {
+        "status": "complete",
+        "counts": {
+          "a1e78b195b76b6976f13fdecad95f21eea1f0cda91301957931cbceba442509e": 1
+        },
+        "labeled_correct_count": 1,
+        "unique_label_count": 1,
+        "unique_fraction": 1.0,
+        "effective_label_count": 1.0,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.24999999999999997,
+          "4": 1.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": -0.0
+      },
+      "control_flow_proxy": {
+        "status": "complete",
+        "counts": {
+          "0a50b7103e97200a8850a0cabedcf8fda34bf7a6502ab78314a645147b34a7fd": 1
+        },
+        "labeled_correct_count": 1,
+        "unique_label_count": 1,
+        "unique_fraction": 1.0,
+        "effective_label_count": 1.0,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.24999999999999997,
+          "4": 1.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": -0.0
+      },
+      "strategy": {
+        "status": "incomplete",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": null,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": null,
+          "4": null
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "lexical": {
+        "pairwise_token_jaccard_distance": null
+      }
+    },
+    "Mbpp/242": {
+      "sample_count": 4,
+      "correct_count": 4,
+      "correct_fraction": 1.0,
+      "pass_at_k": {
+        "1": 1.0,
+        "4": 1.0
+      },
+      "implementation_proxy": {
+        "status": "complete",
+        "counts": {
+          "4216c8d8957402c715955a919a3e6dc4917ae14012e32fe8058e22500edc447c": 2,
+          "dd5f20befc6596e42b8af035b758d42c12de9da1f71d988b067add2268cc1300": 1,
+          "eb2e58e36e65599ec3b217e3a9558b627285899a877ec68b8615af5a048a07e3": 1
+        },
+        "labeled_correct_count": 4,
+        "unique_label_count": 3,
+        "unique_fraction": 0.75,
+        "effective_label_count": 2.82842712474619,
+        "simpson_diversity": 0.8333333333333334,
+        "coverage_at_k": {
+          "1": 1.0,
+          "4": 3.0
+        },
+        "correct_matched_coverage": 1.8333333333333333,
+        "correct_matched_coverage_at_budgets": {
+          "2": 1.8333333333333333,
+          "4": 3.0
+        },
+        "correct_label_entropy": 1.0397207708399179
+      },
+      "exact_program": {
+        "status": "complete",
+        "counts": {
+          "4df8338aaa91cec142423956702f7757c080e2909cb44bd48904414d506989b9": 1,
+          "c85e2cd6e3827ef010bf62006469d9f87e41a3e1a63a8dc24ed8d6c75af9427b": 2,
+          "f47fbdb025b3e49c3154d76883023c22e78dc87a7b700c5f7c4d7db659581319": 1
+        },
+        "labeled_correct_count": 4,
+        "unique_label_count": 3,
+        "unique_fraction": 0.75,
+        "effective_label_count": 2.82842712474619,
+        "simpson_diversity": 0.8333333333333334,
+        "coverage_at_k": {
+          "1": 1.0,
+          "4": 3.0
+        },
+        "correct_matched_coverage": 1.8333333333333333,
+        "correct_matched_coverage_at_budgets": {
+          "2": 1.8333333333333333,
+          "4": 3.0
+        },
+        "correct_label_entropy": 1.0397207708399179
+      },
+      "control_flow_proxy": {
+        "status": "complete",
+        "counts": {
+          "20dcfbfe6c0bf9d45d0ac52afe99b3d06614bbf1873b79af2c0044fb2c02473f": 2,
+          "95b7171ba2de6318909e18a3edf3b27d9f7b9c597a7318489e4b6d23470621c9": 2
+        },
+        "labeled_correct_count": 4,
+        "unique_label_count": 2,
+        "unique_fraction": 0.5,
+        "effective_label_count": 2.0,
+        "simpson_diversity": 0.6666666666666667,
+        "coverage_at_k": {
+          "1": 1.0,
+          "4": 2.0
+        },
+        "correct_matched_coverage": 1.6666666666666665,
+        "correct_matched_coverage_at_budgets": {
+          "2": 1.6666666666666665,
+          "4": 2.0
+        },
+        "correct_label_entropy": 0.6931471805599453
+      },
+      "strategy": {
+        "status": "incomplete",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": null,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": null,
+          "4": null
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "lexical": {
+        "pairwise_token_jaccard_distance": 0.425925925925926
+      }
+    },
+    "Mbpp/25": {
+      "sample_count": 4,
+      "correct_count": 2,
+      "correct_fraction": 0.5,
+      "pass_at_k": {
+        "1": 0.5,
+        "4": 1.0
+      },
+      "implementation_proxy": {
+        "status": "complete",
+        "counts": {
+          "2906d81cbdca3415f22fb0d17c1dda55b3431d172b66bc765efb2e6255b6dd8f": 1,
+          "7d57bc95aa0fa774753ed985607158c444e24b85d824f8721cafb4a61c8f5cdb": 1
+        },
+        "labeled_correct_count": 2,
+        "unique_label_count": 2,
+        "unique_fraction": 1.0,
+        "effective_label_count": 2.0,
+        "simpson_diversity": 1.0,
+        "coverage_at_k": {
+          "1": 0.49999999999999994,
+          "4": 2.0
+        },
+        "correct_matched_coverage": 2.0,
+        "correct_matched_coverage_at_budgets": {
+          "2": 2.0,
+          "4": null
+        },
+        "correct_label_entropy": 0.6931471805599453
+      },
+      "exact_program": {
+        "status": "complete",
+        "counts": {
+          "14145e6183c7f95d6390187f6c54ae8e5e57a864ea215766a15279b7862d44f8": 1,
+          "9e6cad4213dd3cb8caee6d037a39357b73eb6860553b712f7d1e29611cf461d5": 1
+        },
+        "labeled_correct_count": 2,
+        "unique_label_count": 2,
+        "unique_fraction": 1.0,
+        "effective_label_count": 2.0,
+        "simpson_diversity": 1.0,
+        "coverage_at_k": {
+          "1": 0.49999999999999994,
+          "4": 2.0
+        },
+        "correct_matched_coverage": 2.0,
+        "correct_matched_coverage_at_budgets": {
+          "2": 2.0,
+          "4": null
+        },
+        "correct_label_entropy": 0.6931471805599453
+      },
+      "control_flow_proxy": {
+        "status": "complete",
+        "counts": {
+          "47cee81e7be0f95cca04686d084f1e13995d25907095726eb7d16dd5f06ec910": 1,
+          "d1963bb4a75dedb3ddf24ec994ff3b182baf5b989c07b248df75ede7d95cd97d": 1
+        },
+        "labeled_correct_count": 2,
+        "unique_label_count": 2,
+        "unique_fraction": 1.0,
+        "effective_label_count": 2.0,
+        "simpson_diversity": 1.0,
+        "coverage_at_k": {
+          "1": 0.49999999999999994,
+          "4": 2.0
+        },
+        "correct_matched_coverage": 2.0,
+        "correct_matched_coverage_at_budgets": {
+          "2": 2.0,
+          "4": null
+        },
+        "correct_label_entropy": 0.6931471805599453
+      },
+      "strategy": {
+        "status": "incomplete",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": null,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": null,
+          "4": null
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "lexical": {
+        "pairwise_token_jaccard_distance": 0.5128205128205128
+      }
+    },
+    "Mbpp/449": {
+      "sample_count": 4,
+      "correct_count": 0,
+      "correct_fraction": 0.0,
+      "pass_at_k": {
+        "1": 0.0,
+        "4": 0.0
+      },
+      "implementation_proxy": {
+        "status": "no_correct",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": 0,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.0,
+          "4": 0.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "exact_program": {
+        "status": "no_correct",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": 0,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.0,
+          "4": 0.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "control_flow_proxy": {
+        "status": "no_correct",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": 0,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.0,
+          "4": 0.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "strategy": {
+        "status": "no_correct",
+        "counts": {},
+        "labeled_correct_count": 0,
+        "unique_label_count": 0,
+        "unique_fraction": null,
+        "effective_label_count": null,
+        "simpson_diversity": null,
+        "coverage_at_k": {
+          "1": 0.0,
+          "4": 0.0
+        },
+        "correct_matched_coverage": null,
+        "correct_matched_coverage_at_budgets": {
+          "2": null,
+          "4": null
+        },
+        "correct_label_entropy": null
+      },
+      "lexical": {
+        "pairwise_token_jaccard_distance": null
+      }
+    }
+  },
+  "aggregate": {
+    "task_count": 4,
+    "sample_count": 16,
+    "correct_count": 7,
+    "correct_fraction": {
+      "mean": 0.4375,
+      "all_task_mean": 0.4375,
+      "ci95": [
+        0.125,
+        0.8125
+      ],
+      "eligible_tasks": 4,
+      "total_tasks": 4,
+      "unavailable_tasks": [],
+      "population": "tasks_with_available_estimates",
+      "bootstrap_valid_replicates": 1000
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.4375,
+        "all_task_mean": 0.4375,
+        "ci95": [
+          0.12499999999999999,
+          0.8125
+        ],
+        "eligible_tasks": 4,
+        "total_tasks": 4,
+        "unavailable_tasks": [],
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 1000
+      },
+      "4": {
+        "mean": 0.75,
+        "all_task_mean": 0.75,
+        "ci95": [
+          0.25,
+          1.0
+        ],
+        "eligible_tasks": 4,
+        "total_tasks": 4,
+        "unavailable_tasks": [],
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 1000
+      }
+    },
+    "implementation_proxy": {
+      "coverage_at_k": {
+        "1": {
+          "mean": 0.4375,
+          "all_task_mean": 0.4375,
+          "ci95": [
+            0.12499999999999999,
+            0.8125
+          ],
+          "eligible_tasks": 4,
+          "total_tasks": 4,
+          "unavailable_tasks": [],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 1000
+        },
+        "4": {
+          "mean": 1.5,
+          "all_task_mean": 1.5,
+          "ci95": [
+            0.5,
+            2.5
+          ],
+          "eligible_tasks": 4,
+          "total_tasks": 4,
+          "unavailable_tasks": [],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 1000
+        }
+      },
+      "correct_matched_coverage": {
+        "mean": 1.9166666666666665,
+        "all_task_mean": null,
+        "ci95": [
+          1.8333333333333333,
+          2.0
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_correct_budget_correct_samples",
+        "bootstrap_valid_replicates": 941
+      },
+      "correct_label_entropy": {
+        "mean": 0.577622650466621,
+        "all_task_mean": null,
+        "ci95": [
+          0.0,
+          1.0397207708399179
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "unique_fraction": {
+        "mean": 0.9166666666666666,
+        "all_task_mean": null,
+        "ci95": [
+          0.75,
+          1.0
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "effective_label_count": {
+        "mean": 1.9428090415820634,
+        "all_task_mean": null,
+        "ci95": [
+          1.0,
+          2.82842712474619
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "simpson_diversity": {
+        "mean": 0.9166666666666667,
+        "all_task_mean": null,
+        "ci95": [
+          0.8333333333333334,
+          1.0
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_two_correct_samples",
+        "bootstrap_valid_replicates": 941
+      },
+      "correct_matched_coverage_at_budgets": {
+        "2": {
+          "mean": 1.9166666666666665,
+          "all_task_mean": null,
+          "ci95": [
+            1.8333333333333333,
+            2.0
+          ],
+          "eligible_tasks": 2,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_2_correct_samples",
+          "bootstrap_valid_replicates": 941
+        },
+        "4": {
+          "mean": 3.0,
+          "all_task_mean": null,
+          "ci95": [
+            3.0,
+            3.0
+          ],
+          "eligible_tasks": 1,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/25",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+          "bootstrap_valid_replicates": 687
+        }
+      }
+    },
+    "exact_program": {
+      "coverage_at_k": {
+        "1": {
+          "mean": 0.4375,
+          "all_task_mean": 0.4375,
+          "ci95": [
+            0.12499999999999999,
+            0.8125
+          ],
+          "eligible_tasks": 4,
+          "total_tasks": 4,
+          "unavailable_tasks": [],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 1000
+        },
+        "4": {
+          "mean": 1.5,
+          "all_task_mean": 1.5,
+          "ci95": [
+            0.5,
+            2.5
+          ],
+          "eligible_tasks": 4,
+          "total_tasks": 4,
+          "unavailable_tasks": [],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 1000
+        }
+      },
+      "correct_matched_coverage": {
+        "mean": 1.9166666666666665,
+        "all_task_mean": null,
+        "ci95": [
+          1.8333333333333333,
+          2.0
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_correct_budget_correct_samples",
+        "bootstrap_valid_replicates": 941
+      },
+      "correct_label_entropy": {
+        "mean": 0.577622650466621,
+        "all_task_mean": null,
+        "ci95": [
+          0.0,
+          1.0397207708399179
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "unique_fraction": {
+        "mean": 0.9166666666666666,
+        "all_task_mean": null,
+        "ci95": [
+          0.75,
+          1.0
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "effective_label_count": {
+        "mean": 1.9428090415820634,
+        "all_task_mean": null,
+        "ci95": [
+          1.0,
+          2.82842712474619
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "simpson_diversity": {
+        "mean": 0.9166666666666667,
+        "all_task_mean": null,
+        "ci95": [
+          0.8333333333333334,
+          1.0
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_two_correct_samples",
+        "bootstrap_valid_replicates": 941
+      },
+      "correct_matched_coverage_at_budgets": {
+        "2": {
+          "mean": 1.9166666666666665,
+          "all_task_mean": null,
+          "ci95": [
+            1.8333333333333333,
+            2.0
+          ],
+          "eligible_tasks": 2,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_2_correct_samples",
+          "bootstrap_valid_replicates": 941
+        },
+        "4": {
+          "mean": 3.0,
+          "all_task_mean": null,
+          "ci95": [
+            3.0,
+            3.0
+          ],
+          "eligible_tasks": 1,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/25",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+          "bootstrap_valid_replicates": 687
+        }
+      }
+    },
+    "control_flow_proxy": {
+      "coverage_at_k": {
+        "1": {
+          "mean": 0.4375,
+          "all_task_mean": 0.4375,
+          "ci95": [
+            0.12499999999999999,
+            0.8125
+          ],
+          "eligible_tasks": 4,
+          "total_tasks": 4,
+          "unavailable_tasks": [],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 1000
+        },
+        "4": {
+          "mean": 1.25,
+          "all_task_mean": 1.25,
+          "ci95": [
+            0.5,
+            2.0
+          ],
+          "eligible_tasks": 4,
+          "total_tasks": 4,
+          "unavailable_tasks": [],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 1000
+        }
+      },
+      "correct_matched_coverage": {
+        "mean": 1.8333333333333333,
+        "all_task_mean": null,
+        "ci95": [
+          1.6666666666666665,
+          2.0
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_correct_budget_correct_samples",
+        "bootstrap_valid_replicates": 941
+      },
+      "correct_label_entropy": {
+        "mean": 0.46209812037329684,
+        "all_task_mean": null,
+        "ci95": [
+          0.0,
+          0.6931471805599453
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "unique_fraction": {
+        "mean": 0.8333333333333334,
+        "all_task_mean": null,
+        "ci95": [
+          0.5,
+          1.0
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "effective_label_count": {
+        "mean": 1.6666666666666667,
+        "all_task_mean": null,
+        "ci95": [
+          1.0,
+          2.0
+        ],
+        "eligible_tasks": 3,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 996
+      },
+      "simpson_diversity": {
+        "mean": 0.8333333333333334,
+        "all_task_mean": null,
+        "ci95": [
+          0.6666666666666666,
+          1.0
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_two_correct_samples",
+        "bootstrap_valid_replicates": 941
+      },
+      "correct_matched_coverage_at_budgets": {
+        "2": {
+          "mean": 1.8333333333333333,
+          "all_task_mean": null,
+          "ci95": [
+            1.6666666666666665,
+            2.0
+          ],
+          "eligible_tasks": 2,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_2_correct_samples",
+          "bootstrap_valid_replicates": 941
+        },
+        "4": {
+          "mean": 2.0,
+          "all_task_mean": null,
+          "ci95": [
+            2.0,
+            2.0
+          ],
+          "eligible_tasks": 1,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/25",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+          "bootstrap_valid_replicates": 687
+        }
+      }
+    },
+    "strategy": {
+      "coverage_at_k": {
+        "1": {
+          "mean": 0.0,
+          "all_task_mean": null,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "eligible_tasks": 1,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/242",
+            "Mbpp/25"
+          ],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 702
+        },
+        "4": {
+          "mean": 0.0,
+          "all_task_mean": null,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "eligible_tasks": 1,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/242",
+            "Mbpp/25"
+          ],
+          "population": "tasks_with_available_estimates",
+          "bootstrap_valid_replicates": 702
+        }
+      },
+      "correct_matched_coverage": {
+        "mean": null,
+        "all_task_mean": null,
+        "ci95": null,
+        "eligible_tasks": 0,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/242",
+          "Mbpp/25",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_correct_budget_correct_samples",
+        "bootstrap_valid_replicates": 0
+      },
+      "correct_label_entropy": {
+        "mean": null,
+        "all_task_mean": null,
+        "ci95": null,
+        "eligible_tasks": 0,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/242",
+          "Mbpp/25",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 0
+      },
+      "unique_fraction": {
+        "mean": null,
+        "all_task_mean": null,
+        "ci95": null,
+        "eligible_tasks": 0,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/242",
+          "Mbpp/25",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 0
+      },
+      "effective_label_count": {
+        "mean": null,
+        "all_task_mean": null,
+        "ci95": null,
+        "eligible_tasks": 0,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/242",
+          "Mbpp/25",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_positive_correct_count",
+        "bootstrap_valid_replicates": 0
+      },
+      "simpson_diversity": {
+        "mean": null,
+        "all_task_mean": null,
+        "ci95": null,
+        "eligible_tasks": 0,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/242",
+          "Mbpp/25",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_complete_labels_and_at_least_two_correct_samples",
+        "bootstrap_valid_replicates": 0
+      },
+      "correct_matched_coverage_at_budgets": {
+        "2": {
+          "mean": null,
+          "all_task_mean": null,
+          "ci95": null,
+          "eligible_tasks": 0,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/242",
+            "Mbpp/25",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_2_correct_samples",
+          "bootstrap_valid_replicates": 0
+        },
+        "4": {
+          "mean": null,
+          "all_task_mean": null,
+          "ci95": null,
+          "eligible_tasks": 0,
+          "total_tasks": 4,
+          "unavailable_tasks": [
+            "Mbpp/141",
+            "Mbpp/242",
+            "Mbpp/25",
+            "Mbpp/449"
+          ],
+          "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+          "bootstrap_valid_replicates": 0
+        }
+      }
+    },
+    "lexical": {
+      "pairwise_token_jaccard_distance": {
+        "mean": 0.4693732193732194,
+        "all_task_mean": null,
+        "ci95": [
+          0.425925925925926,
+          0.5128205128205128
+        ],
+        "eligible_tasks": 2,
+        "total_tasks": 4,
+        "unavailable_tasks": [
+          "Mbpp/141",
+          "Mbpp/449"
+        ],
+        "population": "tasks_with_at_least_two_correct_tokenizable_samples",
+        "bootstrap_valid_replicates": 941
+      }
+    }
+  },
+  "definitions": {
+    "pass_at_k": "1 - C(n-c,k)/C(n,k); n includes all completions, c is correct count.",
+    "coverage_at_k": "Sum over correct labels of 1 - C(n-n_j,k)/C(n,k); incorrect draws remain in n.",
+    "implementation_proxy": "Conservative normalized Python AST hash; neither algorithm identity nor semantic equivalence.",
+    "exact_program": "SHA-256 of stripped executable source; formatting differences remain distinct.",
+    "control_flow_proxy": "Ordered Python AST control-flow node skeleton; an exploratory structural proxy, not an algorithm identity.",
+    "effective_label_count": "exp(Shannon entropy) of correct-label frequencies.",
+    "simpson_diversity": "Probability that two distinct correct samples drawn without replacement have different labels.",
+    "pairwise_token_jaccard_distance": "Mean pairwise Jaccard distance between Python token sets of correct samples.",
+    "strategy": "Externally supplied strategy_id labels; a task is unavailable unless every correct sample has a label. Zero-correct coverage is zero.",
+    "correct_matched_coverage": "Expected distinct labels in correct_budget draws without replacement from the correct samples only; eligible-task population reported.",
+    "correct_label_entropy": "Natural-log Shannon entropy of correct-label frequencies; null for zero correct samples or incomplete labels.",
+    "macro": "Equal task weights, including zero-correct tasks. mean is conditional on availability; all_task_mean is null if any task is unavailable. Never compare eligibility-changing means as whole-task gains.",
+    "ci95": "Pointwise 95% percentile bootstrap over tasks; eligibility is recomputed in each resample, empty eligible resamples omitted and counted. No multiple-comparison correction.",
+    "expected_samples": "A mapping validates the complete task universe; an integer only validates observed task counts. Missing whole tasks cannot be detected without the mapping."
+  }
+}
