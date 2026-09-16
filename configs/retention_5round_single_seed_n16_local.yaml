@@ -1,4 +1,4 @@
-# Full 500-task reduced retention protocol: one seed, five rounds, 16 samples per task.
+# Full 500-task evaluation with five self-evolution rounds; 16 candidates per train/eval task.
 seed: 43
 data_seed: 42
 model:
@@ -11,7 +11,7 @@ data:
   calibration: data/mbpp/calibration.jsonl
   validation: data/mbpp/validation.jsonl
   eval: data/mbpp/eval.jsonl
-output_dir: runs/retention_5round_single_seed_n16_b128_local_v1
+output_dir: runs/retention_5round_single_seed_train16_eval16_b128_v1
 data_limits: {}
 methods:
 - plain
@@ -20,7 +20,7 @@ methods:
 rounds: 5
 checkpoint_retention: latest
 generation:
-  train_samples: 1
+  train_samples: 16
   eval_samples: 16
   batch_size: 16
   max_new_tokens: 512
@@ -39,7 +39,7 @@ calibration:
   tau: 1.0
   rho: 0.5
 train:
-  epochs: 5
+  epochs: 1
   batch_size: 1
   gradient_accumulation_steps: 16
   max_length: 1536
