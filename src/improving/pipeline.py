@@ -102,6 +102,9 @@ def validate_config(config):
             raise ValueError(f'Missing data.{key} path')
     if type(config.get('rounds', 1)) is not int or config.get('rounds', 1) < 1:
         raise ValueError('rounds must be a positive integer')
+    checkpoint_retention = config.get('checkpoint_retention', 'all')
+    if not isinstance(checkpoint_retention, str) or checkpoint_retention not in {'all', 'latest'}:
+        raise ValueError('checkpoint_retention must be all or latest')
     gen = config.get('generation', {})
     n = gen.get('eval_samples', 64)
     if (type(n) is not int or n < 1 or type(gen.get('train_samples', 1)) is not int
@@ -140,6 +143,27 @@ def validate_config(config):
     if evaluation.get('code_extraction', 'strict') not in {'strict', 'first_fence'}:
         raise ValueError('evaluation.code_extraction must be strict or first_fence')
     return config
+
+
+def _prune_completed_checkpoint(directory):
+    """Prune a superseded model while keeping its auditable non-model outputs."""
+    directory = Path(directory)
+    marker = directory / 'complete.json'
+    checkpoint = directory / 'model'
+    state = json.loads(marker.read_text())
+    checkpoint_files = {name: digest for name, digest in state['files'].items()
+                        if name.startswith('model/')}
+    if not checkpoint_files:
+        return
+    state['files'] = {name: digest for name, digest in state['files'].items()
+                      if not name.startswith('model/')}
+    state['checkpoint_status'] = 'pruned'
+    state['pruned_checkpoint_files'] = checkpoint_files
+    # Publish the pruned marker first. A crash after this write can leave an
+    # extra checkpoint, but can never leave a marker that requires deleted files.
+    atomic_json(marker, state)
+    if checkpoint.exists():
+        shutil.rmtree(checkpoint)
 
 
 def load_config(path):
@@ -431,6 +455,7 @@ def run_experiment(config, *, resume=False):
         model_settings['revision'] = base_state['resolved_revision']
     for method in config['methods']:
         previous_checkpoint = None
+        previous_directory = None
         identity = base_identity
         for round_index in range(1, config.get('rounds', 1) + 1):
             directory = root / method / f'round_{round_index}'
@@ -441,7 +466,9 @@ def run_experiment(config, *, resume=False):
                 if any(not (directory / name).exists() or file_sha(directory / name) != digest
                        for name, digest in state['files'].items()):
                     raise ValueError(f'Completed round integrity failure: {directory}')
-                previous_checkpoint = checkpoint
+                if checkpoint.is_dir():
+                    previous_checkpoint = checkpoint
+                    previous_directory = directory
                 identity = state['model_identity']
                 continue
             directory.mkdir(parents=True, exist_ok=True)
@@ -450,6 +477,9 @@ def run_experiment(config, *, resume=False):
             if local_base_fingerprint and checkpoint_fingerprint(local_base) != local_base_fingerprint:
                 raise ValueError('Base model/tokenizer changed during this experiment')
             model, tokenizer = load_model(model_settings, checkpoint if trained else previous_checkpoint)
+            if trained and not (directory / 'training_stats.json').exists():
+                atomic_json(directory / 'training_stats.json', json.loads(
+                    (checkpoint / 'training_stats.json').read_text()))
             if not trained:
                 operators = None
                 if method not in {'plain', 'ssd'}:
@@ -482,6 +512,7 @@ def run_experiment(config, *, resume=False):
                 with record_stage(directory, 'sft'):
                     model, stats = train_on_records(model, tokenizer, splits['train'], records,
                                                     config.get('train', {}), checkpoint, seed=seed + round_index)
+                atomic_json(directory / 'training_stats.json', stats)
             eval_path = directory / 'evaluation.jsonl'
             model_identity = stable_hash([identity, method, round_index, checkpoint_fingerprint(checkpoint)])
             with record_stage(directory, 'post_training_evaluation'):
@@ -494,7 +525,10 @@ def run_experiment(config, *, resume=False):
                      for p in directory.rglob('*') if p.is_file() and '.parts' not in str(p)
                      and p.name != 'complete.json'}
             atomic_json(marker, {'status': 'completed', 'model_identity': model_identity, 'files': files})
+            if config.get('checkpoint_retention', 'all') == 'latest' and previous_directory is not None:
+                _prune_completed_checkpoint(previous_directory)
             previous_checkpoint, identity = checkpoint, model_identity
+            previous_directory = directory
             del model, tokenizer
             gc.collect()
             if torch.cuda.is_available():

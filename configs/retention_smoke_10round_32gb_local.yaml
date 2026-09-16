@@ -15,6 +15,7 @@ output_dir: runs/retention_smoke_10round_32gb_local_v1
 data_limits: {train: 8, calibration: 8, validation: 8, eval: 4}
 methods: [plain, spd_hard, spectral_soft]
 rounds: 10
+checkpoint_retention: latest
 generation:
   train_samples: 1
   eval_samples: 4

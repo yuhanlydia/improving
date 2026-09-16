@@ -64,6 +64,14 @@ method-round generates up to 36,387 candidates, so these profiles are
 multi-day experiments on one GPU and need substantial checkpoint storage.
 Their output directories are distinct from formal v1.
 
+The retention profiles set `checkpoint_retention: latest`: after the next
+round is sealed, the superseded merged model is removed while its samples,
+metrics, resource records, training statistics, hashes, and pruning provenance
+remain. The latest checkpoint for each method is retained, so interrupted runs
+can resume without accumulating roughly 3 GB per completed round for the 1.5B
+model. Set the option to `all` when every intermediate weight checkpoint is a
+required deliverable and sufficient disk space is available.
+
 For a short functional check only, the following profiles use four evaluation
 tasks, four samples, eight training tasks, one SFT epoch and no generation-policy
 diagnostic. They verify that five/ten sequential rounds and resume work; they

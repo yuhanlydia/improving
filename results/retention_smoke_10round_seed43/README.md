@@ -28,3 +28,8 @@ to recover disk space; retained runtime `complete.json` files therefore contain
 model hash entries whose weight files are intentionally absent from this Git
 archive. Generated programs, verified outcomes, metrics, and resource records
 for every round are retained.
+
+See `DEBUGGING.md` for the post-run effect audit. All three methods exercised
+distinct generation paths and the interventions were numerically active, but
+this four-task smoke run does not show a Spectral-soft advantage and is too
+small to estimate one reliably.

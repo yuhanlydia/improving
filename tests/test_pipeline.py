@@ -76,7 +76,7 @@ def test_stage_resume_preserves_actual_prior_compute_time(tmp_path, monkeypatch)
     assert len(record['attempts']) == 2
 
 
-def test_tiny_real_round_and_resume_without_training_again(tmp_path):
+def test_tiny_real_round_prunes_superseded_checkpoint_and_resumes(tmp_path):
     model, tok = tiny_model_and_tokenizer()
     model_dir = tmp_path / 'tiny'
     model.save_pretrained(model_dir)
@@ -89,7 +89,8 @@ def test_tiny_real_round_and_resume_without_training_again(tmp_path):
                             'reference': 'def f ( ) : return 1', 'source': 'fixture', 'split': split}])
         paths[split] = str(path)
     config = {'seed': 42, 'model': {'name': str(model_dir), 'device': 'cpu', 'dtype': 'float32'},
-              'data': paths, 'output_dir': str(tmp_path / 'run'), 'methods': ['spectral_soft'], 'rounds': 1,
+              'data': paths, 'output_dir': str(tmp_path / 'run'), 'methods': ['spectral_soft'], 'rounds': 2,
+              'checkpoint_retention': 'latest',
               'generation': {'train_samples': 1, 'eval_samples': 2, 'batch_size': 2,
                              'max_new_tokens': 4, 'max_prompt_tokens': 32, 'temperature': .8},
               'calibration': {'max_length': 64, 'max_examples': 1, 'tau': 1.0},
@@ -99,14 +100,29 @@ def test_tiny_real_round_and_resume_without_training_again(tmp_path):
               'evaluation': {'backend': 'none', 'ks': [1, 2], 'correct_budget': 1},
               'diagnostics': {'evaluate_generation_policy': True}}
     result = run_experiment(config)
-    completed = tmp_path / 'run' / 'spectral_soft' / 'round_1' / 'complete.json'
+    first = tmp_path / 'run' / 'spectral_soft' / 'round_1'
+    completed = tmp_path / 'run' / 'spectral_soft' / 'round_2' / 'complete.json'
     before = completed.read_bytes()
     run_experiment(config, resume=True)
     assert completed.read_bytes() == before
     assert result['status'] == 'completed'
+    assert not (first / 'model').exists()
+    first_state = json.loads((first / 'complete.json').read_text())
+    assert first_state['checkpoint_status'] == 'pruned'
+    assert not any(name.startswith('model/') for name in first_state['files'])
+    assert json.loads((first / 'training_stats.json').read_text())['examples'] == 1
     assert (completed.parent / 'model' / 'model.safetensors').exists()
     records = [json.loads(line) for line in (completed.parent / 'evaluation.jsonl').read_text().splitlines()]
     assert len(records) == 2
+
+
+@pytest.mark.parametrize('value', [True, 'final', 'none', 1, []])
+def test_invalid_checkpoint_retention_fails(value):
+    config = {'model': {'name': 'fixture'}, 'output_dir': 'run', 'methods': ['plain'],
+              'data': {name: f'{name}.jsonl' for name in ('train', 'calibration', 'validation', 'eval')},
+              'checkpoint_retention': value}
+    with pytest.raises(ValueError, match='checkpoint_retention'):
+        validate_config(config)
 
 
 @pytest.mark.parametrize('key,value', [('eval_samples', 0), ('eval_samples', True),
