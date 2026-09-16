@@ -1,0 +1,75 @@
+# Full 500-task reduced retention protocol: one seed, five rounds, 16 samples per task.
+seed: 43
+data_seed: 42
+model:
+  name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+  device: auto
+  dtype: bfloat16
+  attn_implementation: sdpa
+data:
+  train: data/mbpp/train.jsonl
+  calibration: data/mbpp/calibration.jsonl
+  validation: data/mbpp/validation.jsonl
+  eval: data/mbpp/eval.jsonl
+output_dir: runs/retention_5round_single_seed_n16_b128_local_v1
+data_limits: {}
+methods:
+- plain
+- spd_hard
+- spectral_soft
+rounds: 5
+checkpoint_retention: latest
+generation:
+  train_samples: 1
+  eval_samples: 16
+  batch_size: 16
+  max_new_tokens: 512
+  max_prompt_tokens: 1024
+  temperature: 0.8
+  top_p: 0.95
+  top_k: 0
+  task_batch_size: 128
+  sequence_batch_size: 128
+calibration:
+  max_examples: 50
+  max_length: 1536
+  span_mode: completion
+  layers: null
+  rank_fraction: 0.5
+  tau: 1.0
+  rho: 0.5
+train:
+  epochs: 5
+  batch_size: 1
+  gradient_accumulation_steps: 16
+  max_length: 1536
+  learning_rate: 1.0e-05
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  max_grad_norm: 1.0
+  lora_rank: 8
+  lora_alpha: 8
+  lora_dropout: 0.05
+  gradient_checkpointing: true
+  loss_scope: all
+evaluation:
+  backend: local
+  allow_unsafe_local: true
+  code_extraction: first_fence
+  workers: 8
+  timeout: 5
+  ks:
+  - 1
+  - 8
+  - 16
+  correct_budget: 4
+  correct_budgets:
+  - 4
+  - 8
+  - 16
+  correctness_margin: 0.01
+  bootstrap_samples: 2000
+diagnostics:
+  evaluate_generation_policy: false
+  eval_task_limit: 128
+  eval_samples: 16
