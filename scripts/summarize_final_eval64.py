@@ -23,6 +23,13 @@ def _metric_cell(metric):
     return f"{metric['mean']:.3f}{interval}; {metric['eligible_tasks']}/{metric['total_tasks']} tasks"
 
 
+def _expected_samples_match(expected_samples, sample_count):
+    """Accept scalar protocols and per-task protocols with a uniform count."""
+    if isinstance(expected_samples, dict):
+        return bool(expected_samples) and all(value == sample_count for value in expected_samples.values())
+    return expected_samples == sample_count
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("run_dir", type=Path)
@@ -39,7 +46,7 @@ def main():
             raise FileNotFoundError(f"Missing completed metrics: {path}")
         summary = json.loads(path.read_text())
         protocol = summary["protocol"]
-        if protocol["expected_samples"] != 64 or protocol["ks"] != list(KS):
+        if not _expected_samples_match(protocol["expected_samples"], 64) or protocol["ks"] != list(KS):
             raise ValueError(f"Unexpected 64-sample protocol for {model}: {protocol}")
         if protocol["correct_budgets"] != list(CORRECT_BUDGETS):
             raise ValueError(f"Unexpected correct budgets for {model}: {protocol['correct_budgets']}")

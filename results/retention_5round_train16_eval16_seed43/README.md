@@ -13,10 +13,20 @@ This is the compact evidence bundle for the completed full-task run. Each round 
 
 At round 5, spectral-soft retained more correct-program AST coverage than plain and SPD-hard in point estimates. This is the conditional expected coverage in four draws from the correct samples, not coverage from four total generations. Its paired coverage advantage over SPD-hard was +0.293 [0.233, 0.353] on 251 shared eligible tasks. Pass@1 was 0.402 versus 0.413 for both controls. The paired pass@1 delta versus SPD-hard was -0.0118 [-0.0190, -0.0048], so the declared 1% noninferiority criterion was not met. Spectral-soft remained above the base model in pass@1 (+0.0225 [0.0120, 0.0335]) while all methods lost diversity relative to base across five rounds.
 
-This is a single-seed, 16-sample reduced-budget run. AST fingerprints are implementation proxies rather than independently annotated algorithms. Correct-matched coverage is conditional on tasks with at least four correct samples. Generation-policy diagnostics were intentionally disabled for the runtime-constrained profile. Generated programs and intermediate 2.9 GB checkpoints are omitted from GitHub; the final checkpoints are published on Hugging Face.
+This is a single-seed run. The original round reports use 16 evaluation
+samples per task; the completed final-checkpoint supplement uses 64 samples per
+task and is reported in [`eval64/`](eval64/REPORT.md). AST fingerprints are
+implementation proxies rather than independently annotated algorithms.
+Correct-matched coverage is conditional on tasks with enough correct samples
+for the stated budget. Generation-policy diagnostics were intentionally
+disabled for the runtime-constrained profile. Generated programs and
+intermediate 2.9 GB checkpoints are omitted from GitHub; the final checkpoints
+are published on Hugging Face.
 
 - `metrics.csv`: compact per-round metrics
 - `round5_comparisons.json`: paired final-round comparisons
 - `report.md` / `report.json`: complete generated report and per-task statistics
 - `MODEL_FILES.sha256`: final checkpoint checksums
 - `config.yaml`, `manifest.json`, `run_status.json`: frozen provenance
+- `eval64/`: final-checkpoint 500-task x 64-sample report, compact aggregates,
+  paired comparisons, and source checksums

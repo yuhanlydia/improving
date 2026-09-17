@@ -3,6 +3,21 @@
 本仓库只研究 **同一道 coding 题的不同正确实现/算法，在自蒸馏后是否被保留**。
 提供从数据准备、校准、生成、LoRA 微调到独立代码验证、同题覆盖统计、跨轮次报告的完整实验流程。
 
+## Latest completed five-round result
+
+The completed seed-43 retention run trains on all 291 MBPP training tasks with
+16 raw completions per task for five rounds, then evaluates the base and three
+round-5 checkpoints on all 500 held-out tasks with 64 samples per task. The
+compact evidence and paired task-bootstrap comparisons are in
+[`results/retention_5round_train16_eval16_seed43/eval64/`](results/retention_5round_train16_eval16_seed43/eval64/REPORT.md).
+
+Against the intended `spd_hard` control, `spectral_soft` improves total AST
+implementation-proxy coverage@64 by +3.122 [2.686, 3.596] and pass@64 by
++0.024 [0.006, 0.044]. Its pass@1 is lower by -0.0143 [-0.0189, -0.0098],
+so it does not meet the declared absolute 1% correctness noninferiority margin.
+This is a single-training-seed result and AST fingerprints are implementation
+proxies rather than audited semantic algorithm labels.
+
 ## Start here: formal Spectral-soft experiment
 
 当前主线是 **提高同一道 coding 题的正确实现多样性，同时保持准确率同水平**。
@@ -35,7 +50,11 @@ bash scripts/run_formal.sh configs/formal_24gb.yaml
 
 结果默认在 `runs/formal_spectral_16gb_v1/report/summary.md`，可上传的紧凑包在 `evidence/compact.tar.gz`。紧凑包包含逐题指标与运行来源，不含权重；需要程序用于独立算法标注时执行 `python -m improving formal --config configs/formal_16gb.yaml --stage export --resume --include-programs`。
 
-**已完成的实证仍是 [64 题、seed-42 的探索性 pilot](results/pilot_seed42_codecentric/README.md)。新的正式确认、机制、三轮保留和 HumanEval+ 结果需要运行后取得；本仓库不把代码测试计为 benchmark 成绩。**
+The five-round single-seed retention extension above is complete. The
+preregistered five-seed confirmation, mechanism, three-round retention, and
+HumanEval+ stages remain pending; repository unit tests are never reported as
+benchmark results. The earlier [64-task seed-42 exploratory pilot](results/pilot_seed42_codecentric/README.md)
+remains available separately.
 
 ### Five- and ten-round retention extensions
 

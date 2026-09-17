@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "run": "retention_5round_single_seed_train16_eval16_b128_v1",
+  "training_seed": 43,
+  "train_tasks": 291,
+  "train_samples_per_task_per_round": 16,
+  "rounds": 5,
+  "eval_tasks": 500,
+  "eval_samples_per_task": 64,
+  "models": [
+    "base",
+    "plain",
+    "spd_hard",
+    "spectral_soft"
+  ],
+  "ks": [
+    1,
+    4,
+    8,
+    16,
+    64
+  ],
+  "correct_matched_budgets": [
+    4,
+    8,
+    16,
+    64
+  ],
+  "evaluation_provenance_status": "identical task_local_v2 declarations across all four models",
+  "sources": [
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/base/evaluation.jsonl",
+      "bytes": 84523775,
+      "sha256": "007e9117e2850cd360e3cfbd4b7c25b24994d8a16ac39868a2b1a76be56b9de3"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/base/evaluation.verified.jsonl",
+      "bytes": 117554831,
+      "sha256": "3491c161b0a8a3cf90879a3705e33a5fb38bd042c68327afbc89a3d8e393010d"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/base/evaluation.metrics.json",
+      "bytes": 3342068,
+      "sha256": "a42d0319e011bd0ddafeff47d39ed23eedcd56505a45ddbbabbf38210254bc14"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/plain/evaluation.jsonl",
+      "bytes": 68989331,
+      "sha256": "77b7070b4d4c40a4133451e1f0a26ea04327c13e808ba9da9816b924c5427e8c"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/plain/evaluation.verified.jsonl",
+      "bytes": 98547609,
+      "sha256": "7f02e53bbbc28f18f0525ff9fb3d75f3b93e1a54ef00eb144fe9d6a1b81b5f4d"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/plain/evaluation.metrics.json",
+      "bytes": 2980610,
+      "sha256": "c387c113f3051213632b8e60370bc214812aa53a425b37d47ee2168f47b956c5"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/spd_hard/evaluation.jsonl",
+      "bytes": 65545873,
+      "sha256": "4e5e67df7e6c63146c7d32a06d0716abbeb40cbd194301f5fefac3146339b4f3"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/spd_hard/evaluation.verified.jsonl",
+      "bytes": 94473226,
+      "sha256": "1e94017848bd71e0ca35ce28ee4b6633b25c417aa7038f453d2660b7f6cd018a"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/spd_hard/evaluation.metrics.json",
+      "bytes": 2920343,
+      "sha256": "a6268c5e658c97a58c3ce74dba34aa1c7089c94283383ac28c58fa78c47d701b"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/spectral_soft/evaluation.jsonl",
+      "bytes": 71794243,
+      "sha256": "1868edd31dc1ad383d67a09e91956f6b4cd3182162a2099186a9cf35731657ba"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/spectral_soft/evaluation.verified.jsonl",
+      "bytes": 102663914,
+      "sha256": "3d7802860d0854f736653b91d390a83ff7a2c7d3e19cd3cd0ff41af555e8ac15"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/spectral_soft/evaluation.metrics.json",
+      "bytes": 3188240,
+      "sha256": "1e3e64c77e9ab2c39c503d6afb5222501598dcdf3aeeccff1bc403e9291a983c"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/summary.csv",
+      "bytes": 3390,
+      "sha256": "cb7eb3882257f6603025f5f2005d7d94734804ac75ef5ee7655cc01ccdd32d3f"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/comparisons.json",
+      "bytes": 1558396,
+      "sha256": "dc35a5a934b487147b813410f4abb69953df25ad73721d72ee81fd4db736a598"
+    },
+    {
+      "path": "runs/retention_5round_single_seed_train16_eval16_b128_v1/supplemental_eval64/REPORT.md",
+      "bytes": 3137,
+      "sha256": "72fba781e8aad9635bf06502249386a4f584c5da0ca9c22d622a6aadd4292799"
+    }
+  ]
+}

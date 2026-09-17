@@ -1,0 +1,766 @@
+{
+  "base": {
+    "task_count": 500,
+    "sample_count": 32000,
+    "correct_count": 12142,
+    "correct_fraction": {
+      "mean": 0.3794375,
+      "all_task_mean": 0.3794375,
+      "ci95": [
+        0.34740546875,
+        0.41365703125
+      ],
+      "eligible_tasks": 500,
+      "total_tasks": 500,
+      "population": "tasks_with_available_estimates",
+      "bootstrap_valid_replicates": 2000
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.3794375,
+        "all_task_mean": 0.3794375,
+        "ci95": [
+          0.34740546875,
+          0.41365703125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.5507654491198912,
+        "all_task_mean": 0.5507654491198912,
+        "ci95": [
+          0.5132311306218681,
+          0.5890580618405479
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.6109743277142735,
+        "all_task_mean": 0.6109743277142735,
+        "ci95": [
+          0.5724928416444336,
+          0.6497163629340588
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.6569243830645763,
+        "all_task_mean": 0.6569243830645763,
+        "ci95": [
+          0.6184579345767386,
+          0.6952451294337093
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.72,
+        "all_task_mean": 0.72,
+        "ci95": [
+          0.6819500000000001,
+          0.758
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.3794375,
+        "all_task_mean": 0.3794375,
+        "ci95": [
+          0.34740546875,
+          0.41365703125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 1.2665641226612274,
+        "all_task_mean": 1.2665641226612274,
+        "ci95": [
+          1.159415250025182,
+          1.3736470797606455
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 2.2670132030155092,
+        "all_task_mean": 2.2670132030155092,
+        "ci95": [
+          2.0738004189885935,
+          2.4590917365037095
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 4.039637834881175,
+        "all_task_mean": 4.039637834881175,
+        "ci95": [
+          3.6929032849396326,
+          4.390863679872534
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 12.802,
+        "all_task_mean": 12.802,
+        "ci95": [
+          11.69585,
+          13.9681
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": 3.3583723736089284,
+        "all_task_mean": null,
+        "ci95": [
+          3.282182510720265,
+          3.439956670735758
+        ],
+        "eligible_tasks": 322,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 5.986525949447583,
+        "all_task_mean": null,
+        "ci95": [
+          5.779330460447849,
+          6.196882660452379
+        ],
+        "eligible_tasks": 294,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_8_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 10.42331543495907,
+        "all_task_mean": null,
+        "ci95": [
+          9.959521542093748,
+          10.910493297809975
+        ],
+        "eligible_tasks": 251,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_16_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 19.875,
+        "all_task_mean": null,
+        "ci95": [
+          15.0,
+          25.04092307692307
+        ],
+        "eligible_tasks": 24,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_64_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      }
+    }
+  },
+  "plain": {
+    "task_count": 500,
+    "sample_count": 32000,
+    "correct_count": 13263,
+    "correct_fraction": {
+      "mean": 0.41446875,
+      "all_task_mean": 0.41446875,
+      "ci95": [
+        0.38040546875,
+        0.45168984375
+      ],
+      "eligible_tasks": 500,
+      "total_tasks": 500,
+      "population": "tasks_with_available_estimates",
+      "bootstrap_valid_replicates": 2000
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.41446875,
+        "all_task_mean": 0.41446875,
+        "ci95": [
+          0.38040546875,
+          0.45168984375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.5654111549696559,
+        "all_task_mean": 0.5654111549696559,
+        "ci95": [
+          0.5268074897383598,
+          0.6045970197961521
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.6185723086964429,
+        "all_task_mean": 0.6185723086964429,
+        "ci95": [
+          0.5793926136329006,
+          0.65815805619536
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.6563636760539059,
+        "all_task_mean": 0.6563636760539059,
+        "ci95": [
+          0.6166121006457762,
+          0.6960772759859236
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.704,
+        "all_task_mean": 0.704,
+        "ci95": [
+          0.664,
+          0.744
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.41446875,
+        "all_task_mean": 0.41446875,
+        "ci95": [
+          0.38040546875,
+          0.45168984375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 1.1661383023595477,
+        "all_task_mean": 1.1661383023595477,
+        "ci95": [
+          1.070903410028078,
+          1.2672731045868904
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 1.9228737911818574,
+        "all_task_mean": 1.9228737911818574,
+        "ci95": [
+          1.7571056197779187,
+          2.101574059760503
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 3.1592155356398983,
+        "all_task_mean": 3.1592155356398983,
+        "ci95": [
+          2.8673068380698647,
+          3.47591123889947
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 8.506,
+        "all_task_mean": 8.506,
+        "ci95": [
+          7.60195,
+          9.46405
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": 2.856476213813779,
+        "all_task_mean": null,
+        "ci95": [
+          2.7541549099452163,
+          2.9606601396926697
+        ],
+        "eligible_tasks": 321,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 4.690364473715527,
+        "all_task_mean": null,
+        "ci95": [
+          4.453332768614563,
+          4.9366147006484855
+        ],
+        "eligible_tasks": 305,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_8_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 7.3244981368337205,
+        "all_task_mean": null,
+        "ci95": [
+          6.814141127178505,
+          7.842568973120032
+        ],
+        "eligible_tasks": 263,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_16_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 8.686274509803921,
+        "all_task_mean": null,
+        "ci95": [
+          6.377226853883282,
+          11.162976249381494
+        ],
+        "eligible_tasks": 51,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_64_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      }
+    }
+  },
+  "spd_hard": {
+    "task_count": 500,
+    "sample_count": 32000,
+    "correct_count": 13365,
+    "correct_fraction": {
+      "mean": 0.41765625,
+      "all_task_mean": 0.41765625,
+      "ci95": [
+        0.384625,
+        0.4546578125
+      ],
+      "eligible_tasks": 500,
+      "total_tasks": 500,
+      "population": "tasks_with_available_estimates",
+      "bootstrap_valid_replicates": 2000
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.41765625,
+        "all_task_mean": 0.41765625,
+        "ci95": [
+          0.384625,
+          0.4546578125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.5659676600941804,
+        "all_task_mean": 0.5659676600941804,
+        "ci95": [
+          0.527518317657576,
+          0.604875113633502
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.6187692750882325,
+        "all_task_mean": 0.6187692750882325,
+        "ci95": [
+          0.5796125930854173,
+          0.6583837108361063
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.656461003056232,
+        "all_task_mean": 0.656461003056232,
+        "ci95": [
+          0.616541219686637,
+          0.6960544516270536
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.702,
+        "all_task_mean": 0.702,
+        "ci95": [
+          0.662,
+          0.7420499999999998
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.41765625,
+        "all_task_mean": 0.41765625,
+        "ci95": [
+          0.384625,
+          0.4546578125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 1.1526910962957369,
+        "all_task_mean": 1.1526910962957369,
+        "ci95": [
+          1.059633787473874,
+          1.2513327874361007
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 1.8917267799240527,
+        "all_task_mean": 1.8917267799240527,
+        "ci95": [
+          1.7283757935135853,
+          2.062184461404335
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 3.103388895756195,
+        "all_task_mean": 3.103388895756195,
+        "ci95": [
+          2.817451519989818,
+          3.40744240345712
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 8.388,
+        "all_task_mean": 8.388,
+        "ci95": [
+          7.514,
+          9.322049999999999
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": 2.8097969039470296,
+        "all_task_mean": null,
+        "ci95": [
+          2.702378107013863,
+          2.912624204119433
+        ],
+        "eligible_tasks": 321,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 4.589740759204707,
+        "all_task_mean": null,
+        "ci95": [
+          4.341571130697039,
+          4.8420976777276685
+        ],
+        "eligible_tasks": 303,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_8_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 7.136154971929802,
+        "all_task_mean": null,
+        "ci95": [
+          6.612424214688567,
+          7.64193275562665
+        ],
+        "eligible_tasks": 264,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_16_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 7.981132075471698,
+        "all_task_mean": null,
+        "ci95": [
+          5.9298245614035086,
+          10.380074468085107
+        ],
+        "eligible_tasks": 53,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_64_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      }
+    }
+  },
+  "spectral_soft": {
+    "task_count": 500,
+    "sample_count": 32000,
+    "correct_count": 12906,
+    "correct_fraction": {
+      "mean": 0.4033125,
+      "all_task_mean": 0.4033125,
+      "ci95": [
+        0.37115312500000003,
+        0.43831796874999995
+      ],
+      "eligible_tasks": 500,
+      "total_tasks": 500,
+      "population": "tasks_with_available_estimates",
+      "bootstrap_valid_replicates": 2000
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.4033125,
+        "all_task_mean": 0.4033125,
+        "ci95": [
+          0.37115312500000003,
+          0.43831796874999995
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.562148161088867,
+        "all_task_mean": 0.562148161088867,
+        "ci95": [
+          0.5239757778858503,
+          0.6009773591542646
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.6189282395695613,
+        "all_task_mean": 0.6189282395695613,
+        "ci95": [
+          0.5799531764909873,
+          0.6581920368265824
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.6622507815182023,
+        "all_task_mean": 0.6622507815182023,
+        "ci95": [
+          0.6233787417205545,
+          0.7018316378569717
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.726,
+        "all_task_mean": 0.726,
+        "ci95": [
+          0.688,
+          0.766
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.4033125,
+        "all_task_mean": 0.4033125,
+        "ci95": [
+          0.37115312500000003,
+          0.43831796874999995
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 1.243749039938556,
+        "all_task_mean": 1.243749039938556,
+        "ci95": [
+          1.1431083542658207,
+          1.348755115711012
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 2.161080512531813,
+        "all_task_mean": 2.161080512531813,
+        "ci95": [
+          1.9763838957574165,
+          2.3468053037933396
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 3.758255772115641,
+        "all_task_mean": 3.758255772115641,
+        "ci95": [
+          3.4251782302115035,
+          4.103086515045223
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 11.51,
+        "all_task_mean": 11.51,
+        "ci95": [
+          10.424,
+          12.652399999999997
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_available_estimates",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": 3.143291510215674,
+        "all_task_mean": null,
+        "ci95": [
+          3.052151432442491,
+          3.236868415837648
+        ],
+        "eligible_tasks": 323,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_4_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 5.451019508347272,
+        "all_task_mean": null,
+        "ci95": [
+          5.221458862962949,
+          5.691262607579812
+        ],
+        "eligible_tasks": 302,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_8_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 9.09058337320117,
+        "all_task_mean": null,
+        "ci95": [
+          8.580622492811118,
+          9.615960487699715
+        ],
+        "eligible_tasks": 259,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_16_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 12.176470588235293,
+        "all_task_mean": null,
+        "ci95": [
+          9.37483552631579,
+          15.0
+        ],
+        "eligible_tasks": 34,
+        "total_tasks": 500,
+        "population": "tasks_with_complete_labels_and_at_least_64_correct_samples",
+        "bootstrap_valid_replicates": 2000
+      }
+    }
+  }
+}

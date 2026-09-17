@@ -1,0 +1,987 @@
+{
+  "plain_minus_base": {
+    "direction": "current_minus_previous",
+    "task_count": 500,
+    "evaluation_identity_check": "declared_provenance_equal",
+    "correctness": {
+      "metric": "task_macro_correct_fraction",
+      "margin": 0.01,
+      "delta": {
+        "mean": 0.03503125,
+        "all_task_mean": 0.03503125,
+        "ci95": [
+          0.025403906249999997,
+          0.04540625
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "noninferior": true
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.03503125,
+        "all_task_mean": 0.03503125,
+        "ci95": [
+          0.025403906249999997,
+          0.04540625
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.014645705849764554,
+        "all_task_mean": 0.014645705849764554,
+        "ci95": [
+          0.0035726654768200275,
+          0.02578586451172219
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.007597980982169215,
+        "all_task_mean": 0.007597980982169215,
+        "ci95": [
+          -0.004422959510671402,
+          0.019885941463066457
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -0.000560707010670496,
+        "all_task_mean": -0.000560707010670496,
+        "ci95": [
+          -0.013798564385109827,
+          0.012829319603621431
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -0.016,
+        "all_task_mean": -0.016,
+        "ci95": [
+          -0.04,
+          0.008
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.03503125000000001,
+        "all_task_mean": 0.03503125000000001,
+        "ci95": [
+          0.025403906250000007,
+          0.04540625
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": -0.10042582030167964,
+        "all_task_mean": -0.10042582030167964,
+        "ci95": [
+          -0.14195690591083074,
+          -0.058621159282062935
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": -0.34413941183365204,
+        "all_task_mean": -0.34413941183365204,
+        "ci95": [
+          -0.42891005746967154,
+          -0.2601543456124548
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -0.8804222992412762,
+        "all_task_mean": -0.8804222992412762,
+        "ci95": [
+          -1.050281263759979,
+          -0.715082851722488
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -4.296,
+        "all_task_mean": -4.296,
+        "ci95": [
+          -4.91805,
+          -3.6919500000000003
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": -0.5105450460781567,
+        "all_task_mean": null,
+        "ci95": [
+          -0.5691189932070015,
+          -0.45464704799623973
+        ],
+        "eligible_tasks": 311,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": -1.3638615453142144,
+        "all_task_mean": null,
+        "ci95": [
+          -1.4887791049135546,
+          -1.2436493522093226
+        ],
+        "eligible_tasks": 285,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -3.1732880253548577,
+        "all_task_mean": null,
+        "ci95": [
+          -3.4222336608574406,
+          -2.934467199126611
+        ],
+        "eligible_tasks": 237,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -11.318181818181818,
+        "all_task_mean": null,
+        "ci95": [
+          -14.392980072463768,
+          -8.49953703703704
+        ],
+        "eligible_tasks": 22,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "caveat": "Metric, sampling budgets and available declared evaluator/task harness identities were checked. Missing legacy provenance is explicitly unverified. Identical prompts, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain."
+  },
+  "spd_hard_minus_base": {
+    "direction": "current_minus_previous",
+    "task_count": 500,
+    "evaluation_identity_check": "declared_provenance_equal",
+    "correctness": {
+      "metric": "task_macro_correct_fraction",
+      "margin": 0.01,
+      "delta": {
+        "mean": 0.03821875,
+        "all_task_mean": 0.03821875,
+        "ci95": [
+          0.028715625,
+          0.04859375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "noninferior": true
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.03821875,
+        "all_task_mean": 0.03821875,
+        "ci95": [
+          0.028715625,
+          0.04859375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.01520221097428924,
+        "all_task_mean": 0.01520221097428924,
+        "ci95": [
+          0.0037094430699302454,
+          0.02625112453098637
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.007794947373959033,
+        "all_task_mean": 0.007794947373959033,
+        "ci95": [
+          -0.004214445501553613,
+          0.019853462255389462
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -0.00046338000834429194,
+        "all_task_mean": -0.00046338000834429194,
+        "ci95": [
+          -0.014188135926675798,
+          0.01320068172292071
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -0.018,
+        "all_task_mean": -0.018,
+        "ci95": [
+          -0.042,
+          0.004
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.03821875000000001,
+        "all_task_mean": 0.03821875000000001,
+        "ci95": [
+          0.02871562500000001,
+          0.04859375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": -0.11387302636549065,
+        "all_task_mean": -0.11387302636549065,
+        "ci95": [
+          -0.15733176276724334,
+          -0.07090118126904384
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": -0.37528642309145643,
+        "all_task_mean": -0.37528642309145643,
+        "ci95": [
+          -0.4643529187722048,
+          -0.28801556663024797
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -0.9362489391249798,
+        "all_task_mean": -0.9362489391249798,
+        "ci95": [
+          -1.1056935955785272,
+          -0.7672233437329382
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -4.414,
+        "all_task_mean": -4.414,
+        "ci95": [
+          -5.0520499999999995,
+          -3.798
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": -0.5602393104834131,
+        "all_task_mean": null,
+        "ci95": [
+          -0.620203311960209,
+          -0.5024146068264466
+        ],
+        "eligible_tasks": 311,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": -1.4580467687163405,
+        "all_task_mean": null,
+        "ci95": [
+          -1.5912065108858593,
+          -1.328951991999187
+        ],
+        "eligible_tasks": 285,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -3.3915337280063698,
+        "all_task_mean": null,
+        "ci95": [
+          -3.6596124817747016,
+          -3.1355820916237627
+        ],
+        "eligible_tasks": 237,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -12.333333333333334,
+        "all_task_mean": null,
+        "ci95": [
+          -15.476190476190476,
+          -9.449861111111112
+        ],
+        "eligible_tasks": 21,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "caveat": "Metric, sampling budgets and available declared evaluator/task harness identities were checked. Missing legacy provenance is explicitly unverified. Identical prompts, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain."
+  },
+  "spectral_soft_minus_base": {
+    "direction": "current_minus_previous",
+    "task_count": 500,
+    "evaluation_identity_check": "declared_provenance_equal",
+    "correctness": {
+      "metric": "task_macro_correct_fraction",
+      "margin": 0.01,
+      "delta": {
+        "mean": 0.023875,
+        "all_task_mean": 0.023875,
+        "ci95": [
+          0.01578046875,
+          0.03222187499999998
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "noninferior": true
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": 0.023875,
+        "all_task_mean": 0.023875,
+        "ci95": [
+          0.01578046875,
+          0.03222187499999998
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.011382711968975851,
+        "all_task_mean": 0.011382711968975851,
+        "ci95": [
+          0.0007472461188335719,
+          0.021702632693082518
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.007953911855287916,
+        "all_task_mean": 0.007953911855287916,
+        "ci95": [
+          -0.0032052019292176603,
+          0.02016559937775917
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.005326398453625931,
+        "all_task_mean": 0.005326398453625931,
+        "ci95": [
+          -0.008709203610150353,
+          0.01970317489123075
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.006,
+        "all_task_mean": 0.006,
+        "ci95": [
+          -0.018,
+          0.03
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": 0.023875000000000004,
+        "all_task_mean": 0.023875000000000004,
+        "ci95": [
+          0.01578046875,
+          0.03222187499999998
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": -0.022815082722671284,
+        "all_task_mean": -0.022815082722671284,
+        "ci95": [
+          -0.05716847402168163,
+          0.012386312514164822
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": -0.10593269048369632,
+        "all_task_mean": -0.10593269048369632,
+        "ci95": [
+          -0.17242767101744216,
+          -0.035957454487825634
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -0.28138206276553446,
+        "all_task_mean": -0.28138206276553446,
+        "ci95": [
+          -0.4102151369446903,
+          -0.146602173945259
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -1.292,
+        "all_task_mean": -1.292,
+        "ci95": [
+          -1.7860500000000001,
+          -0.78
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": -0.21621423592999497,
+        "all_task_mean": null,
+        "ci95": [
+          -0.26338146288134634,
+          -0.1712302020285684
+        ],
+        "eligible_tasks": 311,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": -0.5655161846473469,
+        "all_task_mean": null,
+        "ci95": [
+          -0.6710582647547939,
+          -0.4554695696815643
+        ],
+        "eligible_tasks": 283,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": -1.3422586793603524,
+        "all_task_mean": null,
+        "ci95": [
+          -1.5882434475943992,
+          -1.091048810798944
+        ],
+        "eligible_tasks": 237,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": -5.222222222222222,
+        "all_task_mean": null,
+        "ci95": [
+          -7.45125,
+          -3.0
+        ],
+        "eligible_tasks": 18,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "caveat": "Metric, sampling budgets and available declared evaluator/task harness identities were checked. Missing legacy provenance is explicitly unverified. Identical prompts, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain."
+  },
+  "spectral_soft_minus_plain": {
+    "direction": "current_minus_previous",
+    "task_count": 500,
+    "evaluation_identity_check": "declared_provenance_equal",
+    "correctness": {
+      "metric": "task_macro_correct_fraction",
+      "margin": 0.01,
+      "delta": {
+        "mean": -0.01115625,
+        "all_task_mean": -0.01115625,
+        "ci95": [
+          -0.016094531250000002,
+          -0.00628125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "noninferior": false
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": -0.01115625,
+        "all_task_mean": -0.01115625,
+        "ci95": [
+          -0.016094531250000002,
+          -0.00628125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": -0.003262993880788701,
+        "all_task_mean": -0.003262993880788701,
+        "ci95": [
+          -0.009283707049054424,
+          0.003047399256503232
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.0003559308731187021,
+        "all_task_mean": 0.0003559308731187021,
+        "ci95": [
+          -0.00660925510332175,
+          0.007311030447620167
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.005887105464296429,
+        "all_task_mean": 0.005887105464296429,
+        "ci95": [
+          -0.002448903637806618,
+          0.013853495529867147
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.022,
+        "all_task_mean": 0.022,
+        "ci95": [
+          0.004,
+          0.042
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": -0.011156250000000006,
+        "all_task_mean": -0.011156250000000006,
+        "ci95": [
+          -0.016094531250000006,
+          -0.006281250000000007
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.07761073757900834,
+        "all_task_mean": 0.07761073757900834,
+        "ci95": [
+          0.051705283406990515,
+          0.10339546725088768
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.23820672134995566,
+        "all_task_mean": 0.23820672134995566,
+        "ci95": [
+          0.18329618511067797,
+          0.29636921895754614
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.5990402364757417,
+        "all_task_mean": 0.5990402364757417,
+        "ci95": [
+          0.4869263191088721,
+          0.7231093071148845
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 3.004,
+        "all_task_mean": 3.004,
+        "ci95": [
+          2.568,
+          3.4940999999999995
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": 0.29542497837164544,
+        "all_task_mean": null,
+        "ci95": [
+          0.2488768199585551,
+          0.34316922020628526
+        ],
+        "eligible_tasks": 316,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.7800955378748559,
+        "all_task_mean": null,
+        "ci95": [
+          0.6653322789038247,
+          0.8894675100835937
+        ],
+        "eligible_tasks": 296,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 1.8157231276209642,
+        "all_task_mean": null,
+        "ci95": [
+          1.5818656638250101,
+          2.055080678055994
+        ],
+        "eligible_tasks": 254,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 5.275862068965517,
+        "all_task_mean": null,
+        "ci95": [
+          3.5447214076246336,
+          7.150282258064515
+        ],
+        "eligible_tasks": 29,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "caveat": "Metric, sampling budgets and available declared evaluator/task harness identities were checked. Missing legacy provenance is explicitly unverified. Identical prompts, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain."
+  },
+  "spectral_soft_minus_spd_hard": {
+    "direction": "current_minus_previous",
+    "task_count": 500,
+    "evaluation_identity_check": "declared_provenance_equal",
+    "correctness": {
+      "metric": "task_macro_correct_fraction",
+      "margin": 0.01,
+      "delta": {
+        "mean": -0.01434375,
+        "all_task_mean": -0.01434375,
+        "ci95": [
+          -0.01887578125,
+          -0.009780468750000004
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "noninferior": false
+    },
+    "pass_at_k": {
+      "1": {
+        "mean": -0.01434375,
+        "all_task_mean": -0.01434375,
+        "ci95": [
+          -0.01887578125,
+          -0.009780468750000004
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": -0.0038194990053133883,
+        "all_task_mean": -0.0038194990053133883,
+        "ci95": [
+          -0.009375225693132882,
+          0.00176260293117776
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.00015896448132888684,
+        "all_task_mean": 0.00015896448132888684,
+        "ci95": [
+          -0.006414460880441282,
+          0.006338201343282931
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.005789778461970222,
+        "all_task_mean": 0.005789778461970222,
+        "ci95": [
+          -0.0017539490758198626,
+          0.01354868460072776
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 0.024,
+        "all_task_mean": 0.024,
+        "ci95": [
+          0.006,
+          0.044
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "implementation_coverage_at_k": {
+      "1": {
+        "mean": -0.014343750000000008,
+        "all_task_mean": -0.014343750000000008,
+        "ci95": [
+          -0.018875781250000008,
+          -0.009780468750000009
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "4": {
+        "mean": 0.09105794364281937,
+        "all_task_mean": 0.09105794364281937,
+        "ci95": [
+          0.06601354867039361,
+          0.11605088018747954
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.2693537326077601,
+        "all_task_mean": 0.2693537326077601,
+        "ci95": [
+          0.21460300366072993,
+          0.3243236296632422
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 0.6548668763594453,
+        "all_task_mean": 0.6548668763594453,
+        "ci95": [
+          0.5437347177149345,
+          0.770010179781125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 3.122,
+        "all_task_mean": 3.122,
+        "ci95": [
+          2.68595,
+          3.59605
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "correct_matched_coverage_at_budgets": {
+      "4": {
+        "mean": 0.3343973321781965,
+        "all_task_mean": null,
+        "ci95": [
+          0.28955470590964033,
+          0.3787110897843099
+        ],
+        "eligible_tasks": 318,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "8": {
+        "mean": 0.8754529919459029,
+        "all_task_mean": null,
+        "ci95": [
+          0.7730941721429861,
+          0.9793856509650538
+        ],
+        "eligible_tasks": 295,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "16": {
+        "mean": 1.998443218444857,
+        "all_task_mean": null,
+        "ci95": [
+          1.7919974441259436,
+          2.2179767424598587
+        ],
+        "eligible_tasks": 254,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      },
+      "64": {
+        "mean": 5.533333333333333,
+        "all_task_mean": null,
+        "ci95": [
+          3.928434065934066,
+          7.206932471264367
+        ],
+        "eligible_tasks": 30,
+        "total_tasks": 500,
+        "population": "tasks_with_estimates_available_in_both_runs",
+        "bootstrap_valid_replicates": 2000
+      }
+    },
+    "caveat": "Metric, sampling budgets and available declared evaluator/task harness identities were checked. Missing legacy provenance is explicitly unverified. Identical prompts, decoding protocol, and stable strategy annotation identities remain caller responsibilities. Partial-eligibility differences describe only the reported paired subset; these pointwise CIs do not establish an overall diversity gain."
+  }
+}
