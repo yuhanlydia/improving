@@ -47,4 +47,6 @@ run_one plain "$root/plain/round_5/model"
 run_one spd_hard "$root/spd_hard/round_5/model"
 run_one spectral_soft "$root/spectral_soft/round_5/model"
 
+"$python_bin" scripts/summarize_final_eval64.py "$root"
+
 printf 'Supplemental 64-sample evaluation completed: %s\n' "$output_root"
