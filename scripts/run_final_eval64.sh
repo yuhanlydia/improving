@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root="${1:-runs/retention_5round_single_seed_train16_eval16_b128_v1}"
-config="configs/retention_5round_single_seed_n16_local.yaml"
+config="${EVAL64_CONFIG:-configs/retention_5round_single_seed_n16_local.yaml}"
 python_bin="${PYTHON_BIN:-/root/miniconda3/envs/improving-iclr/bin/python}"
 tasks="data/mbpp/eval.jsonl"
 output_root="$root/supplemental_eval64"
