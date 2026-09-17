@@ -1,0 +1,12 @@
+{
+  "status": "completed",
+  "output_dir": "runs/retention_5round_single_seed_train16_eval16_b128_v1",
+  "methods": [
+    "plain",
+    "spd_hard",
+    "spectral_soft"
+  ],
+  "rounds": 5,
+  "elapsed_this_invocation_seconds": 78024.2455704757,
+  "verification": "completed"
+}
