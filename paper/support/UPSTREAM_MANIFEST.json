@@ -1,0 +1,59 @@
+{
+  "retrieved": "2026-09-15",
+  "official_author_guidelines": "https://iclr.cc/Conferences/2027/AuthorGuidelines",
+  "official_style_archive": "https://media.iclr.cc/Conferences/ICLR2027/iclr-2027-style-files.zip",
+  "repository": "https://github.com/ICLR/Master-Template",
+  "commit": "46ed6f4c6cef5b175dde23639e77d44c3463b230",
+  "commit_url": "https://github.com/ICLR/Master-Template/commit/46ed6f4c6cef5b175dde23639e77d44c3463b230",
+  "files": [
+    {
+      "endsLF": true,
+      "path": "iclr2027/fancyhdr.sty",
+      "sha": "77ed4e3012d822c7cca5c17efcae308b32b8cc2b",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/fancyhdr.sty"
+    },
+    {
+      "endsLF": false,
+      "path": "iclr2027/iclr2027_conference.bib",
+      "sha": "dbc773bf20f6a5e04306a5f7c8c4c759abf44baf",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/iclr2027_conference.bib"
+    },
+    {
+      "endsLF": true,
+      "path": "iclr2027/iclr2027_conference.bst",
+      "sha": "a85a0087d13bb3d19ba2ca53cae3a9db47119853",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/iclr2027_conference.bst"
+    },
+    {
+      "endsLF": true,
+      "path": "iclr2027/iclr2027_conference.sty",
+      "sha": "f61ad7efce0855557694078c0945e6c33feb8236",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/iclr2027_conference.sty"
+    },
+    {
+      "endsLF": true,
+      "path": "iclr2027/iclr2027_conference.tex",
+      "sha": "c088c541a69898bbb329f86ba3a532254b31816b",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/iclr2027_conference.tex"
+    },
+    {
+      "endsLF": true,
+      "path": "iclr2027/math_commands.tex",
+      "sha": "0668f931945175ca8535db25cc27fa603920cc3c",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/math_commands.tex"
+    },
+    {
+      "endsLF": true,
+      "path": "iclr2027/natbib.sty",
+      "sha": "ff0d0b91b6ef41468c593a0ca40a81f9a183b055",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/iclr2027/natbib.sty"
+    },
+    {
+      "endsLF": true,
+      "path": "README.md",
+      "sha": "ab02c8cea890668baaa2b0cc171d06667b53d7a3",
+      "url": "https://github.com/ICLR/Master-Template/blob/46ed6f4c6cef5b175dde23639e77d44c3463b230/README.md"
+    }
+  ],
+  "license": "https://www.latex-project.org/lppl/lppl-1-3c.txt"
+}
