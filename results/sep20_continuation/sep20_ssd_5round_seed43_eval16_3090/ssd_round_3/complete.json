@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "model_identity": "1376d80c259fa059a74ba224505456ff63ea6680570ea22903e35db27c032b04",
+  "files": {
+    "model_loading.resources.json": "34a66395440fe9bcee4b90316ca80539cec4a64a7b7fbb0822662881b4014335",
+    "train.jsonl": "de2e260a5a69b84b71e60dea4bd9e3a41eb116e9cad7e6f223126fee9742d0f6",
+    "train.jsonl.budget.json": "699683b611b20b9ff755cc60e278cbf3e9f1cae2099b4e181860b58072a4dbe4",
+    "training_generation.resources.json": "c2b0e4050ed68557ecbd5f3ead5074df756762abcd291783efbb5e4f261feb74",
+    "sft.resources.json": "f9e63c7e865ac0f44d23a368e3d497d998132db83b9cd9e91b8a46e4acdfcc79",
+    "training_stats.json": "a47ccb7824e3a282c2f089103acdc803bd6961152d7d533caa0e2efe135591f8",
+    "evaluation.jsonl": "4229406a15b37e1c8b56c1d04f43b235a16ead3d5ad086b609d951fe125fa782",
+    "evaluation.jsonl.budget.json": "aade51e4465e655f610569b89d422fb8e98b82e51e359f9b36686a27a185453e",
+    "evaluation.verified.jsonl": "fbe4c03733cba9e5075e0981a82bcce7cc91cc6187aef69445f6bb2c68f7fcac",
+    "evaluation.metrics.json": "cd65ae8304f0c684e88d1a4a292b27e4edaeb74fbe728beae3d7bd44c39647e0",
+    "post_training_evaluation.resources.json": "5e96a5089330b3709a0f3abf4a0939ecd7c0188ae1a687d29c69c8589e91f87b",
+    "model/config.json": "9da2b91e2ce53a217860678a33eca23b4113ba66f41d7986516dacf4e2d78475",
+    "model/generation_config.json": "a74797aba705d511c09cc4d12c4517653426ac5559841f0bad62aa8733e100da",
+    "model/model.safetensors": "47a85999767edebf17d37e47fe205a7cb9d702a88b7606ae320f494bf8eede79",
+    "model/tokenizer_config.json": "74ecb08f77f4d27fdc01b86c03038bf0102b1395c28f2016334af062ce1ec5be",
+    "model/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+    "model/added_tokens.json": "58b54bbe36fc752f79a24a271ef66a0a0830054b4dfad94bde757d851968060b",
+    "model/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+    "model/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model/tokenizer.json": "9c5ae00e602b8860cbd784ba82a8aa14e8feecec692e7076590d014d7b7fdafa",
+    "model/training_stats.json": "a47ccb7824e3a282c2f089103acdc803bd6961152d7d533caa0e2efe135591f8"
+  }
+}
