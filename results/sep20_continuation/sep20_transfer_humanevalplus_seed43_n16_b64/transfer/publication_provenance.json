@@ -1,0 +1,179 @@
+{
+  "part_id": "sep20_transfer_humanevalplus_seed43_n16_b64/transfer",
+  "source_root": "/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64",
+  "source_digest": "5aa5842558ab15b5b763e4367d22f669a0ed24a65b0688e7ad0f3c78a579f880",
+  "files": [
+    {
+      "source_relative_path": "base/complete.json",
+      "source_sha256": "ae217754f94937ac730b84ea546503469d4a38374baec38ad95c115ee41e629e",
+      "source_bytes": 1692
+    },
+    {
+      "source_relative_path": "base/evaluation.jsonl.budget.json",
+      "source_sha256": "365b4cf5abc94f7435a58d7047ac6592be932de18117412f5a637de2d2d8c12f",
+      "source_bytes": 677
+    },
+    {
+      "source_relative_path": "base/evaluation.metrics.json",
+      "source_sha256": "be9164842a08f23dc97dd1b60282aacacd1106f8b2d74dc414ec5a897a62d273",
+      "source_bytes": 822785
+    },
+    {
+      "source_relative_path": "base/evaluation.verified.jsonl",
+      "source_sha256": "2e3cc5927c5eba132a3b53d4978085d416562423501c801e6a0ac8e818b33731",
+      "source_bytes": 14175463
+    },
+    {
+      "source_relative_path": "base/evaluation_generation.resources.json",
+      "source_sha256": "8fdecc01323adb35f40a86c7641eb9fc6e7632b3780ccd2dffd5f36bd759cffe",
+      "source_bytes": 1207
+    },
+    {
+      "source_relative_path": "base/model_loading.resources.json",
+      "source_sha256": "af9cd61a073049d33ca180999a6ffcf944b5053ec9f5b09f6c377f9a21174377",
+      "source_bytes": 1185
+    },
+    {
+      "source_relative_path": "base/verification_and_metrics.resources.json",
+      "source_sha256": "fb6f6670db451366bce32a67d1ac69d2db65eb2c7e201c2db4179bd0afd2b3ec",
+      "source_bytes": 1211
+    },
+    {
+      "source_relative_path": "manifest.json",
+      "source_sha256": "4314c8249c5e105d64d11eeb9f184ce41c58450faf71fef4282e18c31a3652ba",
+      "source_bytes": 26955
+    },
+    {
+      "source_relative_path": "plain/round_5/complete.json",
+      "source_sha256": "a1fd6b2a8aeedea287891d52ffac0b0b9c82df076be2719df93974de664da271",
+      "source_bytes": 1692
+    },
+    {
+      "source_relative_path": "plain/round_5/evaluation.jsonl.budget.json",
+      "source_sha256": "08f01095ca67cb1857197ae553366dee5f70017b745982557f13557e45074144",
+      "source_bytes": 678
+    },
+    {
+      "source_relative_path": "plain/round_5/evaluation.metrics.json",
+      "source_sha256": "e1885903e8d5b03657bfcfba1ee43547d85aed4a12ab17bbc4b501bc52725cfa",
+      "source_bytes": 828729
+    },
+    {
+      "source_relative_path": "plain/round_5/evaluation.verified.jsonl",
+      "source_sha256": "fe30bba943ddb065760de811ccd16bf4e0b32b0e16a5ee9fd7bbe557d367dd0b",
+      "source_bytes": 15557592
+    },
+    {
+      "source_relative_path": "plain/round_5/evaluation_generation.resources.json",
+      "source_sha256": "635694e9030d111aca9a41c30f165acbb57e7a21a519ef1f489986edc5d0d794",
+      "source_bytes": 1205
+    },
+    {
+      "source_relative_path": "plain/round_5/model_loading.resources.json",
+      "source_sha256": "19547babb944ad84f186339cb34a1ddc660fa3abdc747d25035a863bda516a1b",
+      "source_bytes": 1187
+    },
+    {
+      "source_relative_path": "plain/round_5/verification_and_metrics.resources.json",
+      "source_sha256": "fea2d255ef5076731ff03feef63fd83c1b16602719efa74239865c9d47201f1f",
+      "source_bytes": 1211
+    },
+    {
+      "source_relative_path": "run_status.json",
+      "source_sha256": "4ab8fa0703f4402827185d3f4daf06d1d61df2708c23f057e30dc9aed87eff41",
+      "source_bytes": 312
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/complete.json",
+      "source_sha256": "d831086751e163139a553e39ef4b361d88b03b4305ff12c321f7e4e6161982a9",
+      "source_bytes": 1692
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/evaluation.jsonl.budget.json",
+      "source_sha256": "d89e8a9c09097ce127980842b023d022b0ae018a39ad3d4a760bb78f04137d20",
+      "source_bytes": 681
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/evaluation.metrics.json",
+      "source_sha256": "5b898ae9653394b9b0ebab49168a58ee8131a4de2f5277a3b3c16dfc2f86fcc8",
+      "source_bytes": 828058
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/evaluation.verified.jsonl",
+      "source_sha256": "4f72108cccdc388a449e4e82196c31a8460d890840911af26df026323888ef31",
+      "source_bytes": 15403212
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/evaluation_generation.resources.json",
+      "source_sha256": "c07e043ddeea6e8517108bbd7cc8a4bd63977efe6aebce642180a2c02a57f0ee",
+      "source_bytes": 1205
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/model_loading.resources.json",
+      "source_sha256": "855d34e91489b7f6f4cbf6d0d241eafa022a93c3dbe20ac4e6d8a99907d4703d",
+      "source_bytes": 1185
+    },
+    {
+      "source_relative_path": "spd_hard/round_5/verification_and_metrics.resources.json",
+      "source_sha256": "bb8599d595aa3b355db75a43de5328fd93ca67c8be4492cbd3b471598d268f27",
+      "source_bytes": 1213
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/complete.json",
+      "source_sha256": "212b08d690ce8127230f9267935f2cb94c321dd9609ac86187fa407ed6fac3e0",
+      "source_bytes": 1692
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/evaluation.jsonl.budget.json",
+      "source_sha256": "651e4f60e6c3f1644243a5c6abf4a2ac38ef8f539fadb5cf9bef4256a56291fd",
+      "source_bytes": 686
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/evaluation.metrics.json",
+      "source_sha256": "8cc31b1e5903397c0bee0cb9a5637bf7468a85c9df03d233f5f212600f3584fc",
+      "source_bytes": 828871
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/evaluation.verified.jsonl",
+      "source_sha256": "e691ae5e29f7a2364cde8c93c0b3fa3f41c3a096c75903353e171bbfdff6cf3d",
+      "source_bytes": 15672977
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/evaluation_generation.resources.json",
+      "source_sha256": "c4ff4977f97729fedd7e7912538fbe714d395fe35ce60c89f4d259cfa75f5a29",
+      "source_bytes": 1205
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/model_loading.resources.json",
+      "source_sha256": "fecb219d06b516181603889e961784894377b957b96377635e1df434023f050b",
+      "source_bytes": 1187
+    },
+    {
+      "source_relative_path": "spectral_soft/round_5/verification_and_metrics.resources.json",
+      "source_sha256": "18a5291fd85600f3c80d21aa76deadb5fa00ef50da54545204a56f78e4e51417",
+      "source_bytes": 1213
+    },
+    {
+      "source_relative_path": "transfer_complete.json",
+      "source_sha256": "baf9c871ebc102b4e4283f8263fb98ded053a25175a15d1c937277ee2c508cbf",
+      "source_bytes": 832
+    }
+  ],
+  "metrics_implementation_sha256": "9e2fc30e1c8df0c9d9ff95f6a025f69245226efb6cf29ee9738243b30a311528",
+  "format": "compact_evidence_v1",
+  "excluded": [
+    "model weights",
+    "datasets and task prompts/tests",
+    "generated program text and token ids",
+    "secrets"
+  ],
+  "recomputable": [
+    "pass@k from correctness labels",
+    "AST richness from implementation_proxy hashes",
+    "control-flow and exact-program richness from hashes"
+  ],
+  "limitations": [
+    "Program tests cannot be rerun from this compact archive.",
+    "Token Jaccard and fresh AST canonicalization need original program text, retained on the experiment machine."
+  ]
+}

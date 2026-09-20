@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "benchmark": "humanevalplus",
+  "source_run": "/root/improving/runs/historical_seed43_restored",
+  "student_round": 5,
+  "task_count": 164,
+  "samples_per_task": 16,
+  "training_on_target": false,
+  "calibration_on_target": false,
+  "generation": {
+    "max_prompt_tokens": 4096,
+    "max_new_tokens": 1024,
+    "batch_size": 64,
+    "sequence_batch_size": 64,
+    "task_batch_size": 64
+  },
+  "results": {
+    "status": "completed",
+    "completed": [
+      "base",
+      "plain/round_5",
+      "spectral_soft/round_5",
+      "spd_hard/round_5"
+    ],
+    "unavailable_checkpoints": [],
+    "missing_checkpoints": [],
+    "training_performed": false,
+    "output_dir": "/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64"
+  },
+  "evaluation_protocol": "official_evalplus_base_and_plus"
+}

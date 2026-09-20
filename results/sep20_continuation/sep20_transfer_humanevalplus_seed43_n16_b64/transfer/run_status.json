@@ -1,0 +1,13 @@
+{
+  "status": "completed",
+  "completed": [
+    "base",
+    "plain/round_5",
+    "spectral_soft/round_5",
+    "spd_hard/round_5"
+  ],
+  "unavailable_checkpoints": [],
+  "missing_checkpoints": [],
+  "training_performed": false,
+  "output_dir": "/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64"
+}

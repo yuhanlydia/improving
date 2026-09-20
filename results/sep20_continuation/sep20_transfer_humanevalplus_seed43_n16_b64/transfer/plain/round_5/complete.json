@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "protocol_fingerprint": "82fb96217a0c487c29882303009dd62d73ed005112231520a1210d95bd1cafab",
+  "model_identity": "e2bf448a071cbcdbafcf31d4a074b53d620735e4cb03385f4297cbf3a2c267ef",
+  "files": {
+    "model_loading.resources.json": "19547babb944ad84f186339cb34a1ddc660fa3abdc747d25035a863bda516a1b",
+    "evaluation.jsonl": "fb33963f9687f2721f4fe64f0508f8ac19a1dea18d8026325faa6be7a7d0a397",
+    "evaluation.jsonl.budget.json": "08f01095ca67cb1857197ae553366dee5f70017b745982557f13557e45074144",
+    "evaluation_generation.resources.json": "635694e9030d111aca9a41c30f165acbb57e7a21a519ef1f489986edc5d0d794",
+    "evaluation.evalplus.jsonl.manifest.jsonl": "788ce79503f750611e4c85e65f921aeba9cf5139571835359be03c2488b4f175",
+    "evaluation.evalplus.jsonl": "5be2a4928382c7c3f78da60f1764b1eb2f3d78ab91bdf89171b9707b0b34ef5a",
+    "evaluation.verified.jsonl": "fe30bba943ddb065760de811ccd16bf4e0b32b0e16a5ee9fd7bbe557d367dd0b",
+    "evaluation.metrics.json": "e1885903e8d5b03657bfcfba1ee43547d85aed4a12ab17bbc4b501bc52725cfa",
+    "verification_and_metrics.resources.json": "fea2d255ef5076731ff03feef63fd83c1b16602719efa74239865c9d47201f1f",
+    "evaluation.evalplus/attempt_0001/samples_eval_results.json": "93f4554ed324f4a67395b4d2da580c09f183be8c402284891c3da58b730b0288",
+    "evaluation.evalplus/attempt_0001/evaluation_metadata.json": "074b946b3c5d0eec483d3477f3da54a21b4632c76cbf8edbac3457fad661ad35",
+    "evaluation.evalplus/attempt_0001/dataset_metadata.json": "5591e3ee9066a6f08ec6023e7e1e676ae7b87df387ee83404bb0da6fc772e9cb",
+    "evaluation.evalplus/attempt_0001/environment.txt": "2441158689552feed48178b6aab4d2c1b2a1b6288394494cc9b2c33a2f4e48c5"
+  }
+}
