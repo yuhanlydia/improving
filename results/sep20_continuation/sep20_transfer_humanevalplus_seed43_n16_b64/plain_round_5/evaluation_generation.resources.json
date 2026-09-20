@@ -1,0 +1,36 @@
+{
+  "stage": "evaluation_generation",
+  "elapsed_seconds": 2626.496298920014,
+  "status": "completed",
+  "cuda_devices": [
+    {
+      "device": 0,
+      "name": "NVIDIA GeForce RTX 3090",
+      "peak_allocated_bytes": 6272896512,
+      "peak_reserved_bytes": 14015266816
+    }
+  ],
+  "cuda_peak_allocated_bytes": 6272896512,
+  "cuda_peak_reserved_bytes": 14015266816,
+  "cuda_sum_of_device_peak_allocated_bytes": 6272896512,
+  "memory_definition": "peak fields are maximum per-device peaks; sum of device peaks is an upper bound, not a simultaneous peak",
+  "attempts": [
+    {
+      "stage": "evaluation_generation",
+      "elapsed_seconds": 2626.496298920014,
+      "status": "completed",
+      "cuda_devices": [
+        {
+          "device": 0,
+          "name": "NVIDIA GeForce RTX 3090",
+          "peak_allocated_bytes": 6272896512,
+          "peak_reserved_bytes": 14015266816
+        }
+      ],
+      "cuda_peak_allocated_bytes": 6272896512,
+      "cuda_peak_reserved_bytes": 14015266816,
+      "cuda_sum_of_device_peak_allocated_bytes": 6272896512,
+      "memory_definition": "peak fields are maximum per-device peaks; sum of device peaks is an upper bound, not a simultaneous peak"
+    }
+  ]
+}
