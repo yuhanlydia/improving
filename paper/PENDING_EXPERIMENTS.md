@@ -1,3 +1,5 @@
+> Historical planning record. The active September 20 experiment and evidence matrix is in `experiments/iclr2027/README.md`; the current manuscript is `paper/iclr2027/main.tex`.
+
 # SPECTRUM：待完成实验与执行顺序
 
 ## 当前状态与固定协议

@@ -1,0 +1,734 @@
+{
+  "sources": [
+    "results/retention_5round_train16_eval16_seed43/report.json",
+    "results/retention_5round_train16_eval16_seed43/eval64/metrics_compact.json"
+  ],
+  "uncertainty": "Reported pointwise 95% task-bootstrap confidence intervals, 2000 resamples; one training seed.",
+  "figure1_analytic": {
+    "status": "ILLUSTRATIVE",
+    "a": 0.4,
+    "q_broad": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "q_concentrated": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "D4_broad": 2.734375,
+    "D4_concentrated": 1
+  },
+  "figure2_gain": {
+    "status": "ANALYTIC ILLUSTRATION",
+    "formula": "1/(1+tau*(1-mu))",
+    "tau_for_drawn_shape": 1,
+    "note": "Shape illustrative; ticks use symbolic tau and do not select an experimental strength."
+  },
+  "eval16": {
+    "base/evaluation": {
+      "pass_at_1": {
+        "mean": 0.37925,
+        "ci95": [
+          0.346871875,
+          0.41400312499999997
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 4.016,
+        "ci95": [
+          3.664,
+          4.3740499999999995
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 3.310434709480511,
+        "ci95": [
+          3.221199169291293,
+          3.400123345220875
+        ],
+        "eligible_tasks": 262,
+        "total_tasks": 500
+      }
+    },
+    "plain/round_1/evaluation": {
+      "pass_at_1": {
+        "mean": 0.38425,
+        "ci95": [
+          0.351490625,
+          0.418875
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.808,
+        "ci95": [
+          3.472,
+          4.1581
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 3.173048067300941,
+        "ci95": [
+          3.0671956385801002,
+          3.280951416244543
+        ],
+        "eligible_tasks": 261,
+        "total_tasks": 500
+      }
+    },
+    "plain/round_2/evaluation": {
+      "pass_at_1": {
+        "mean": 0.3915,
+        "ci95": [
+          0.359621875,
+          0.42625625
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.634,
+        "ci95": [
+          3.30195,
+          3.9661999999999993
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 3.0800160393097196,
+        "ci95": [
+          2.973781447839116,
+          3.191841953132971
+        ],
+        "eligible_tasks": 269,
+        "total_tasks": 500
+      }
+    },
+    "plain/round_3/evaluation": {
+      "pass_at_1": {
+        "mean": 0.3965,
+        "ci95": [
+          0.364990625,
+          0.43238125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.372,
+        "ci95": [
+          3.06795,
+          3.6900999999999993
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 2.8954791209655024,
+        "ci95": [
+          2.776544808807758,
+          3.018028129989538
+        ],
+        "eligible_tasks": 257,
+        "total_tasks": 500
+      }
+    },
+    "plain/round_4/evaluation": {
+      "pass_at_1": {
+        "mean": 0.407875,
+        "ci95": [
+          0.374375,
+          0.444375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.19,
+        "ci95": [
+          2.8859500000000002,
+          3.506
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 2.803304432193321,
+        "ci95": [
+          2.685506626926781,
+          2.918009932185873
+        ],
+        "eligible_tasks": 270,
+        "total_tasks": 500
+      }
+    },
+    "plain/round_5/evaluation": {
+      "pass_at_1": {
+        "mean": 0.413,
+        "ci95": [
+          0.379375,
+          0.44975624999999997
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.09,
+        "ci95": [
+          2.80395,
+          3.398
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 2.746691347624183,
+        "ci95": [
+          2.6286378087769147,
+          2.8617909104231325
+        ],
+        "eligible_tasks": 268,
+        "total_tasks": 500
+      }
+    },
+    "spectral_soft/round_1/evaluation": {
+      "pass_at_1": {
+        "mean": 0.378375,
+        "ci95": [
+          0.34675,
+          0.41288125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.848,
+        "ci95": [
+          3.50395,
+          4.202
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 3.221975831745947,
+        "ci95": [
+          3.1221283699493885,
+          3.3256851813758965
+        ],
+        "eligible_tasks": 261,
+        "total_tasks": 500
+      }
+    },
+    "spectral_soft/round_2/evaluation": {
+      "pass_at_1": {
+        "mean": 0.383625,
+        "ci95": [
+          0.351625,
+          0.417878125
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.768,
+        "ci95": [
+          3.436,
+          4.10405
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 3.159304273589988,
+        "ci95": [
+          3.054195526187688,
+          3.2671764167634643
+        ],
+        "eligible_tasks": 259,
+        "total_tasks": 500
+      }
+    },
+    "spectral_soft/round_3/evaluation": {
+      "pass_at_1": {
+        "mean": 0.3905,
+        "ci95": [
+          0.35960624999999996,
+          0.425375
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.662,
+        "ci95": [
+          3.32995,
+          4.0
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 3.0633024736078176,
+        "ci95": [
+          2.9517744700832935,
+          3.174149546385129
+        ],
+        "eligible_tasks": 262,
+        "total_tasks": 500
+      }
+    },
+    "spectral_soft/round_4/evaluation": {
+      "pass_at_1": {
+        "mean": 0.39775,
+        "ci95": [
+          0.36474375000000003,
+          0.43275625
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.588,
+        "ci95": [
+          3.268,
+          3.93005
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 2.991413656052439,
+        "ci95": [
+          2.8799553352713403,
+          3.1020587473730923
+        ],
+        "eligible_tasks": 263,
+        "total_tasks": 500
+      }
+    },
+    "spectral_soft/round_5/evaluation": {
+      "pass_at_1": {
+        "mean": 0.40175,
+        "ci95": [
+          0.368490625,
+          0.43750625
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "C16": {
+        "mean": 3.606,
+        "ci95": [
+          3.27395,
+          3.954
+        ],
+        "eligible_tasks": 500,
+        "total_tasks": 500
+      },
+      "D4": {
+        "mean": 2.9971258357189914,
+        "ci95": [
+          2.888132498642703,
+          3.1055915119398576
+        ],
+        "eligible_tasks": 263,
+        "total_tasks": 500
+      }
+    }
+  },
+  "eval64": {
+    "base": {
+      "pass_at_k": {
+        "1": {
+          "mean": 0.3794375,
+          "ci95": [
+            0.34740546875,
+            0.41365703125
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "4": {
+          "mean": 0.5507654491198912,
+          "ci95": [
+            0.5132311306218681,
+            0.5890580618405479
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "8": {
+          "mean": 0.6109743277142735,
+          "ci95": [
+            0.5724928416444336,
+            0.6497163629340588
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "16": {
+          "mean": 0.6569243830645763,
+          "ci95": [
+            0.6184579345767386,
+            0.6952451294337093
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "64": {
+          "mean": 0.72,
+          "ci95": [
+            0.6819500000000001,
+            0.758
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        }
+      },
+      "implementation_coverage_at_k": {
+        "1": {
+          "mean": 0.3794375,
+          "ci95": [
+            0.34740546875,
+            0.41365703125
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "4": {
+          "mean": 1.2665641226612274,
+          "ci95": [
+            1.159415250025182,
+            1.3736470797606455
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "8": {
+          "mean": 2.2670132030155092,
+          "ci95": [
+            2.0738004189885935,
+            2.4590917365037095
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "16": {
+          "mean": 4.039637834881175,
+          "ci95": [
+            3.6929032849396326,
+            4.390863679872534
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "64": {
+          "mean": 12.802,
+          "ci95": [
+            11.69585,
+            13.9681
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        }
+      }
+    },
+    "plain": {
+      "pass_at_k": {
+        "1": {
+          "mean": 0.41446875,
+          "ci95": [
+            0.38040546875,
+            0.45168984375
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "4": {
+          "mean": 0.5654111549696559,
+          "ci95": [
+            0.5268074897383598,
+            0.6045970197961521
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "8": {
+          "mean": 0.6185723086964429,
+          "ci95": [
+            0.5793926136329006,
+            0.65815805619536
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "16": {
+          "mean": 0.6563636760539059,
+          "ci95": [
+            0.6166121006457762,
+            0.6960772759859236
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "64": {
+          "mean": 0.704,
+          "ci95": [
+            0.664,
+            0.744
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        }
+      },
+      "implementation_coverage_at_k": {
+        "1": {
+          "mean": 0.41446875,
+          "ci95": [
+            0.38040546875,
+            0.45168984375
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "4": {
+          "mean": 1.1661383023595477,
+          "ci95": [
+            1.070903410028078,
+            1.2672731045868904
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "8": {
+          "mean": 1.9228737911818574,
+          "ci95": [
+            1.7571056197779187,
+            2.101574059760503
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "16": {
+          "mean": 3.1592155356398983,
+          "ci95": [
+            2.8673068380698647,
+            3.47591123889947
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "64": {
+          "mean": 8.506,
+          "ci95": [
+            7.60195,
+            9.46405
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        }
+      }
+    },
+    "spectral_soft": {
+      "pass_at_k": {
+        "1": {
+          "mean": 0.4033125,
+          "ci95": [
+            0.37115312500000003,
+            0.43831796874999995
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "4": {
+          "mean": 0.562148161088867,
+          "ci95": [
+            0.5239757778858503,
+            0.6009773591542646
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "8": {
+          "mean": 0.6189282395695613,
+          "ci95": [
+            0.5799531764909873,
+            0.6581920368265824
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "16": {
+          "mean": 0.6622507815182023,
+          "ci95": [
+            0.6233787417205545,
+            0.7018316378569717
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "64": {
+          "mean": 0.726,
+          "ci95": [
+            0.688,
+            0.766
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        }
+      },
+      "implementation_coverage_at_k": {
+        "1": {
+          "mean": 0.4033125,
+          "ci95": [
+            0.37115312500000003,
+            0.43831796874999995
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "4": {
+          "mean": 1.243749039938556,
+          "ci95": [
+            1.1431083542658207,
+            1.348755115711012
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "8": {
+          "mean": 2.161080512531813,
+          "ci95": [
+            1.9763838957574165,
+            2.3468053037933396
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "16": {
+          "mean": 3.758255772115641,
+          "ci95": [
+            3.4251782302115035,
+            4.103086515045223
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        },
+        "64": {
+          "mean": 11.51,
+          "ci95": [
+            10.424,
+            12.652399999999997
+          ],
+          "eligible_tasks": 500,
+          "total_tasks": 500
+        }
+      }
+    }
+  },
+  "paired_vs_initial": {
+    "plain/round_1": {
+      "mean": -0.13825759274738866,
+      "ci95": [
+        -0.20797810823147955,
+        -0.06804863961550427
+      ],
+      "eligible_tasks": 245,
+      "total_tasks": 500
+    },
+    "plain/round_2": {
+      "mean": -0.22024799951629223,
+      "ci95": [
+        -0.2934757464191245,
+        -0.14517954237106637
+      ],
+      "eligible_tasks": 246,
+      "total_tasks": 500
+    },
+    "plain/round_3": {
+      "mean": -0.3760934435934436,
+      "ci95": [
+        -0.4526774958172162,
+        -0.29874511156692013
+      ],
+      "eligible_tasks": 240,
+      "total_tasks": 500
+    },
+    "plain/round_4": {
+      "mean": -0.5003075021517644,
+      "ci95": [
+        -0.5736340902318103,
+        -0.42959305960909544
+      ],
+      "eligible_tasks": 244,
+      "total_tasks": 500
+    },
+    "plain/round_5": {
+      "mean": -0.5741617994730027,
+      "ci95": [
+        -0.6537107276293412,
+        -0.4987493439846996
+      ],
+      "eligible_tasks": 241,
+      "total_tasks": 500
+    },
+    "spectral_soft/round_1": {
+      "mean": -0.09967773273558399,
+      "ci95": [
+        -0.16600567356740195,
+        -0.035437523823137085
+      ],
+      "eligible_tasks": 242,
+      "total_tasks": 500
+    },
+    "spectral_soft/round_2": {
+      "mean": -0.13999218766167923,
+      "ci95": [
+        -0.21132327414352664,
+        -0.06972498545915587
+      ],
+      "eligible_tasks": 236,
+      "total_tasks": 500
+    },
+    "spectral_soft/round_3": {
+      "mean": -0.2210229433590089,
+      "ci95": [
+        -0.3047545061413611,
+        -0.14572164649924393
+      ],
+      "eligible_tasks": 244,
+      "total_tasks": 500
+    },
+    "spectral_soft/round_4": {
+      "mean": -0.3162995177457987,
+      "ci95": [
+        -0.39198348006132,
+        -0.2439455640685815
+      ],
+      "eligible_tasks": 242,
+      "total_tasks": 500
+    },
+    "spectral_soft/round_5": {
+      "mean": -0.3152965855006672,
+      "ci95": [
+        -0.39445073313153484,
+        -0.2395721128340615
+      ],
+      "eligible_tasks": 245,
+      "total_tasks": 500
+    }
+  }
+}

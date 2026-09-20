@@ -1,0 +1,589 @@
+\documentclass{article}
+\usepackage{iclr2027_conference,times}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,microtype}
+\usepackage{array,multirow,xcolor,url,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+\newcommand{\method}{\textsc{Spectrum}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\I}{\mathbf I}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\Cbar}{\overline C}
+\newcommand{\pending}{\textcolor{gray}{\ensuremath{\mathrm{x}}}}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newcommand{\paperfigure}[2]{\IfFileExists{#1}{\includegraphics[width=\linewidth]{#1}}{\fbox{\parbox[c][1.55in][c]{.94\linewidth}{\centering #2}}}}
+
+\title{SPECTRUM: Looped Self-Distillation through\\Proximal Spectral Modulation}
+\author{Anonymous Authors}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Learning from self-generated solutions can increase a language model's correctness while narrowing the range of correct solutions it produces. This distinction matters for coding, mathematical reasoning, and other tasks with multiple valid solution paths: the next learning round inherits a distribution of solutions, not an accuracy score. We study this effect through \emph{Looped Self-Distillation}, a modular framework that repeatedly constructs a generation policy, samples a synthetic corpus, and updates a single student. We introduce \method, which re-estimates loss-sensitive key/value geometry at each round and converts it into a full-rank proximal spectral modulation. Its continuous, bounded gains shape generation without eliminating any local direction at finite strength; ordinary self-distillation transfers the resulting data distribution into a student that uses standard inference. Over five rounds on MBPP, \method\ retains $89.9\%$ of the initial model's 64-sample correct-implementation richness, compared with $66.4\%$ for plain self-distillation. Its diversity advantage persists when the number of correct samples is held fixed, and its pass@64 is $2.2$ percentage points higher than plain self-distillation. These results establish correct-solution retention as a distinct outcome of repeated self-distillation and identify generation-time spectral modulation as a practical way to improve it.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+The value of a correct answer is not exhausted by whether it is correct. A programming task can admit implementations with different decompositions, control flow, and data structures; a mathematical problem can admit different derivations. Sampling several valid paths supports search, verification, and the construction of richer training data. This last role becomes consequential when a language model learns from its own outputs: the solutions it produces today become part of the distribution it learns tomorrow.
+
+Self-distillation offers a simple route to such improvement. Recent code-generation methods train a student on outputs sampled from the same model family, making the generation policy an important determinant of learning \citep{zhang2026ssd}. Repeated generation and training also have established precedents in self-improvement \citep{zelikman2022star,gulcehre2023rest,singh2024restem}. These procedures make a central question unavoidable: \emph{when correctness improves, what happens to the variety within the correct solutions?} Correctness and diversity are recognized as distinct in creative reasoning and code analysis \citep{hu2026uarlacl,rajput2025dynamic}. We focus on their joint evolution across successive student updates.
+
+Our starting observation is a separation between the two outcomes. In a five-round MBPP experiment, plain self-distillation raises pass@1 from $37.94\%$ to $41.45\%$, while expected correct AST richness at 64 samples falls from $12.802$ to $8.506$ implementations per task. Figure~\ref{fig:motivation} places this longitudinal phenomenon beside a simple probability example: redistributing probability among correct implementations changes diversity while leaving every pass@$k$ unchanged. Accuracy therefore cannot determine what variety of correct training material remains available for the next round.
+
+We formalize \emph{Looped Self-Distillation} as an outer learning process with explicit generation and student-update modules. This formulation separates the initial checkpoint, the temporarily modified generation policy, and the native student evaluated after learning. It accommodates different synthetic-data generators without requiring a different adapter for each solution strategy. Within this framework, \method\ uses the current student's reference-loss gradients to estimate key/value geometry, then derives a continuous spectral gain from a proximal objective. A finite modulation strength controls how far generation departs from the current student; all local directions retain positive gain. The resulting raw outputs train one LoRA student \citep{hu2022lora}, and the geometry is re-estimated at the next round.
+
+The evidence supports a concrete retention benefit. After five rounds, \method\ retains $89.9\%$ of the initial correct AST richness at 64 samples, versus $66.4\%$ for plain self-distillation. It also produces more distinct implementations when compared at the same number of correct samples, and solves more tasks at the largest measured sampling budget. These are outcomes of the final native student, whose inference requires no spectral modification. We organize the study around three contributions:
+\begin{enumerate}
+\item We characterize \textbf{correctness--diversity dissociation} in repeated self-distillation, combining a probability decomposition with longitudinal measurements of correct-implementation richness.
+\item We formulate \textbf{Looped Self-Distillation} as a modular generation--learning framework, making the evolution of both correctness and correct-solution diversity explicit.
+\item We introduce \textbf{\method}, a per-round proximal spectral modulation with a closed form and local retention guarantees, and demonstrate improved implementation-richness retention in the learned student.
+\end{enumerate}
+
+\begin{figure}[t]
+\centering\paperfigure{figures/fig1_motivation.pdf}{Correctness and correct-solution diversity across learning rounds}
+\caption{\textbf{Correctness does not determine correct-solution diversity.} The measured panels use the completed five-round MBPP experiment, with 16 samples per task at each round. The probability illustration explicitly holds correctness fixed while redistributing mass among correct implementations; it is an analytical example, not an estimated program histogram. Richness counts distinct normalized AST classes; the trajectory displays point estimates at a common 16-sample budget.}
+\label{fig:motivation}
+\end{figure}
+
+\section{Correctness and correct-solution retention}
+\label{sec:problem}
+For a task $x$, let $v_x(y)\in\{0,1\}$ indicate whether output $y$ passes the recorded verifier, and let $\phi(y)$ identify its implementation class. For code we use a conservatively normalized AST fingerprint. Define correctness probability $a_\theta(x)=\Pr_{\pi_\theta}[v_x(y)=1]$ and conditional class probabilities
+\begin{equation}
+q_{\theta,j}(x)=\Pr_{\pi_\theta}[\phi(y)=j\mid v_x(y)=1],\qquad
+\Pr[v_x(y)=1,\phi(y)=j]=a_\theta(x)q_{\theta,j}(x).
+\label{eq:factorization}
+\end{equation}
+This factorization separates how often the model succeeds from which implementations it uses when it succeeds. We suppress $x$ below and assume independent samples from a fixed decoding policy.
+
+\begin{proposition}[Correctness does not identify conditional richness]
+\label{prop:separation}
+For a fixed correctness probability $a>0$, pass@$k=1-(1-a)^k$ is invariant to the conditional class distribution $q$. The expected number of distinct correct classes in $k$ total draws and in $b$ correct draws is, respectively,
+\begin{equation}
+C_k(a,q)=\sum_j\bigl[1-(1-aq_j)^k\bigr],\qquad
+D_b(q)=\sum_j\bigl[1-(1-q_j)^b\bigr].
+\label{eq:population}
+\end{equation}
+For $b\ge2$, distributions with identical pass@$k$ for every $k$ can have different $D_b$.
+\end{proposition}
+
+For example, set $a=0.4$. A model concentrated on one correct implementation has $D_4=1$; one uniform over four correct implementations has $D_4=4[1-(3/4)^4]=2.734375$. Both have pass@4 equal to $0.8704$. These occupancy identities motivate measuring the conditional distribution alongside correctness.
+
+We report \emph{correct AST richness@$k$} and \emph{correct-conditioned AST richness@$b$}. These descriptive names refer to expected class counts using standard rarefaction estimators \citep{hurlbert1971nonconcept}; $C_k$ and $D_b$ are mathematical shorthand, not additional metrics. The first fixes the total generation budget and the second fixes the number of correct samples. Their exact finite-sample estimators, task eligibility, and relationship to pass@$k$ appear in Appendix~\ref{app:metrics}.
+
+\begin{definition}[Correct-solution retention profile]
+\label{def:retention}
+For students $\theta_0,\ldots,\theta_T$ evaluated under one common protocol, the retention profile is the sequence $(a_{\theta_t},C_k(\theta_t),D_b(\theta_t))_{t=0}^T$. Relative richness retention is $R_{t,k}=C_k(\theta_t)/C_k(\theta_0)$ when the denominator is positive. Correctness--diversity dissociation occurs when correctness increases while the corresponding richness decreases.
+\end{definition}
+
+This definition does not prescribe a universal acceptable loss or an optimal modulation strength. Those are empirical operating choices. Retention is a ratio of expected numbers of classes, not the fraction of initial class identities that survives. In particular, $D_b$ controls correct-sample count within each eligible task; population comparisons must also identify the eligible task set.
+
+\section{Looped Self-Distillation}
+\label{sec:framework}
+Let $\cQ$ be a fixed collection of synthesis prompts, $\cD_{\rm ref}$ a fixed calibration set, and $\theta_t$ the current native student. A round comprises a generation-policy constructor $\mathcal A$, synthetic sampling, and a learner $\mathcal L$:
+\begin{equation}
+\widetilde\pi_t=\mathcal A(\theta_t,\cD_{\rm ref}),\qquad
+\cD_t=\{(x,y_{x,s}):x\in\cQ,\ y_{x,s}\sim\widetilde\pi_t\}_{s=1}^{S},\qquad
+\theta_{t+1}=\mathcal L(\theta_t,\cD_t).
+\label{eq:loop}
+\end{equation}
+Evaluation always targets $\pi_{\theta_{t+1}}$, with the same decoding settings across methods. The distinction between $\widetilde\pi_t$ and $\pi_{\theta_{t+1}}$ prevents a temporary decoding benefit from being mistaken for a learned one.
+
+Equation~\eqref{eq:loop} is an operational framework for repeated self-distillation, building on established iterative self-training. Plain self-distillation uses an unmodified generator; a decoding-based method changes the sampling policy; \method\ changes selected generation weights temporarily. A corpus-selection rule can be included in $\mathcal L$ when a compared method requires it. Our completed study trains on all raw outputs and warm-starts the current student at every round. The fixed reference set supplies no new human annotations between rounds. Reward-based methods such as UA-RL are useful comparators for the same endpoints, but their policy-gradient updates remain distinct from self-distillation.
+
+\begin{figure}[t]
+\centering\paperfigure{figures/fig2_framework.pdf}{Looped Self-Distillation and proximal spectral modulation}
+\caption{\textbf{A modular loop with a \method\ generation module.} Each round begins with a native student. Reference-completion loss defines a gradient second moment, whose normalized spectrum determines the proximal gain. The gain is temporarily folded into K/V weights to generate raw training outputs. Restoring the native weights before single-LoRA learning produces the next student, evaluated through standard inference and used to re-estimate geometry in the following round. The gain inset is analytical.}
+\label{fig:framework}
+\end{figure}
+
+\section{SPECTRUM: proximal spectral modulation}
+\label{sec:method}
+\subsection{Estimating the current student's loss-sensitive geometry}
+For each reference $(x_i,y_i^\star)$, define the mean completion-token negative log likelihood $\ell_i(\theta_t)$. Prompt and padding targets are masked in this calibration loss. For a selected key or value projection $\ell$, let $g_{iu}^{(\ell)}$ be the gradient of $\ell_i$ with respect to its native linear output at nonpadding position $u$. Following the use of reference-loss gradients to characterize generation-relevant activation directions \citep{hao2026spd}, form the uncentered second moment
+\begin{equation}
+C_{t,\ell}=\frac{1}{M_\ell}\sum_{i,u\,\mathrm{nonpad}}g_{iu}^{(\ell)}g_{iu}^{(\ell)\top},\qquad
+\Cbar_{t,\ell}=C_{t,\ell}/\lambda_{\max}(C_{t,\ell}).
+\label{eq:geometry}
+\end{equation}
+Here $M_\ell$ counts every included position, including positions with zero gradient. The loss mask and the positions at which gradients are collected are separate choices. Calibration is computed per example before accumulation, making its normalization independent of batching.
+
+The eigenvalues of $\Cbar$ lie in $[0,1]$. A large eigenvalue identifies high mean-squared sensitivity of the reference loss along that direction; it does not identify a signed parameter update or a particular algorithm. A finite reference set cannot exhaust all valid implementations. We therefore use its sensitivity information to modulate generation while retaining a positive response in every local direction.
+
+\subsection{A proximal generation operator}
+For a row activation $h\in\R^{1\times d}$ and modulation strength $\tau\ge0$, define
+\begin{equation}
+z^\star=\argmin_z\left\{\frac12\|z-h\|_2^2+
+\frac\tau2 z(\I-\Cbar)z^\top\right\}=hT_\tau,\qquad
+T_\tau=[\I+\tau(\I-\Cbar)]^{-1}.
+\label{eq:prox}
+\end{equation}
+The first term anchors generation to the current model; the second attenuates directions less emphasized by the reference geometry. This is a quadratic proximal map \citep{parikh2014proximal}. If $\Cbar=U\diag(\mu_j)U^\top$, then
+\begin{equation}
+T_\tau=U\diag\!\left(\frac{1}{1+\tau(1-\mu_j)}\right)U^\top.
+\label{eq:gain}
+\end{equation}
+The most sensitive directions have gain one. Other gains decrease continuously with $\tau$, whose value is a design parameter studied experimentally. No solution labels, strategy count, or assignment of implementations to adapters is required.
+
+\begin{proposition}[Local retention and stability]
+\label{prop:prox}
+Suppose $\Cbar\succeq0$ has spectrum in $[0,1]$ and $0\le\tau<\infty$. Equation~\eqref{eq:prox} has a unique solution. Its gains lie in $[1/(1+\tau),1]$, and for every local difference $\delta$,
+\begin{equation}
+\frac{\|\delta\|_2}{1+\tau}\le\|\delta T_\tau\|_2\le\|\delta\|_2,
+\qquad \|T_\tau-\I\|_2\le\frac{\tau}{1+\tau}.
+\label{eq:bounds}
+\end{equation}
+For two normalized second moments $A,B$ with spectra in $[0,1]$,
+\begin{equation}
+\|T_\tau(A)-T_\tau(B)\|_2\le\tau\|A-B\|_2.
+\label{eq:lipschitz}
+\end{equation}
+\end{proposition}
+These properties provide a local design rationale: finite modulation retains distinguishability of local activation states, and the operator depends continuously on normalized calibration statistics without an eigengap assumption. They do not identify activation directions with semantic strategies. The effect after nonlinear generation and learning is evaluated through program outputs. Appendix~\ref{app:proofs} provides the proofs and assumptions.
+
+\subsection{Generating data and learning a native student}
+For $h=xW^\top+b^\top$, replace the selected linear map temporarily by $W'=T_\tau^\top W$ and $b'=T_\tau^\top b$. Then $xW'^\top+b'^\top=hT_\tau$ exactly in real arithmetic. The intervention is applied at native K/V outputs before positional transformations; generation uses ordinary forward execution. After sampling, we restore $\theta_t$ and optimize a single LoRA adapter on every raw completion, including incorrect or duplicate outputs. The student uses all nonpadding causal targets, distinct from the completion-only calibration mask. The adapter is merged to produce $\theta_{t+1}$.
+
+Re-estimation closes the loop: the next round measures the updated student's geometry rather than applying a permanently fixed transform. This separates a generation policy that guides data collection from the parameters that ultimately retain the benefit. Table~\ref{alg:loop} in Appendix~\ref{app:implementation} specifies the complete procedure.
+
+\section{Experiments}
+\label{sec:experiments}
+\subsection{Protocol and comparisons}
+The completed experiment uses Qwen2.5-Coder-1.5B-Instruct \citep{hui2024qwen25coder} on MBPP \citep{austin2021mbpp}. We preserve its 500 official test tasks and remove training-prompt overlaps before allocating 291 synthesis prompts, 50 calibration references, and 30 validation tasks. Five rounds each generate 16 raw outputs per synthesis prompt and train one LoRA epoch. Methods share prompts, candidate counts, optimization schedules, and native-student evaluation policies. Generated token counts can differ and are reported separately.
+
+Each recorded round has 16 evaluation samples per task; an additional final-checkpoint evaluation uses 64 samples per task. We keep these tiers separate. Correctness is determined by a recorded local Python task-test harness, and AST fingerprints measure implementation structure. The updated experiment suite additionally specifies 64-sample evaluation at every round, three independent training seeds, and cross-benchmark and model-scale extensions. Unavailable results are marked \pending\ in the corresponding tables; they do not contribute to the conclusions below.
+
+The main comparison includes the initial model, plain self-distillation, SSD's decoding recipe, UA-RL, and \method. SSD and UA-RL are listed with \pending\ until their common-protocol five-round runs are available. UA-RL is an adapted policy-gradient comparator with semantic strategy clustering, not an SFT variant. Simple operator replacements are evaluated separately as design ablations. Appendix~\ref{app:protocol} gives the hyperparameters and Appendix~\ref{app:extensions} defines the extension matrix.
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{Final native-student evaluation after five rounds.} MBPP, 500 tasks, 64 samples per task, training seed 43. Richness is the expected number of distinct correct AST classes. Correct-conditioned richness uses each method's eligible tasks; paired comparisons use their intersection. Bold identifies the best completed trained-model result. \pending\ denotes a result to be filled after the specified run.}
+\label{tab:main}
+\begin{tabular}{lrrrrr}
+\toprule
+Metric $\uparrow$ & Initial & Plain & SSD & UA-RL & \method\\
+\midrule
+pass@1 (\%) &37.94&\textbf{41.45}&\pending&\pending&40.33\\
+pass@8 (\%) &61.10&61.86&\pending&\pending&\textbf{61.89}\\
+pass@16 (\%) &65.69&65.64&\pending&\pending&\textbf{66.23}\\
+pass@64 (\%) &72.00&70.40&\pending&\pending&\textbf{72.60}\\
+Correct AST richness @64 &12.802&8.506&\pending&\pending&\textbf{11.510}\\
+Relative richness retention (\%) &100.0&66.4&\pending&\pending&\textbf{89.9}\\
+Correct-conditioned richness @4 &3.358&2.856&\pending&\pending&\textbf{3.143}\\
+Eligible tasks for previous row &322&321&\pending&\pending&323\\
+Solved tasks / 500 &360&352&\pending&\pending&\textbf{363}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{How much correct-implementation richness is retained?}
+Table~\ref{tab:main} shows that \method\ retains substantially more correct implementation variety than plain self-distillation. Its 64-sample richness is $11.510$, compared with $8.506$, a relative increase of $35.3\%$. Normalizing by the initial model gives retention rates of $89.9\%$ and $66.4\%$. The distinction matters because plain self-distillation improves single-sample accuracy more strongly while retaining fewer correct implementations.
+
+The higher richness is accompanied by better large-budget success: \method\ solves 363 of 500 tasks versus 352 for plain self-distillation. The paired pass@64 difference is $+2.2$ percentage points, with a $95\%$ task-bootstrap interval of $[0.4,4.2]$. Its pass@1 is $1.12$ points lower than plain self-distillation and $2.39$ points above the initial model. Thus the measured benefit is retention and large-budget search performance, with an explicit single-sample accuracy trade-off.
+
+\subsection{Does the gain persist at a fixed correct-sample count?}
+More distinct correct outputs could arise simply from sampling more correct programs. Correct-conditioned richness removes this count difference within a task. Table~\ref{tab:matched} reports paired comparisons on tasks for which both models have enough correct samples. \method\ improves richness at budgets of four, eight, and sixteen correct draws. The four-draw gain is $0.295$ AST classes per task; at sixteen correct draws the gain is $1.816$. The positive effects therefore concern the implementation distribution within correct outputs, in addition to unconditional success.
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{Paired \method\ minus Plain comparisons.} Final 64-sample evaluation. Intervals resample tasks, not training seeds. $D_b$ comparisons use common eligible tasks; $C_{64}$ and pass@$k$ use all 500 tasks. Mathematical symbols are defined in Section~\ref{sec:problem}.}
+\label{tab:matched}
+\begin{tabular}{lrrr}
+\toprule
+Endpoint & Difference & 95\% interval & Paired tasks\\
+\midrule
+Correct AST richness @64 ($C_{64}$) &+3.004&[2.568, 3.494]&500\\
+Correct-conditioned richness @4 ($D_4$) &+0.295&[0.249, 0.343]&316\\
+Correct-conditioned richness @8 ($D_8$) &+0.780&[0.665, 0.889]&296\\
+Correct-conditioned richness @16 ($D_{16}$) &+1.816&[1.582, 2.055]&254\\
+pass@1 (percentage points) & $-1.116$ &[$-1.61$, $-0.63$]&500\\
+pass@64 (percentage points) &+2.200&[0.40, 4.20]&500\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{What changes with sampling budget and learning round?}
+Figure~\ref{fig:budget} evaluates different budgets using the same final pool of 64 samples per task. At small budgets, correctness has a strong influence on observed richness. At larger budgets, repeated visits to common implementations leave more room for the conditional distribution to matter. \method\ has greater richness than plain self-distillation at each displayed multi-sample budget and higher pass@64. The curves use only recorded budgets; the connecting segments do not imply an unmeasured scaling law.
+
+\begin{figure}[t]
+\centering\paperfigure{figures/fig3_budget.pdf}{Sampling budget, correct AST richness, and pass@k}
+\caption{\textbf{Sampling budget exposes different aspects of the learned distribution.} Expected correct AST richness and pass@$k$ are estimated from the same final 64-sample pool, at the recorded budgets $k\in\{1,4,8,16,64\}$. All-task means use 500 MBPP tasks. Richness and correctness have separate axes and units.}
+\label{fig:budget}
+\end{figure}
+
+Figure~\ref{fig:retention} examines the recorded 16-sample evaluations across five rounds. Correct-conditioned richness falls from an initial $3.310$ to $2.747$ under plain self-distillation and $2.997$ under \method. The latter retains more correct-conditioned richness at every recorded round. Paired differences from the initial model further distinguish the methods while holding the task set fixed within each contrast. Eligibility may vary between rounds, so these are pointwise longitudinal summaries rather than a single fixed-cohort estimate.
+
+\begin{figure}[t]
+\centering\paperfigure{figures/fig4_retention.pdf}{Five-round native-student retention trajectories}
+\caption{\textbf{The retention benefit persists through the loop.} All observations use the per-round 16-sample protocol. Paired changes relative to the initial model use the common eligible tasks for each contrast; absolute richness uses its stated task population. Intervals are pointwise $95\%$ task-bootstrap intervals. The 64-sample final results are reported separately in Table~\ref{tab:main}.}
+\label{fig:retention}
+\end{figure}
+
+\subsection{Design ablations and further comparisons}
+\label{sec:ablations}
+We separate method comparisons from simple generation-operator controls. Table~\ref{tab:ablation} includes a rank-truncation design that keeps half the calibrated directions and sets the others to zero. It uses the same calibration and learning protocol as \method\ and is treated as an ablation, not as a complete reproduction of a prior method. Its final richness retention is $65.5\%$, compared with $89.9\%$ for \method. The continuous operator raises richness by $3.122$ classes and pass@64 by $2.4$ points, while its pass@1 is $1.43$ points lower.
+
+Three additional controls target distinct explanations: randomized eigenvectors preserve the gain spectrum but change its orientation; isotropic attenuation matches the operator's Frobenius distance from identity without directional selectivity; fixed geometry reuses the first-round statistic. A modulation-strength sweep studies the operating point. These controls are specified, with unavailable results marked \pending, rather than inferred from the completed soft-versus-truncation comparison.
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{Generation-design ablations after five rounds.} Same MBPP protocol; 64 final samples per task. Identity is plain self-distillation. Rank truncation is a local operator-design control. Other rows await execution. The two matched controls match operator-level quantities, not output KL or generated token budgets.}
+\label{tab:ablation}
+\begin{tabular}{lrrrr}
+\toprule
+Generator design & pass@1 (\%) & pass@64 (\%) & AST richness @64 & Retention (\%)\\
+\midrule
+Identity &41.45&70.40&8.506&66.4\\
+Rank truncation (half directions) &41.77&70.20&8.388&65.5\\
+\method\ ($\tau=1$) &40.33&72.60&11.510&89.9\\
+Randomized eigenvectors &\pending&\pending&\pending&\pending\\
+Matched isotropic attenuation &\pending&\pending&\pending&\pending\\
+Fixed first-round geometry &\pending&\pending&\pending&\pending\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The extension protocol evaluates four additional code benchmarks and models at 3B, 7B, and an additional decoder family. It distinguishes transfer of an MBPP-trained student from training anew on another benchmark. Resource and sample-length tables accompany the comparisons, since equal candidate counts do not ensure equal generated tokens or wall time. Appendix~\ref{app:extensions} contains the full matrices, and Appendix~\ref{app:resources} reports available resource counts.
+
+\subsection{Resources and sample length}
+The benefit comes with a measurable change in the generated corpus. Across the five completed rounds, \method\ produces 5.34 million training-generation tokens, compared with 4.86 million for plain self-distillation, a 9.9\% increase at the same 23,280 candidates. Mean output length rises from 208.76 to 229.48 tokens (Table~\ref{tab:resources}). Reporting both quantities distinguishes a matched sampling allocation from equal realized token usage. It also motivates the fixed-correct-count analysis: that comparison measures distinct correct structures at the same number of successful draws rather than treating additional outputs as diversity.
+
+Calibration adds reference-gradient collection and module-wise eigendecompositions. For an output dimension $d$ and $M$ accumulated positions, the second-moment and factorization costs scale as $O(Md^2)$ and $O(d^3)$, respectively. Temporary weight folding does not introduce a separate operator into the generation forward pass, and the final student has the original architecture. Actual time and memory depend on the model and hardware and remain separately recorded quantities; the current aggregate bundle supplies token counts, while the expanded runs export stage-wise runtime and memory.
+
+\begin{table}[t]
+\centering\small
+\caption{Available training-generation resources over five rounds. Mean length is generated tokens divided by all 23,280 records. Time, peak memory, and judge usage require the corresponding archived runtime records or new runs; \pending\ is not zero.}
+\label{tab:resources}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Records & Generated tokens & Mean tokens & GPU hours & Peak GB\\
+\midrule
+Plain &23,280&4,859,928&208.76&\pending&\pending\\
+SSD &\pending&\pending&\pending&\pending&\pending\\
+UA-RL (adapted) &\pending&\pending&\pending&\pending&\pending\\
+\method &23,280&5,342,368&229.48&\pending&\pending\\
+Rank-truncation control &23,280&4,727,089&203.05&\pending&\pending\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Related work}
+\label{sec:related}
+\paragraph{Self-generated data and iterative improvement.}
+STaR, ReST, and ReST-EM repeatedly generate training material and update a model \citep{zelikman2022star,gulcehre2023rest,singh2024restem}; SD-Zero studies iterative self-distillation with teacher synchronization \citep{he2026sdzero}. ReST-EM also examines later-round regressions. SSD studies self-distillation from raw code outputs and analyzes precision and exploration \citep{zhang2026ssd}; self-policy distillation uses capability-selective activation geometry to guide generation \citep{hao2026spd}. Our framework makes generation and learning explicit and evaluates how within-correct implementation richness evolves in the resulting native students.
+
+\paragraph{Diversity, recursive collapse, and recurrent computation.}
+UA-RL rewards underrepresented high-level strategies through group-relative policy optimization \citep{hu2026uarlacl}. Its reference-strategy coverage differs from our expected count of observed correct implementation classes. Functionally correct programs can also differ behaviorally and algorithmically \citep{rajput2025dynamic}. Recursive-data-collapse research studies distributional degradation under repeated model-generated training, and accumulation can mitigate that degradation \citep{shumailov2024collapse,gerstgrasser2024accumulating}. We examine a conditional, executable-task outcome that can deteriorate while task correctness rises, using generation modulation rather than historical data accumulation. Finally, looped or recurrent-depth transformers repeat computation within an inference process \citep{dehghani2019universal,geiping2025recurrent}; our loop updates model parameters between synthetic-data rounds.
+
+\paragraph{Spectral control.}
+Activation editing and conceptors provide spectral or soft-subspace mechanisms for controlling models \citep{qiu2024sea,postmus2024conceptors}. \method\ combines a reference-loss second moment with a specific proximal gain and repeatedly distills its generation distribution into a native student. The per-round recalibration and student-level evaluation connect spectral control to correct-solution retention throughout learning.
+
+\section{Discussion and conclusion}
+\label{sec:discussion}
+Repeated self-distillation should be evaluated as a change in a solution distribution, not only in a success probability. Our completed experiment shows that single-sample accuracy can rise as correct implementation richness contracts, and that per-round proximal spectral modulation substantially reduces that contraction in the final native student. Fixed-correct-count comparisons connect the gain to variety within successful outputs.
+
+The current measured scope is one model, one benchmark, and one training seed; the extension tables separate planned comparisons from completed evidence. AST classes represent implementation structure, not audited algorithm identities, and correctness is relative to the available tests. The local operator guarantees motivate \method\ but do not imply a semantic-diversity theorem for the full network. Within this scope, the results support a concrete design principle: treat the diversity of correct synthetic solutions as an outcome to retain throughout self-improvement.
+
+\section*{Reproducibility statement}
+Appendices~\ref{app:metrics}--\ref{app:resources} give estimator definitions, proofs, calibration and training details, evaluator protocols, full longitudinal results, and resource accounting. The accompanying code exports per-task estimates, task-bootstrap intervals, provenance, and resumable round checkpoints. Numerical cells marked \pending\ identify the explicitly specified extension runs whose results are not yet available.
+
+\section*{AI use statement}
+AI assistants were used to assist with literature discovery, mathematical exposition, manuscript drafting, figure code, and experiment software. No experimental scores were generated by an AI assistant to fill missing results; pending entries are marked explicitly.
+
+\clearpage
+\bibliographystyle{iclr2027_conference}
+\bibliography{references}
+
+\clearpage
+\appendix
+
+\section{Metric definitions and probability analysis}
+\label{app:metrics}
+\subsection{The object measured}
+A task is a prompt together with its recorded verification procedure. Let $V=1$ denote passing that procedure and $J=\phi(Y)$ the implementation fingerprint. Equation~\eqref{eq:factorization} is the conditional-probability factorization $\Pr(V=1,J=j)=\Pr(V=1)\Pr(J=j\mid V=1)$. Correct-conditioned quantities require $a>0$. If a model never succeeds on a task, unconditional richness is zero and the conditional distribution is undefined, rather than being assigned an arbitrary zero-diversity distribution.
+
+For countably many correct classes, all sums below converge: $1-(1-p)^k\le kp$ bounds $C_k\le ka$ and $D_b\le b$. With $J$ positive-probability classes, $C_k\le\min(J,ka)$ and $D_b\le\min(J,b)$. A finite sample estimates the number of classes encountered at the specified budget, not the total support size of the model.
+
+\subsection{Proof of Proposition~\ref{prop:separation}}
+Let $I_j$ indicate whether at least one of $k$ draws is a correct output from class $j$. Then $\E I_j=1-(1-aq_j)^k$, and linearity of expectation gives $C_k$. For $b$ independent draws from the conditional correct-output distribution, the same argument gives $D_b$. The event that all $k$ unconditional draws fail has probability $(1-a)^k$, giving pass@$k$. Holding $a$ fixed preserves this probability for every $k$, whereas taking $q=(1,0,\ldots)$ or a uniform distribution on $J\ge2$ classes gives respectively $D_b=1$ and $D_b=J[1-(1-1/J)^b]>1$ for $b\ge2$. Thus correctness fails to identify conditional richness.\hfill$\square$
+
+The uniform example approaches $J$ as $b$ increases without bound. It is not equal to $\min(J,b)$ at finite budget, because repeated draws remain possible. For $b=1$, every defined $D_1$ equals one, so it cannot distinguish conditional diversity.
+
+\subsection{Finite-sample estimators and rarefaction}
+For one task, suppose $n$ outputs contain $m$ verified-correct outputs, with $m_j$ in correct fingerprint class $j$ and $\sum_jm_j=m$. The estimators are
+\begin{align}
+\widehat{\mathrm{pass@}k}&=1-\frac{\binom{n-m}{k}}{\binom nk},\quad 1\le k\le n,\label{eq:passest}\\
+\widehat C_k&=\sum_j\left[1-\frac{\binom{n-m_j}{k}}{\binom nk}\right],\quad 1\le k\le n,\label{eq:cest}\\
+\widehat D_b&=\sum_j\left[1-\frac{\binom{m-m_j}{b}}{\binom mb}\right],\quad 1\le b\le m.\label{eq:dest}
+\end{align}
+We set $\binom ab=0$ for nonnegative integers $a<b$. The first is the standard pass@$k$ estimator \citep{chen2021humaneval}. The other two are individual-based rarefaction estimators applied to correct implementation classes \citep{hurlbert1971nonconcept}. Selecting a uniform subset of $k$ observed outputs misses class $j$ with probability $\binom{n-m_j}{k}/\binom nk$; the analogous calculation among only correct outputs yields Equation~\eqref{eq:dest}. Conditional on the observed pool these are exact expected subset counts; under independent sampling they estimate the population quantities at the same draw budget.
+
+At $k=n$, $\widehat C_n$ is exactly the number of distinct observed correct fingerprints. At $k=1$, $\widehat C_1=m/n=\widehat{\mathrm{pass@}1}$. At $b=m>0$, $\widehat D_m$ is the same observed class count, but $D_m$ is available only when that many correct samples exist. This is why a 64-correct-draw analysis would condition on a small and method-dependent subset of a 64-total-draw evaluation; we emphasize $b\in\{4,8,16\}$ instead.
+
+\subsection{AST, exact-code, and control-flow views}
+The primary fingerprint parses the extracted Python program and hashes a conservatively normalized AST. Formatting and docstrings do not affect it. Simple local identifiers are normalized when scope handling is unambiguous; function names, external identifiers, literals, and uncertain scopes are retained. It is not an algorithm-equivalence oracle. Exact-code fingerprints and a control-flow-node skeleton supply secondary views. Parse failures are recorded and do not silently become new correct classes.
+
+In the recorded per-round evaluation, the fifth-round \method-minus-truncation comparison improves exact-code four-correct-draw richness by $0.312$ with interval $[0.253,0.377]$ and AST richness by $0.293$ with interval $[0.233,0.353]$. The coarser control-flow result is $0.042$ with interval $[-0.011,0.095]$. Thus the evidence is strongest for implementation structure and does not establish a uniform increase in high-level algorithm families.
+
+\subsection{Task aggregation, paired contrasts, and uncertainty}
+Unconditional correctness and $C_k$ are macro-averaged over all evaluation tasks with a complete sample pool. For $D_b$, define $\mathcal E_b(M)=\{x:m_x(M)\ge b\}$ for model $M$. Its reported marginal mean averages over this set and prints its size. A comparison of models $A,B$ instead uses $\mathcal E_b(A)\cap\mathcal E_b(B)$ and averages within-task differences. The difference between two marginal means with different eligible sets is not the paired contrast.
+
+Reported intervals use 2,000 task-bootstrap replicates at the $2.5$th and $97.5$th percentiles. Paired resampling preserves method pairing within each selected task; conditional metrics retain their declared eligibility rule and report valid-replicate counts. These intervals quantify uncertainty across tasks for a fixed trained model. They do not estimate variation across training seeds or create independent replicates from correlated learning rounds. New multi-seed outputs retain task and seed indices separately. A fixed-cohort longitudinal analysis uses the common eligible task intersection across all specified models and rounds; it requires per-task values and cannot be reconstructed from aggregate means alone.
+
+\section{Proximal operator properties and derivations}
+\label{app:proofs}
+\subsection{Calibration loss and second-moment interpretation}
+Let $\mathcal T_i$ be the selected nonpadding completion targets for reference $i$. Calibration uses
+\begin{equation}
+\ell_i(\theta)=-\frac{1}{|\mathcal T_i|}\sum_{u\in\mathcal T_i}
+\log\pi_\theta(y_{iu}^\star\mid x_i,y_{i,<u}^\star).
+\end{equation}
+This mean is computed separately for every example. Gradient vectors at all nonpadding K/V-output positions, including prompt positions, contribute to Equation~\eqref{eq:geometry}. The statistic is an uncentered second moment. A large eigenvalue measures average squared directional sensitivity, so gradients of opposite sign both contribute positively. No claim about signed agreement follows from this statistic. An empty or zero-signal calibration is rejected because division by a positive maximum eigenvalue would otherwise be undefined.
+
+\subsection{Proof of Proposition~\ref{prop:prox}}
+The Hessian of the objective in Equation~\eqref{eq:prox} is $H=\I+\tau(\I-\Cbar)$. Its eigenvalues are $1+\tau(1-\mu_j)\in[1,1+\tau]$, so $H$ is positive definite and the minimizer is unique. Setting the derivative to zero gives $zH=h$, hence $z=hH^{-1}$. Diagonalization gives Equation~\eqref{eq:gain}. Since $T_\tau$ is symmetric positive definite, its singular values equal its gains and yield
+\begin{equation}
+(1+\tau)^{-1}\|\delta\|_2\le\|\delta T_\tau\|_2\le\|\delta\|_2.
+\end{equation}
+Furthermore,
+\begin{equation}
+\|T_\tau-\I\|_2=\max_j\frac{\tau(1-\mu_j)}{1+\tau(1-\mu_j)}\le\frac{\tau}{1+\tau}.
+\end{equation}
+For $\tau>0$, equality in the last bound requires a zero eigenvalue of $\Cbar$. The general statement is an inequality. The condition number of $T_\tau$ is at most $1+\tau$, and $T_0=\I$.
+
+For normalized PSD matrices $A,B$, write $H_A=\I+\tau(\I-A)$ and similarly $H_B$. The resolvent identity gives
+\begin{equation}
+T_\tau(A)-T_\tau(B)=H_A^{-1}(H_B-H_A)H_B^{-1}
+=\tau T_\tau(A)(A-B)T_\tau(B).
+\end{equation}
+Both outer factors have norm at most one, proving Equation~\eqref{eq:lipschitz}. This proof uses no eigengap. It is a stability statement about normalized matrices; converting error in an unnormalized second moment to error in $\Cbar$ additionally requires control of its normalization.\hfill$\square$
+
+\subsection{Exact folding and its scope}
+For the row-vector convention $h=xW^\top+b^\top$, the modified activation is
+\begin{equation}
+hT=xW^\top T+b^\top T=x(T^\top W)^\top+(T^\top b)^\top.
+\end{equation}
+Thus folding requires left-multiplication of the output dimension of the stored weight, not right-multiplication of the input dimension. The bias is transformed when present. The code snapshots and restores the original tensors even if generation fails. Calibration uses explicit temporary linear wrappers for gradient access; neither generation nor native-student inference registers activation hooks.
+
+The identity holds at the selected native linear output before RoPE or other downstream transformations. It does not assert that a pre-RoPE intervention equals one applied after RoPE. Positive local singular values likewise do not imply positive probability for every semantic strategy after the entire nonlinear network, decoding procedure, and student update. The local propositions and the output-space measurements serve different evidentiary roles.
+
+\subsection{Design controls}
+Let $P_r$ project onto the leading $r$ eigenvectors of $\Cbar$, and let $s_j$ be \method's gains. Rank truncation uses $P_r$. Randomized-eigenvector modulation uses $Q\diag(s_j)Q^\top$ with a seeded Haar orthogonal $Q$, preserving the gains while changing their orientation. Write $d_F=\|T_\tau-\I\|_F$. Matched isotropic attenuation uses $(1-d_F/\sqrt d)\I$. An optional matched two-level blend uses $P_r+\rho(\I-P_r)$, where $\rho=1-d_F/\sqrt{d-r}$ if this lies in $[0,1]$; an infeasible match is rejected. These constructions match a spectrum or operator distance, not an activation-weighted distortion, output KL, or computational budget. Fixed geometry reuses first-round calibration; all other \method\ rounds re-estimate it.
+
+\section{Implementation and complete loop algorithm}
+\label{app:implementation}
+\begin{table}[ht]
+\centering
+\caption{Looped Self-Distillation with the \method\ generation module.}
+\label{alg:loop}
+\begin{tabular}{p{.95\linewidth}}
+\toprule
+\textbf{Inputs:} native student $\theta_0$; synthesis prompts $\cQ$; fixed reference set $\cD_{\rm ref}$; rounds $T$; samples per prompt $S$; strength $\tau$; common evaluation protocol.\\
+\textbf{For} $t=0,\ldots,T-1$:\\
+1. Save the native student state $\theta_t$.\\
+2. On fixed references, compute completion-masked losses and K/V-output gradients; accumulate $C_{t,\ell}$ over all nonpadding positions.\\
+3. Normalize each nonzero second moment and build $T_{t,\ell}=[\I+\tau(\I-\Cbar_{t,\ell})]^{-1}$.\\
+4. Temporarily fold every selected operator into its K/V weight and bias.\\
+5. Sample $S$ raw completions per synthesis prompt, retaining every output and its generation metadata.\\
+6. Restore $\theta_t$; initialize one LoRA adapter; train one epoch on the entire raw corpus using all nonpadding targets.\\
+7. Merge the adapter into $\theta_{t+1}$ and save the native checkpoint.\\
+8. Evaluate $\theta_{t+1}$ without modulation; save outputs, per-task counts, richness estimates, task-bootstrap intervals, and resources.\\
+\textbf{Return:} native student $\theta_T$ and the complete retention profile.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The synthesis task order and reference split are fixed independently of the test outputs. Each round's model and corpus are separately identified. Resume checks bind a stage to the configuration, model checkpoint, task hashes, and implementation provenance. Checkpoint retention is set to all rounds in the expanded protocol so that later evaluation can increase sampling without retraining the students.
+
+\section{Data, optimization, and evaluation protocols}
+\label{app:protocol}
+\begin{table}[ht]
+\centering\small
+\caption{Completed five-round MBPP experiment.}
+\label{tab:protocol}
+\begin{tabular}{p{.31\linewidth}p{.62\linewidth}}
+\toprule
+Component & Recorded setting\\
+\midrule
+Model & Qwen2.5-Coder-1.5B-Instruct; BF16; SDPA attention\\
+Data & 291 synthesis / 50 calibration / 30 validation / 500 official test tasks; split seed 42\\
+Rounds and training seed & Five rounds; seed 43\\
+Generation & 16 raw training completions per task per round; temperature 0.8; top-$p$ 0.95; top-$k$ 0; maximum 512 new tokens\\
+Calibration & Middle and final decoder layers; K/V native linear outputs; 50 references; length 1536; completion-only loss\\
+Spectral setting & $\tau=1$; rank-truncation control retains half the directions\\
+LoRA & Q/K/V/O modules; rank 8; alpha 8; dropout 0.05\\
+Optimization & One epoch; learning rate $10^{-5}$; weight decay 0.01; warmup ratio 0.03; gradient clip 1; microbatch 1; accumulation 16\\
+Student loss & All nonpadding causal targets; maximum sequence length 1536; gradient checkpointing\\
+Evaluation samples & 16 per task at every recorded round; 64 per task for initial and final checkpoints\\
+Verification & Recorded local Python 3.11 harness; first fenced-code extraction; task setup and tests; timeout 5 seconds; eight workers\\
+Uncertainty & 2,000 task-bootstrap replicates; pointwise 95\% intervals\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Data integrity.}
+Official MBPP test rows are preserved. Original prompt text is normalized for duplicate detection; prompt overlaps are removed from the training pool before assigning synthesis, calibration, and validation sets. Function signatures exposed to generation are derived from the reference interface, not the reference implementation body. Test-task references are not used to calibrate or train the model. All raw synthesis completions enter SFT, including incorrect, empty, and duplicate outputs; correctness filtering is not part of this completed protocol.
+
+\paragraph{Generation and verification.}
+Every method uses the same tokenizer chat template for a task. Program extraction and the verifier are shared within each comparison. The completed MBPP result is tied to its recorded local task tests and is not an EvalPlus result. For the additional HumanEval+ evaluation, the extended official EvalPlus checks are applied to the saved samples through the benchmark bridge. Other adaptations are named explicitly in Appendix~\ref{app:extensions}. Generation and verification records remain separate so that correctness decisions and fingerprints can be audited without rerunning model inference.
+
+\paragraph{SSD and UA-RL.}
+The SSD comparator uses temperature 1.5, top-$p$ 0.8, and top-$k$ 20 for synthesis within the same outer-round interface. Its final evaluation uses the common native policy (0.8, 0.95, and 0, respectively); its five-round results are pending. UA-RL uses a larger-model semantic strategy judge to group outputs for each prompt and weights standardized rewards by cluster rarity \citep{hu2026uarlacl}. For a group of $G$ sampled outputs, rewards $r_i$, and cluster frequencies $f_i$, the adapted baseline uses
+\begin{equation}
+A_i=f_i^{-\alpha}\frac{r_i-\overline r}{\operatorname{std}(r)+\epsilon},\qquad 0\le\alpha\le1.
+\label{eq:ua}
+\end{equation}
+Clustering includes the complete group; the factor multiplies positive and negative advantages. AST fingerprints are not substituted for semantic clusters. The adapter records judge calls and tokens separately and retains the policy-gradient objective and KL term. It is labeled an adaptation to our task, budget, and evaluation protocol, rather than an official code reproduction. Candidate budgets and optimizer budgets are reported separately across SFT and RL methods.
+
+\section{Complete longitudinal and paired results}
+\label{app:rounds}
+Table~\ref{tab:allrounds} contains the recorded 16-sample trajectories. Base and final 64-sample results come from a different sampling tier and should not be joined to these trajectories. Pointwise intervals and eligible counts are retained in the underlying report and figure-data files. The expanded exporter additionally stores per-task values and common-cohort comparisons; it does not invent historical per-task values omitted from a compact result bundle.
+
+\begin{table}[ht]
+\centering\small
+\caption{Recorded per-round native-student results, 500 MBPP tasks and 16 samples per task. $D_4$ uses four correct draws and reports its eligible task count. The rank-truncation rows are included as design controls.}
+\label{tab:allrounds}
+\begin{tabular}{llrrrr}
+\toprule
+Method & Round & pass@1 (\%) & AST richness @16 & $D_4$ & Eligible\\
+\midrule
+Initial & 0 & 37.92 & 4.016 & 3.310 & 262 \\
+Plain & 1 & 38.42 & 3.808 & 3.173 & 261 \\
+Plain & 2 & 39.15 & 3.634 & 3.080 & 269 \\
+Plain & 3 & 39.65 & 3.372 & 2.895 & 257 \\
+Plain & 4 & 40.79 & 3.190 & 2.803 & 270 \\
+Plain & 5 & 41.30 & 3.090 & 2.747 & 268 \\
+Rank truncation & 1 & 37.92 & 3.692 & 3.144 & 257 \\
+Rank truncation & 2 & 39.20 & 3.592 & 3.059 & 267 \\
+Rank truncation & 3 & 39.40 & 3.314 & 2.889 & 256 \\
+Rank truncation & 4 & 41.09 & 3.162 & 2.774 & 266 \\
+Rank truncation & 5 & 41.35 & 3.066 & 2.690 & 262 \\
+\method & 1 & 37.84 & 3.848 & 3.222 & 261 \\
+\method & 2 & 38.36 & 3.768 & 3.159 & 259 \\
+\method & 3 & 39.05 & 3.662 & 3.063 & 262 \\
+\method & 4 & 39.77 & 3.588 & 2.991 & 263 \\
+\method & 5 & 40.17 & 3.606 & 2.997 & 263 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering\small
+\caption{Final 64-sample paired \method\ minus rank-truncation design-control results. These comparisons are separate from the main method comparison.}
+\label{tab:pairedablation}
+\begin{tabular}{lrrr}
+\toprule
+Endpoint & Difference & 95\% interval & Paired tasks\\
+\midrule
+AST richness @64 &+3.122&[2.686, 3.596]&500\\
+Correct-conditioned richness @4 &+0.334&[0.290, 0.379]&318\\
+Correct-conditioned richness @8 &+0.875&[0.773, 0.979]&295\\
+Correct-conditioned richness @16 &+1.998&[1.792, 2.218]&254\\
+pass@1 (percentage points) &$-1.434$&[$-1.89$, $-0.98$]&500\\
+pass@64 (percentage points) &+2.400&[0.60, 4.40]&500\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The main result is distinct from the earlier 64-task seed-42 pilot and a ten-round smoke run. The pilot helped select the current direction; it is not another full benchmark seed. The smoke run verifies execution on a tiny task set and supplies no evidence for a ten-round research claim. Neither is pooled with the completed 500-task experiment.
+
+\section{Extended experiment matrix}
+\label{app:extensions}
+\subsection{Independent seeds and modulation strength}
+The confirmation runs in Table~\ref{tab:seeds} use seeds 42, 43, and 44, with 64 samples per task at every round. The historical seed-43 experiment remains identified by its original 16-sample longitudinal protocol and its 64-sample final supplement; new runs have separate provenance. Across-seed variability concerns independent trained checkpoints, not task-bootstrap replicates. Table~\ref{tab:tau} separates modulation-strength sensitivity from seed confirmation.
+
+\begin{table}[ht]
+\centering\small
+\caption{Independent training-seed confirmation matrix. Entries marked \pending\ require the new common-protocol runs. Historical seed 43 is reported separately rather than silently substituted into a different protocol.}
+\label{tab:seeds}
+\begin{tabular}{llrrrr}
+\toprule
+Method & Seed & pass@1 & pass@64 & AST richness @64 & $D_4$\\
+\midrule
+Plain &42 / 43 / 44 &\pending&\pending&\pending&\pending\\
+SSD &42 / 43 / 44 &\pending&\pending&\pending&\pending\\
+UA-RL (adapted) &42 / 43 / 44 &\pending&\pending&\pending&\pending\\
+\method &42 / 43 / 44 &\pending&\pending&\pending&\pending\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering\small
+\caption{Modulation-strength study on MBPP. The known $\tau=1$ row is the historical final-checkpoint result; other cells remain pending. Uniform-schedule reruns are stored separately.}
+\label{tab:tau}
+\begin{tabular}{lrrrr}
+\toprule
+$\tau$ & pass@1 (\%) & pass@64 (\%) & AST richness @64 & $D_4$\\
+\midrule
+0 (identity, historical Plain) &41.45&70.40&8.506&2.856\\
+0.25 &\pending&\pending&\pending&\pending\\
+0.5 &\pending&\pending&\pending&\pending\\
+1 (historical \method) &40.33&72.60&11.510&3.143\\
+2 &\pending&\pending&\pending&\pending\\
+4 &\pending&\pending&\pending&\pending\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Five benchmarks with a common implementation-level question}
+We keep the primary extension in Python code so that correctness is executable and the implementation fingerprint has the same interpretation. Table~\ref{tab:benchmarks} lists MBPP \citep{austin2021mbpp}, HumanEval+ \citep{liu2023evalplus}, APPS introductory \citep{hendrycks2021apps}, CodeContests \citep{li2022alphacode}, and a pinned LiveCodeBench release \citep{jain2024livecodebench}. The latter four first evaluate transfer from the frozen MBPP-trained students; they are not portrayed as separate training datasets or completed mathematical-reasoning experiments. The converters record source revisions, task IDs, selected subsets, prompt changes, and unsupported records.
+
+\begin{table}[ht]
+\centering\small
+\caption{Cross-benchmark native-student evaluation matrix. Each cell is pass@1 / pass@64 / correct AST richness@64; \pending\ denotes pending measurement. All transferred students are trained on MBPP.}
+\label{tab:benchmarks}
+\begin{tabular}{lccc}
+\toprule
+Benchmark & Initial & Plain & \method\\
+\midrule
+MBPP &37.94/72.00/12.80&41.45/70.40/8.51&40.33/72.60/11.51\\
+HumanEval+ &\pending&\pending&\pending\\
+APPS introductory (adapted) &\pending&\pending&\pending\\
+CodeContests (adapted) &\pending&\pending&\pending\\
+LiveCodeBench (adapted) &\pending&\pending&\pending\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For standard-input tasks, the adaptation requests a Python function with a specified input/output interface and verifies recorded test cases. This creates a reproducible transfer task while changing the original submission format; results are reported as adapted-task measurements, not official leaderboard scores. HumanEval+ retains its own official correctness bridge. Protocol-specific extraction is shared across models. A writing or mathematical-reasoning extension would require a defensible correctness verifier and a corresponding definition of solution classes; AST richness is not reused outside code.
+
+\subsection{Model size and architecture}
+Table~\ref{tab:models} uses Qwen2.5-Coder at 1.5B, 3B, and 7B, plus DeepSeek-Coder-6.7B-Instruct \citep{guo2024deepseekcoder} as an additional decoder family. This separates scale within a family from a family change. All new numerical cells remain pending. Model revisions, tokenizer templates, actual target modules, precision, and device resources are recorded by each run. The mathematical framework requires neither a fixed hidden size nor a prescribed number of strategies; the implementation requires compatible native K/V linear maps.
+
+\begin{table}[ht]
+\centering\small
+\caption{Model-scale and family matrix on MBPP. Cells are pass@1 / pass@64 / correct AST richness@64 after five rounds. The first row contains historical results; expanded-protocol runs retain separate identifiers.}
+\label{tab:models}
+\begin{tabular}{lccc}
+\toprule
+Model & Initial & Plain & \method\\
+\midrule
+Qwen2.5-Coder-1.5B-Instruct &37.94/72.00/12.80&41.45/70.40/8.51&40.33/72.60/11.51\\
+Qwen2.5-Coder-3B-Instruct &\pending&\pending&\pending\\
+Qwen2.5-Coder-7B-Instruct &\pending&\pending&\pending\\
+DeepSeek-Coder-6.7B-Instruct &\pending&\pending&\pending\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Resources, sample length, and execution records}
+\label{app:resources}
+The completed arms match 291 synthesis prompts, 16 raw candidates per prompt per round, five rounds, and one student epoch per round. This yields 4,656 training records and 291 optimizer steps per round, or 23,280 records and 1,455 steps across the loop. Actual generated lengths differ. Resource comparisons therefore report candidate counts, generated tokens, wall time, and peak memory separately, without declaring equal FLOPs.
+
+
+
+The updated suite exports calibration, generation, training, verification, and evaluation resources by round, together with sample-length and truncation counts. GPU elapsed time is distinct from summed wall time; peak allocated and reserved memory are reported with their backend and device. UA-RL's strategy judge has a separate call and token ledger, including its model and endpoint configuration without credentials. Model training and generated-code verification should run in an appropriately isolated execution environment; verifier outcomes remain auditable from saved records.
+
+\section{Evidence scope}
+The completed evidence concerns five-round MBPP learning and native-student evaluation. Independent-seed confirmation, further generator controls, transfer benchmarks, and larger models are specified separately, with unavailable measurements marked \pending. These extensions distinguish robustness, mechanism, and scope without pooling incompatible evaluation protocols.
+
+\end{document}

@@ -3,22 +3,37 @@
 本仓库只研究 **同一道 coding 题的不同正确实现/算法，在自蒸馏后是否被保留**。
 提供从数据准备、校准、生成、LoRA 微调到独立代码验证、同题覆盖统计、跨轮次报告的完整实验流程。
 
-## Latest completed five-round result
+## Start here: SPECTRUM ICLR 2027 extension (2026-09-20)
 
-The completed seed-43 retention run trains on all 291 MBPP training tasks with
-16 raw completions per task for five rounds, then evaluates the base and three
-round-5 checkpoints on all 500 held-out tasks with 64 samples per task. The
-compact evidence and paired task-bootstrap comparisons are in
-[`results/retention_5round_train16_eval16_seed43/eval64/`](results/retention_5round_train16_eval16_seed43/eval64/REPORT.md).
+- **Runnable experiments:** [experiments/iclr2027/README.md](experiments/iclr2027/README.md).
+- **Current complete manuscript:** [paper/iclr2027/main.tex](paper/iclr2027/main.tex), with the appendix in the same file; [PDF](paper/iclr2027/main.pdf).
+- **Figures and editable design specifications:** [paper/iclr2027/FIGURE_PROMPTS.md](paper/iclr2027/FIGURE_PROMPTS.md).
+- **Literature and novelty audit:** [docs/sep20_literature.md](docs/sep20_literature.md).
 
-Against the intended `spd_hard` control, `spectral_soft` improves total AST
-implementation-proxy coverage@64 by +3.122 [2.686, 3.596] and pass@64 by
-+0.024 [0.006, 0.044]. Its pass@1 is lower by -0.0143 [-0.0189, -0.0098],
-so it does not meet the declared absolute 1% correctness noninferiority margin.
-This is a single-training-seed result and AST fingerprints are implementation
-proxies rather than audited semantic algorithm labels.
+This is the current five-round experiment suite. It records **64 evaluation samples per task at every round**, full per-task outputs, 2,000 task-bootstrap resamples, resource/length summaries and every student checkpoint. Primary methods are Plain / SSD / SPECTRUM. [UA-RL (adapted)](docs/ua_rl_baseline.md) is a separate semantic-judge RL comparator. Rank truncation appears only as a design ablation. The suite includes three training seeds, targeted operator controls, 3B/7B and another model family, plus four frozen-student transfer datasets in addition to MBPP.
 
-## Start here: formal Spectral-soft experiment
+```bash
+python -m pip install -e '.[train,analysis,evalplus]'
+# Skip preparation if the four existing data/mbpp/*.jsonl splits are present.
+python -m improving prepare --dataset mbpp --output-dir data/mbpp --seed 42
+docker pull python:3.11-slim
+python scripts/run_iclr2027.py plan --stage core --profile 24gb --seeds 43
+# Execute the exact run command printed by plan; planning itself starts no GPU work.
+```
+
+For a host without Docker, the explicit local-verifier option is documented in the experiment README. Existing checkpoints can be evaluated with a larger budget without retraining using `scripts/export_longitudinal.py evaluate`; previously pruned checkpoints are reported as unavailable. New experiments use new output directories and never rewrite historical results.
+
+### Completed evidence
+
+The archived seed-43 experiment trains on 291 MBPP synthesis tasks with 16 raw completions per task for five rounds. Every historical round used 16 evaluation samples per task; its final supplement evaluates four checkpoints on 500 tasks with 64 samples each. [Complete evidence](results/retention_5round_train16_eval16_seed43/eval64/REPORT.md).
+
+SPECTRUM retains **89.9%** of the initial model's correct AST richness@64, versus **66.4%** for Plain. Its paired richness advantage is **+3.004 [2.568, 3.494]**, and pass@64 improves by **2.2 percentage points [0.4, 4.2]** over Plain; pass@1 is 1.12 points lower. Fixed-correct-sample richness also improves. The rank-truncation design control retains 65.5%. These are one-training-seed results; task-bootstrap intervals do not measure seed variation. Pending runs are `x`, not inferred scores.
+
+## Historical experiment entry points
+
+The remaining commands below describe earlier pilot/formal-v1 configurations. For the current manuscript's new runs use `experiments/iclr2027/` above; historical configurations and result bundles remain unchanged for traceability.
+
+### Earlier formal-v1 experiment
 
 当前主线是 **提高同一道 coding 题的正确实现多样性，同时保持准确率同水平**。
 正式版以 Spectral-soft 为候选方法；主指标是固定 4 个正确样本的 AST 覆盖，准确率采用绝对 1 个百分点的不劣容忍界。AST 是实现结构代理，不能直接当作算法类别。

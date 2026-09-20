@@ -108,6 +108,7 @@ def _overview(summary: Mapping[str, Any]) -> dict[str, Any]:
         "sample_count": aggregate["sample_count"],
         "correct_count": aggregate["correct_count"],
         "pass_at_1": _estimate(aggregate["pass_at_k"].get("1", aggregate["correct_fraction"])),
+        "pass_at_k": {k: _estimate(value) for k, value in aggregate["pass_at_k"].items()},
         "correct_budget": summary["protocol"]["correct_budget"],
     }
     for source, name in (("implementation_proxy", "implementation"),
@@ -155,6 +156,10 @@ def _stage(root: Path, method: str, round_index: int, stage: str,
         "status": status, "metrics_path": str(path),
         "metrics": _overview(summary) if status == "available" else None,
         "budget": budget,
+        "resources": {item.name: _read_optional(item) for item in sorted(directory.glob('*.resources.json'))},
+        "raw_records_path": str(directory / f'{stage}.jsonl'),
+        "verified_records_path": str(directory / f'{stage}.verified.jsonl'),
+        "per_task_metrics_retained": bool(summary and summary.get('per_task')),
         "protocol": {"metrics": protocol, "sampling": sampling, "evaluation": evaluation,
                      "evaluation_provenance": "explicit" if evaluation else "unavailable"},
         "provenance_issues": [],
@@ -234,9 +239,9 @@ def _markdown(report: Mapping[str, Any]) -> str:
         metrics = stage["metrics"]
         lines.append("| " + " | ".join(map(_cell, [stage["method"], stage["round"], stage["stage"], stage["status"],
                      _formatted(metrics["pass_at_1"] if metrics else None), metrics["sample_count"] if metrics else "pending"])) + " |")
-    lines += ["", "## Correct implementation and annotated strategy coverage", "",
+    lines += ["", "## Correct implementation richness and annotated strategy coverage", "",
               "Implementation coverage uses conservative Python AST fingerprints. These are implementation proxies, not algorithm identities. Strategy coverage uses supplied independent labels only; incomplete annotations remain unavailable. Wrong completions remain in the draw population.", "",
-              "| Stage | Draw budget K | Implementation proxy coverage | Annotated strategy coverage |", "| --- | ---: | --- | --- |"]
+              "| Stage | Draw budget K | Correct AST richness @K | Annotated strategy coverage |", "| --- | ---: | --- | --- |"]
     for stage in report["stages"]:
         metrics = stage["metrics"]
         if not metrics:
@@ -246,7 +251,7 @@ def _markdown(report: Mapping[str, Any]) -> str:
             lines.append(f"| {_cell(stage['id'])} | {k} | {_formatted(metrics['implementation_coverage_at_k'][k])} | {_formatted(metrics['strategy_coverage_at_k'][k])} |")
     lines += ["", "## Coverage at a fixed correct-sample budget", "",
               "These conditional estimates use only correct samples and require at least the displayed number of correct samples per task. Different eligible-task populations must not be interpreted as whole-task improvements.", "",
-              "| Stage | Correct-sample budget | Implementation proxy coverage | Annotated strategy coverage |", "| --- | ---: | --- | --- |"]
+              "| Stage | Correct-sample budget b | Correct-conditioned AST richness @b | Annotated strategy coverage |", "| --- | ---: | --- | --- |"]
     for stage in report["stages"]:
         metrics = stage["metrics"]
         lines.append("| " + " | ".join(map(_cell, [stage["id"], metrics["correct_budget"] if metrics else "pending",
@@ -271,6 +276,20 @@ def _markdown(report: Mapping[str, Any]) -> str:
                   ("unavailable" if data["training_stats"] is None else "`" + json.dumps(data["training_stats"], sort_keys=True).replace("`", "'") + "`"),
                   "", "Training generation budget: " + ("unavailable" if data["training_budget"] is None else
                   "`" + json.dumps({k: v for k, v in data["training_budget"].items() if k != "protocol"}, sort_keys=True).replace("`", "'") + "`")]
+    lines += ["", "## Wall time and memory", "",
+              "Elapsed time includes recorded attempts. CUDA peaks are recorded per stage; stage peaks must not be added as if they occurred simultaneously. Unrecorded costs remain unavailable.", "",
+              "| Run stage | Operation | Elapsed seconds | Peak allocated bytes | Peak reserved bytes |", "| --- | --- | ---: | ---: | ---: |"]
+    seen = set()
+    for stage in report['stages']:
+        for filename, resource in stage['resources'].items():
+            key = (stage['method'], stage['round'], filename)
+            if key in seen:
+                continue
+            seen.add(key)
+            lines.append('| ' + ' | '.join(map(_cell, [f"{stage['method']}/round_{stage['round']}",
+                         resource.get('stage', filename), resource.get('elapsed_seconds', 'unavailable'),
+                         resource.get('cuda_peak_allocated_bytes', 'unavailable'),
+                         resource.get('cuda_peak_reserved_bytes', 'unavailable')])) + ' |')
     lines += ["", "The JSON report preserves generation budgets, training statistics, full sampling metadata, evaluation provenance, and eligibility details. Sampling budget and correctness can change observed diversity; no model-performance claim follows from a report being complete.", ""]
     return "\n".join(lines)
 
@@ -321,6 +340,7 @@ def build_report(run_dir: str | Path, output_path: str | Path | None = None) -> 
         rounds[relative] = {
             "training_stats": _first_optional(directory / "model" / "training_stats.json", directory / "training_stats.json"),
             "training_budget": _first_optional(directory / "train.jsonl.budget.json", directory / "train.budget.json"),
+            "calibration_provenance": _read_optional(directory / 'calibration_provenance.json'),
         }
         for stage in ("generation_policy", "evaluation"):
             requested = stage == "evaluation" or config.get("diagnostics", {}).get("evaluate_generation_policy", True)
@@ -338,8 +358,11 @@ def build_report(run_dir: str | Path, output_path: str | Path | None = None) -> 
         if row["method"] == "base" or row["status"] == "not_requested":
             continue
         references = ["base/evaluation"]
-        if row["method"] != "spd_hard":
-            references.append(f"spd_hard/round_{row['round']}/{row['stage']}")
+        for method in config.get('reporting', {}).get('reference_methods', ['plain', 'ssd', 'spd_hard']):
+            if row['method'] != method:
+                reference = f"{method}/round_{row['round']}/{row['stage']}"
+                if reference in by_id:
+                    references.append(reference)
         for reference in references:
             comparisons.append(_comparison(row, by_id.get(reference), reference, summaries, margin, bootstrap, seed))
     output = Path(output_path) if output_path is not None else root / "report.json"

@@ -59,21 +59,30 @@ def execution_runtime_identity(evaluation):
 
 @contextmanager
 def record_stage(directory, stage):
-    if torch.cuda.is_available():
-        torch.cuda.synchronize()
-        torch.cuda.reset_peak_memory_stats()
+    devices = list(range(torch.cuda.device_count())) if torch.cuda.is_available() else []
+    for device in devices:
+        torch.cuda.synchronize(device)
+        torch.cuda.reset_peak_memory_stats(device)
     started = time.monotonic()
     succeeded = False
     try:
         yield
         succeeded = True
     finally:
-        if torch.cuda.is_available():
-            torch.cuda.synchronize()
+        for device in devices:
+            torch.cuda.synchronize(device)
+        device_resources = [{
+            'device': device, 'name': torch.cuda.get_device_name(device),
+            'peak_allocated_bytes': torch.cuda.max_memory_allocated(device),
+            'peak_reserved_bytes': torch.cuda.max_memory_reserved(device),
+        } for device in devices]
         record = {'stage': stage, 'elapsed_seconds': time.monotonic() - started,
                   'status': 'completed' if succeeded else 'failed',
-                  'cuda_peak_allocated_bytes': torch.cuda.max_memory_allocated() if torch.cuda.is_available() else None,
-                  'cuda_peak_reserved_bytes': torch.cuda.max_memory_reserved() if torch.cuda.is_available() else None}
+                  'cuda_devices': device_resources,
+                  'cuda_peak_allocated_bytes': max((d['peak_allocated_bytes'] for d in device_resources), default=None),
+                  'cuda_peak_reserved_bytes': max((d['peak_reserved_bytes'] for d in device_resources), default=None),
+                  'cuda_sum_of_device_peak_allocated_bytes': sum(d['peak_allocated_bytes'] for d in device_resources) if devices else None,
+                  'memory_definition': 'peak fields are maximum per-device peaks; sum of device peaks is an upper bound, not a simultaneous peak'}
         path = Path(directory) / f'{stage}.resources.json'
         previous = json.loads(path.read_text()) if path.exists() else None
         attempts = previous.get('attempts', [previous]) if previous else []
@@ -120,6 +129,8 @@ def validate_config(config):
         if value is not None and (type(value) is not int or value < 1):
             raise ValueError(f'diagnostics.{key} must be a positive integer or null')
     calibration = config.get('calibration', {})
+    if type(calibration.get('reestimate_each_round', True)) is not bool:
+        raise ValueError('calibration.reestimate_each_round must be boolean')
     if calibration.get('rank') is not None and (type(calibration['rank']) is not int
                                                or calibration['rank'] < 0):
         raise ValueError('calibration.rank must be a nonnegative integer or null')
@@ -180,6 +191,8 @@ def evaluate_file(tasks, records, path, settings, *, expected_samples, seed=42):
     verified = verify_completions(
         tasks, records, backend=settings.get('backend', 'docker'),
         timeout=float(settings.get('timeout', 5)),
+        memory_mb=int(settings.get('memory_mb', 512)),
+        pids_limit=int(settings.get('pids_limit', 64)),
         allow_unsafe_local=bool(settings.get('allow_unsafe_local', False)),
         docker_image=settings.get('docker_image', 'python:3.11-slim'),
         workers=int(settings.get('workers', 4)), expected_samples=expected_samples,
@@ -191,7 +204,7 @@ def evaluate_file(tasks, records, path, settings, *, expected_samples, seed=42):
                                 correct_budget=settings.get('correct_budget', 8),
                                 correct_budgets=settings.get('correct_budgets'),
                                 bootstrap_samples=settings.get('bootstrap_samples', 1000),
-                                seed=seed, expected_samples=expected_samples)
+                                seed=seed, expected_samples={task['task_id']: expected_samples for task in tasks})
     atomic_json(path.with_suffix('.metrics.json'), summary)
     return summary
 
@@ -431,7 +444,8 @@ def run_experiment(config, *, resume=False):
     # Base evaluated once; the same completions form the reference for every arm.
     base_done = root / 'base' / 'complete.json'
     if not base_done.exists():
-        model, tokenizer = load_model(config['model'])
+        with record_stage(base_path.parent, 'model_loading'):
+            model, tokenizer = load_model(config['model'])
         revision = getattr(model.config, '_commit_hash', None)
         identity = stable_hash([config['model'], revision, local_base_fingerprint])
         with record_stage(base_path.parent, 'evaluation'):
@@ -476,16 +490,32 @@ def run_experiment(config, *, resume=False):
             trained = (checkpoint / 'training_stats.json').exists()
             if local_base_fingerprint and checkpoint_fingerprint(local_base) != local_base_fingerprint:
                 raise ValueError('Base model/tokenizer changed during this experiment')
-            model, tokenizer = load_model(model_settings, checkpoint if trained else previous_checkpoint)
+            with record_stage(directory, 'model_loading'):
+                model, tokenizer = load_model(model_settings, checkpoint if trained else previous_checkpoint)
             if trained and not (directory / 'training_stats.json').exists():
                 atomic_json(directory / 'training_stats.json', json.loads(
                     (checkpoint / 'training_stats.json').read_text()))
             if not trained:
                 operators = None
                 if method not in {'plain', 'ssd'}:
+                    reestimate = cal.get('reestimate_each_round', True)
+                    calibration_path = (directory if reestimate else root / method / 'round_1') / 'calibration.pt'
+                    calibration_identity = identity if reestimate else base_identity
+                    if not reestimate and round_index > 1 and not calibration_path.exists():
+                        raise ValueError('Fixed geometry requires the saved round-1 calibration; do not fit it on a later checkpoint')
                     with record_stage(directory, 'calibration'):
                         covariances = _calibrate(model, tokenizer, splits['calibration'], cal,
-                                                 directory / 'calibration.pt', identity)
+                                                 calibration_path, calibration_identity)
+                    atomic_json(directory / 'calibration_provenance.json', {
+                        'mode': 'reestimated' if reestimate else 'fixed_round_1',
+                        'calibration_round': round_index if reestimate else 1,
+                        'calibration_model_identity': calibration_identity,
+                        'student_model_identity': identity,
+                        'calibration_path': str(calibration_path.relative_to(root)),
+                        'calibration_sha256': file_sha(calibration_path),
+                        'method': method, 'seed': seed,
+                        'calibration_task_ids': [task['task_id'] for task in splits['calibration'][:int(cal.get('max_examples', 50))]],
+                    })
                     operators = _operators(covariances, method, cal, seed)
                     atomic_json(directory / 'operator_diagnostics.json', _operator_diagnostics(
                         model, operators, covariances, method, cal))

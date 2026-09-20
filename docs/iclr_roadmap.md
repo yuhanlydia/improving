@@ -1,3 +1,5 @@
+> Historical planning record. The active September 20 experiment and evidence matrix is in `experiments/iclr2027/README.md`; the current manuscript is `paper/iclr2027/main.tex`.
+
 # ICLR evidence plan: diversity with accuracy maintained
 
 The candidate paper asks whether self-distillation can preserve more correct implementations for the same coding task while maintaining accuracy. Pass@1 improvement is not required. The seed-42, 64-task MBPP pilot motivates the next experiment; it is exploratory, and the new formal results are pending.
