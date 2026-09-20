@@ -1,0 +1,122 @@
+{
+  "status": "failed",
+  "purpose": "memory stress test only; forced 1024-token decode, no accuracy evaluation",
+  "model": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+  "revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+  "allocator_cap_mb": 4608,
+  "context_allowance_mb": 512,
+  "ssd_reserve_mb": 3500,
+  "required_free_mb": 8620,
+  "batches": [
+    8,
+    16
+  ],
+  "research_results": false,
+  "research_configs_changed": false,
+  "allocator_fraction": 0.1910116143807952,
+  "model_loading": {
+    "peak_allocated_bytes": 3088346624,
+    "peak_reserved_bytes": 3286237184,
+    "gpu_sample": {
+      "epoch": 1789938090.2392063,
+      "free_mb": 5312,
+      "total_mb": 24576,
+      "pid_used_mb": {
+        "80331": 15408,
+        "171462": 3390
+      }
+    }
+  },
+  "task_id": "AppsIntro/4038",
+  "prompt_tokens": 1353,
+  "prepared_task_count": 200,
+  "tasks_sha256": "4afcb7510154679f79bb0e46bd1e8573bfd71ed7408149b92048982f7b78e438",
+  "runtime_modeling_sha256": "dfd358726ec68b6507a238101f176d3e835fb4b26d91e0dd0345bf1f3c7a2e40",
+  "generation_call": "direct model.generate; min_new_tokens=max_new_tokens=1024",
+  "error_type": "RuntimeError",
+  "error": "Probe allocator OOM; probe ends without touching SSD",
+  "failed_epoch": 1789938136.9051042,
+  "source_report_sha256": "3afcb593c2f6733027a775cd0a4f0dfc96f7d48962d1ecc4e47fb7c5b92b7212",
+  "wrapper_sha256": "7994d5bdd407a009f92e74ad34682cd35aada0e1393acec371a467bc5b957299",
+  "selected_batch": 8,
+  "selection_basis": "Batch 8 completed full decode; batch 16 exhausted the local allocator cap. Overall stress script reports failed because it deliberately attempted batch 16.",
+  "admission_samples": [
+    {
+      "epoch": 1789938065.3011997,
+      "free_mb": 8708,
+      "total_mb": 24576,
+      "pid_used_mb": {
+        "80331": 15408
+      }
+    },
+    {
+      "epoch": 1789938075.374002,
+      "free_mb": 8708,
+      "total_mb": 24576,
+      "pid_used_mb": {
+        "80331": 15408
+      }
+    },
+    {
+      "epoch": 1789938085.4480338,
+      "free_mb": 8708,
+      "total_mb": 24576,
+      "pid_used_mb": {
+        "80331": 15408
+      }
+    }
+  ],
+  "trials": [
+    {
+      "batch": 8,
+      "generation_kwargs": {
+        "do_sample": true,
+        "temperature": 0.8,
+        "top_p": 0.95,
+        "top_k": 0,
+        "max_new_tokens": 1024,
+        "min_new_tokens": 1024,
+        "num_return_sequences": 8,
+        "pad_token_id": 151643,
+        "use_cache": true
+      },
+      "status": "completed",
+      "output_shape": [
+        8,
+        2377
+      ],
+      "generated_tokens_per_sample": 1024,
+      "sample_count": 8,
+      "wall_seconds": 45.9239343740046,
+      "peak_allocated_bytes": 4130466304,
+      "peak_reserved_bytes": 4573888512,
+      "peak_pid_used_mb": 4676,
+      "monitor_errors": [],
+      "pid_observation_count": 80,
+      "minimum_observed_gpu_free_mb": 4026
+    },
+    {
+      "batch": 16,
+      "generation_kwargs": {
+        "do_sample": true,
+        "temperature": 0.8,
+        "top_p": 0.95,
+        "top_k": 0,
+        "max_new_tokens": 1024,
+        "min_new_tokens": 1024,
+        "num_return_sequences": 16,
+        "pad_token_id": 151643,
+        "use_cache": true
+      },
+      "status": "oom",
+      "error": "CUDA out of memory. Tried to allocate 370.00 MiB. GPU 0 has a total capacity of 23.56 GiB of which 3.75 GiB is free. Process 80331 has 15.05 GiB memory in use. Including non-PyTorch memory, this process has 4.74 GiB memory in use. 4.50 GiB allowed; Of the allocated memory 3.91 GiB is allocated by PyTorch, and 542.21 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "wall_seconds": 0.1554305669851601,
+      "peak_allocated_bytes": 4496093696,
+      "peak_reserved_bytes": 4831838208,
+      "peak_pid_used_mb": 4922,
+      "monitor_errors": [],
+      "pid_observation_count": 1,
+      "minimum_observed_gpu_free_mb": 4110
+    }
+  ]
+}

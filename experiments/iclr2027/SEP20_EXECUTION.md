@@ -34,9 +34,14 @@ Before starting the next method, the completed final checkpoint is archived,
 actually decoded and compared against every original file SHA256, then pruned
 through the pipeline's existing checkpoint-retention bookkeeping. All results and
 original checkpoint hashes remain available. Archives record immutable base
-revisions, file identities and recovery metadata. DeepSeek checkpoints whose
-shard names differ from the base use lossless gzip instead of a delta. Restoring
-an archive requires verifying the reconstructed files before evaluating it.
+revisions, file identities and recovery metadata. For new DeepSeek single-method
+runs, base tensors can be repacked into matching shard layouts without changing
+tensor bytes, then used as delta references. The reference manifest and frozen
+recovery tools are retained beside the archive, and a cold reference rebuild and
+full byte verification must succeed before pruning. Existing gzip archives remain
+supported. This path has CPU fixture coverage; real DeepSeek memory and compression
+measurements are still pending. Restoring an archive requires verifying every
+reconstructed file before evaluating it.
 
 Launch thresholds include two simultaneous checkpoint generations, five rounds
 of calibration artifacts where applicable, and 5 GiB of additional disk space.
@@ -53,3 +58,25 @@ are kept out of Git result bundles.
 
 UA-RL dependencies are installed, but an explicit semantic-judge service
 configuration is still required before that method can start.
+
+## APPS batch adaptation after measured SSD memory growth
+
+Before any APPS research output was generated, its generation batch was reduced
+from 64 to 8. The new run is `sep20_transfer_apps_intro_seed43_n16_b8`;
+all 200 tasks, 16 samples per task, seed 43, checkpoints, decoding parameters and
+1024-token generation limit remain unchanged. All four APPS arms use batch 8.
+
+SSD round-two SFT peaked at 4,320,920,064 allocated CUDA bytes but retained
+15,814,623,232 reserved bytes. The scheduler therefore could not safely admit
+the original APPS allocation alongside it. A separate stress test used the longest
+prepared APPS prompt (1353 tokens) and forced 1024 generated tokens per sequence;
+these forced outputs are not research samples. Under a 4608 MiB allocator cap,
+batch 8 completed in 45.924 seconds with a sampled process peak of 4676 MiB.
+Batch 16 exhausted that allocator cap and exited without stopping SSD.
+
+The APPS process uses the same 4608 MiB allocator cap through
+`run_with_cuda_cap.py`. This cap excludes some CUDA allocations; the scheduler
+budgets 5120 MiB for the process and retains 3500 MiB of SSD growth headroom.
+PID sampling can miss subsecond peaks. Evidence and wrapper identity are recorded
+in `resource_preflights/sep20_apps_batch.json`; the frozen experiment implementation
+was not edited. Historical-cache cleanup now waits for this new APPS output.
