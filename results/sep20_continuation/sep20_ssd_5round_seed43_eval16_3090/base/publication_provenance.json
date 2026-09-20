@@ -1,0 +1,59 @@
+{
+  "part_id": "sep20_ssd_5round_seed43_eval16_3090/base",
+  "source_root": "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+  "source_digest": "e2cca92b875844c872b3e563844ad469028349e8efa659c8a956064b3b6e9486",
+  "files": [
+    {
+      "source_relative_path": "complete.json",
+      "source_sha256": "0a2a8ccd546b818d0f0078d4150f7b08ecc1e1d022ae1877d770a22fc3af80b0",
+      "source_bytes": 684
+    },
+    {
+      "source_relative_path": "evaluation.jsonl.budget.json",
+      "source_sha256": "cf69d13089f54e996765d54ef82e028b9350bd2fc3df67738eb39343736f05d7",
+      "source_bytes": 680
+    },
+    {
+      "source_relative_path": "evaluation.metrics.json",
+      "source_sha256": "6ecd3650444b68811a06b32e569961f4eb09ff1fd96f28d9d67b2b90a4d51c6f",
+      "source_bytes": 2174370
+    },
+    {
+      "source_relative_path": "evaluation.resources.json",
+      "source_sha256": "fa4c20b6adf5f0067869e57ef1cd773d7657d221eb98210ff6a3c4dfe58d6734",
+      "source_bytes": 1177
+    },
+    {
+      "source_relative_path": "evaluation.verified.jsonl",
+      "source_sha256": "7ef1fffd8d6180350949d28c62842631bafcd34b0fe4fbae8dec3b1701ce3787",
+      "source_bytes": 29406716
+    },
+    {
+      "source_relative_path": "model_loading.resources.json",
+      "source_sha256": "e64257c04c1a93966e3d65607b1351a159c439d1c595cb6c8e6b81ad1b7bb9a0",
+      "source_bytes": 1804
+    },
+    {
+      "source_relative_path": "run_manifest.json",
+      "source_sha256": "2eb83a954c318802b8adbd3f64f481ed32666d0f9d07def7c7f0544a9b0dbac0",
+      "source_bytes": 22817
+    }
+  ],
+  "metrics_implementation_sha256": "9e2fc30e1c8df0c9d9ff95f6a025f69245226efb6cf29ee9738243b30a311528",
+  "format": "compact_evidence_v1",
+  "excluded": [
+    "model weights",
+    "datasets and task prompts/tests",
+    "generated program text and token ids",
+    "secrets"
+  ],
+  "recomputable": [
+    "pass@k from correctness labels",
+    "AST richness from implementation_proxy hashes",
+    "control-flow and exact-program richness from hashes"
+  ],
+  "limitations": [
+    "Program tests cannot be rerun from this compact archive.",
+    "Token Jaccard and fresh AST canonicalization need original program text, retained on the experiment machine."
+  ]
+}

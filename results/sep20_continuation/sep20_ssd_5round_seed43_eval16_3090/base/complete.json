@@ -1,0 +1,12 @@
+{
+  "evaluation_sha": "05f2219f7efe6fd69ca3284822734cd20127a674ccb5902675eaf270daac111e",
+  "model_identity": "0c489cd200468d7cf1fd6a0e54c3eda378f989ccedafee2ac521d48ec8845d97",
+  "resolved_revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+  "integrity_schema": 2,
+  "files": {
+    "evaluation.jsonl": "05f2219f7efe6fd69ca3284822734cd20127a674ccb5902675eaf270daac111e",
+    "evaluation.jsonl.budget.json": "cf69d13089f54e996765d54ef82e028b9350bd2fc3df67738eb39343736f05d7",
+    "evaluation.verified.jsonl": "7ef1fffd8d6180350949d28c62842631bafcd34b0fe4fbae8dec3b1701ce3787",
+    "evaluation.metrics.json": "6ecd3650444b68811a06b32e569961f4eb09ff1fd96f28d9d67b2b90a4d51c6f"
+  }
+}
