@@ -1,0 +1,131 @@
+{
+  "baseline_git_commit": "a528dbd31bc212a233d63d9a28271e8573f6dfe6",
+  "frozen_runtime_root": "/root/improving/runs/sep20_ssd_runtime",
+  "files": [
+    {
+      "path": "src/improving/__init__.py",
+      "sha256": "bcb5ecc8195d8fe7c6cac6b94ace1dc39924b108b6752a087c129d0bd8c1ec2a",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/__main__.py",
+      "sha256": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/benchmarks.py",
+      "sha256": "08171657ce2cdfc26b75b46330c7d29e2ce74213195da2416afc53201259ab05",
+      "differs_from_baseline": true
+    },
+    {
+      "path": "src/improving/calibration.py",
+      "sha256": "9039c10049ab43cc94f0c6ce1b59bcde00d44f45dd50565095cef917924c67de",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/cli.py",
+      "sha256": "809334344acf3ad95dada58b092de099834815898be548aa7e3faec0bae73ad1",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/data.py",
+      "sha256": "874e6d60bc8d930e63447b5228e723a5f08ae7d3ec02955a25ce7323afb8c06c",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/formal_reporting.py",
+      "sha256": "0efc7e4feae451dce8c9762e09afc7f7e8c84c99c78c16d6a57aa060a2b882d3",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/formal_statistics.py",
+      "sha256": "7ea00f596fe1a5a3e64614629a361f03f653fc7b0d047a3db6af9a88468e2f22",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/formal_study.py",
+      "sha256": "ea6f2eeb899f2595b2cf332f072f872e83e916a001dfed27651c4e7b5894ddf7",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/formal_transfer.py",
+      "sha256": "5690984298f38a018e3a7b645dfbff274154273e3b0cb0844dbb45a97d1d9769",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/generation.py",
+      "sha256": "d432df51de7ece188c603ab832e078217f21b7c42e23267283abd7e8fbe2bf14",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/geometry.py",
+      "sha256": "672b5330faedb9f9a5d99fec2aceb803015284cdf383f071741e83bef8e8b9b5",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/geometry_analysis.py",
+      "sha256": "f86b4dbad7297e4e9629996265825639d1110ffab1f2ea8c71d8f4fd433665cc",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/geometry_extraction.py",
+      "sha256": "15866b1ccfc611d0b9f3045aea9d9306af2129c3e8712a103b702bdd297174d3",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/geometry_study.py",
+      "sha256": "cc8f8483d11c89688c6cf1cb23dd9a0c2aafe122b4a8e46c1fbfd2df8c463b41",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/longitudinal.py",
+      "sha256": "65582632e09a5e15356676590103784da4f86b8b23405cbcc48bf333b0167869",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/metrics.py",
+      "sha256": "9e2fc30e1c8df0c9d9ff95f6a025f69245226efb6cf29ee9738243b30a311528",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/modeling.py",
+      "sha256": "dfd358726ec68b6507a238101f176d3e835fb4b26d91e0dd0345bf1f3c7a2e40",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/pipeline.py",
+      "sha256": "9be6ee49af464b21322904c5028a93920f60ded80a16470d8b5c67a2fbf982b6",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/reporting.py",
+      "sha256": "45bbf019a2497b7a043fd22f58b9170f2be420286bf2f55a79187b944156a7ff",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/spectral.py",
+      "sha256": "2b9f91d0edbb4b270c69ace605eb6ec6646861f28c702b114a4f86ebac0a9ced",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/training.py",
+      "sha256": "7a7d9be4cb5b51c5f00f3d48363d47d62ebd80a19d45a55ce189acfefe1da8c1",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/ua_rl.py",
+      "sha256": "e4d0e1bd4283f1ee50c6640c5e9c3afe1bf04a7253ecdd3288fd8e27b7f4578d",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/utils.py",
+      "sha256": "9c1a51237ecc940771db2213db3f942acf6b2d81c76bdc1ac2f5540c48de0c6b",
+      "differs_from_baseline": false
+    },
+    {
+      "path": "src/improving/verification.py",
+      "sha256": "a5267bae1b898d2a8f06624ffe79340e287d272c960307f06d9749a432795cd5",
+      "differs_from_baseline": false
+    }
+  ]
+}

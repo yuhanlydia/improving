@@ -1,0 +1,12 @@
+{
+  "examples": 4656,
+  "optimizer_steps": 291,
+  "mean_loss": 1.3669333655476774,
+  "epochs": 1,
+  "truncated_examples": 0,
+  "truncated_tokens": 0,
+  "supervised_tokens_per_epoch": 1522834,
+  "trainable_parameter_count": 2179072,
+  "loss_scope": "all",
+  "seed": 45
+}
