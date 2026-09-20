@@ -204,6 +204,11 @@ class _PrimitiveUnpickler(pickle.Unpickler):
         raise ValueError("LiveCodeBench fixture contains a forbidden persistent object")
 
 
+# Official release_v5 includes a 198,722,655-byte pickle (abc369_g).
+# Bound decompression while retaining those complete private test fixtures.
+_LCB_MAX_PRIVATE_TEST_BYTES = 256 * 1024 * 1024
+
+
 def _private_lcb_tests(value: Any, task_id: str) -> list[dict[str, Any]]:
     if isinstance(value, list):
         return value
@@ -215,9 +220,11 @@ def _private_lcb_tests(value: Any, task_id: str) -> list[dict[str, Any]]:
         try:
             compressed = base64.b64decode(value, validate=True)
             decompressor = zlib.decompressobj()
-            packed = decompressor.decompress(compressed, 64 * 1024 * 1024)
-            if not decompressor.eof or decompressor.unconsumed_tail:
-                raise ValueError("Decoded test fixture exceeds 64 MiB or is truncated")
+            packed = decompressor.decompress(compressed, _LCB_MAX_PRIVATE_TEST_BYTES + 1)
+            if (len(packed) > _LCB_MAX_PRIVATE_TEST_BYTES or not decompressor.eof
+                    or decompressor.unconsumed_tail):
+                raise ValueError(
+                    f"Decoded test fixture exceeds {_LCB_MAX_PRIVATE_TEST_BYTES} bytes or is truncated")
             unpacked = _PrimitiveUnpickler(io.BytesIO(packed)).load()
             if not isinstance(unpacked, (str, bytes)):
                 raise ValueError("Expected a serialized JSON string")
@@ -366,10 +373,15 @@ def prepare_benchmark(name: str, output_dir: str | Path, *, revision: str | None
         splits = {"eval": rows}
     elif name == "codecontests":
         from datasets import load_dataset
-        raw = load_dataset(HF_REPOSITORIES[name], split="test", revision=resolved)
-        source_count = len(raw)
-        source_metadata = {"dataset_fingerprint": getattr(raw, "_fingerprint", None)}
-        splits = {"eval": [convert_codecontests(row, resolved) for row in raw]}
+        # Nonstreaming preparation downloads every split before selecting test.
+        # Streaming visits only official test shards at the pinned revision.
+        raw = load_dataset(HF_REPOSITORIES[name], split="test", revision=resolved,
+                           streaming=True)
+        rows = [convert_codecontests(row, resolved) for row in raw]
+        source_count = len(rows)
+        source_metadata = {"dataset_fingerprint": getattr(raw, "_fingerprint", None),
+                           "split": "test", "loading_mode": "streaming"}
+        splits = {"eval": rows}
     else:
         if not re.fullmatch(r"release_v[1-6]", lcb_release):
             raise ValueError("Pin an explicit supported LiveCodeBench release_v1 through release_v6")
