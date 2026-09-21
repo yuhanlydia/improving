@@ -1,0 +1,14 @@
+{
+  "status": "completed",
+  "protocol_fingerprint": "9f3ef3be847f29e6ae37fe7c1f0df5e981e348fff2d55ad65cf5a57c04a0bde0",
+  "model_identity": "e2bf448a071cbcdbafcf31d4a074b53d620735e4cb03385f4297cbf3a2c267ef",
+  "files": {
+    "model_loading.resources.json": "438d2b4f2df82bc2008ea80bebbd63ed74690b8ae09732c86a2f73efe5a9c212",
+    "evaluation.jsonl": "72da8ae9676cf62570f28cff8c92b8a226f2cb70b2ff9832a87de43686163da7",
+    "evaluation.jsonl.budget.json": "ab71ca03301a1e7a86dbc245935b1473b8293d5dd5cc9337c7072d0f4cc2cedb",
+    "evaluation_generation.resources.json": "b8e0836fe078d73bf47af023de775de9ec9482608f56bcd8b25f3afae48c850c",
+    "evaluation.verified.jsonl": "28dab3786eaa14092fe607324bd201534ef36a3a181b91be91978f10944fd02a",
+    "evaluation.metrics.json": "5b648a2a3356b293bc3ac0b38ad9e77618b4abe37317c8d968b92166bbdefa69",
+    "verification_and_metrics.resources.json": "1f115d07b0aff28ccfe5d32d6796e0ba160cf44554a140a88470ace544d36ba2"
+  }
+}
