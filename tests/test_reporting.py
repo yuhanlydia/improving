@@ -30,9 +30,9 @@ def make_run(path, methods=("spectral_soft", "spd_hard"), rounds=1):
 
 
 def write_stage(root, method="base", round_index=0, stage="evaluation", rows=None,
-                evaluation=None, sampling=None):
+                evaluation=None, sampling=None, ks=(1, 2, 4)):
     directory = root / "base" if method == "base" else root / method / f"round_{round_index}"
-    result = summarize_records(records() if rows is None else rows, ks=[1, 2, 4],
+    result = summarize_records(records() if rows is None else rows, ks=ks,
                                correct_budget=2, bootstrap_samples=50)
     result["protocol"]["evaluation"] = evaluation or {"backend": "docker", "task_tests_sha256": "same-tests"}
     write_json(directory / f"{stage}.metrics.json", result)
@@ -159,8 +159,9 @@ def test_report_refuses_missing_evaluation_provenance_even_with_results(tmp_path
 
 def test_report_labels_partial_coverage_and_never_substitutes_ast_strategy_labels(tmp_path):
     make_run(tmp_path, methods=())
-    rows = records(labels=False) + [dict(records(labels=False)[0], task_id="task/b", strategy_id="identity")]
-    write_stage(tmp_path, rows=rows)
+    rows = records((True, False) * 8, labels=False) + [
+        dict(row, task_id="task/b") for row in records((True, False) * 8)]
+    write_stage(tmp_path, rows=rows, ks=[1, 16])
     result = build_report(tmp_path)
     metrics = result["stages"][0]["metrics"]
     semantic = metrics["strategy_coverage_at_k"]["1"]
@@ -170,6 +171,7 @@ def test_report_labels_partial_coverage_and_never_substitutes_ast_strategy_label
     assert semantic["coverage_status"] == "partial"
     assert semantic["all_task_mean"] is None
     assert metrics["implementation_coverage_at_k"]["1"]["eligible_fraction"] == 1
+    assert metrics["strategy_coverage_at_k"]["16"]["coverage_status"] == "partial"
     assert "partial" in (tmp_path / "report.md").read_text()
 
 
@@ -180,3 +182,40 @@ def test_report_discovers_existing_rounds_without_manifest_and_supports_output_p
     assert any(stage["id"] == "plain/round_3/evaluation" for stage in report["stages"])
     assert output.exists()
     assert output.with_suffix(".md").exists()
+
+
+def test_main_report_uses_16_and_64_and_preserves_pass1_in_appendix_and_json(tmp_path):
+    make_run(tmp_path, methods=("spectral_soft",))
+    for method, index in [("base", 0), ("spectral_soft", 1)]:
+        write_stage(tmp_path, method, index, rows=records((True,) * 64), ks=[1, 4, 16, 64])
+    result = build_report(tmp_path)
+    markdown = (tmp_path / "report.md").read_text()
+    main, appendix = markdown.split("## Appendix: Pass@1 and correctness noninferiority")
+    assert "| Pass@16 | Pass@64 |" in main
+    assert "Pass@1 |" not in main
+    assert "Noninferiority" not in main
+    assert "| ΔPass@16 | ΔPass@64 |" in main
+    coverage = main.split("## Correct implementation richness")[1].split("## Coverage at a fixed")[0]
+    assert "| base/evaluation | 16 | 1.000" in coverage
+    assert "| base/evaluation | 64 | 1.000" in coverage
+    assert "| base/evaluation | 1 |" not in coverage
+    assert "| base/evaluation | 4 |" not in coverage
+    assert "Pass@1" in appendix and "Noninferiority" in appendix
+    assert result["stages"][0]["metrics"]["pass_at_1"]["mean"] == 1
+    assert set(result["stages"][0]["metrics"]["pass_at_k"]) == {"1", "4", "16", "64"}
+    assert any(c["result"] and "noninferior" in c["result"]["correctness"] for c in result["comparisons"])
+
+
+def test_main_report_keeps_missing_64_pending_and_shows_all_fixed_correct_budgets(tmp_path):
+    make_run(tmp_path, methods=())
+    write_stage(tmp_path, rows=records((True,) * 16), ks=[1, 16])
+    build_report(tmp_path)
+    markdown = (tmp_path / "report.md").read_text()
+    correctness = markdown.split("## Correct implementation richness")[0]
+    assert "| Pass@16 | Pass@64 |" in correctness
+    assert "| pending | 16 |" in correctness
+    coverage = markdown.split("## Correct implementation richness")[1].split("## Coverage at a fixed")[0]
+    assert "| base/evaluation | 64 | pending | pending |" in coverage
+    fixed = markdown.split("## Coverage at a fixed")[1].split("## Paired comparisons")[0]
+    for budget in (2, 4, 8):
+        assert f"| base/evaluation | {budget} |" in fixed

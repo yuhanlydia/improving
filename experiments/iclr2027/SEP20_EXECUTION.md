@@ -5,8 +5,9 @@ Qwen 3B / Qwen 7B / DeepSeek 6.7B expansion, and UA-RL. The later request to fin
 all experiments supersedes the initial twelve-hour scheduling window. This file
 records execution choices, not completed experimental results.
 
-All new MBPP runs use seed 43, 16 training candidates, 16 evaluation samples, and
-five rounds. Prepared MBPP splits are 291 train / 50 calibration / 30 validation /
+The initial MBPP protocol used seed 43, 16 training candidates, 16 evaluation samples, and
+five rounds. The September 21 update in EVALUATION_POLICY.md uses n64 for new
+evaluations and unstarted expansion runs; existing runs retain their frozen budgets. Prepared MBPP splits are 291 train / 50 calibration / 30 validation /
 500 evaluation tasks. Existing historical checkpoints provide the initial Plain,
 SPECTRUM and Projection transfer arms. New SSD round-five checkpoints are queued
 for the same four transfer benchmarks. Transfer task counts are HumanEval+ 164,
@@ -56,8 +57,10 @@ Completed base evaluations, rounds, and benchmark parts are published separately
 after evidence validation. Generated programs, model weights and raw datasets
 are kept out of Git result bundles.
 
-UA-RL dependencies are installed, but an explicit semantic-judge service
-configuration is still required before that method can start.
+UA-RL dependencies and a real local CPU Qwen7B semantic judge have been validated.
+The judge is loaded on demand; training admission must respect the actual 31 GB
+cgroup memory limit and GPU capacity. Its measured small-request CPU latency was
+107.95 seconds, so readiness does not imply fast completion.
 
 ## APPS batch adaptation after measured SSD memory growth
 

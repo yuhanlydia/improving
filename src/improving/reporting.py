@@ -234,38 +234,39 @@ def _formatted(metric: Mapping[str, Any] | None) -> str:
 def _markdown(report: Mapping[str, Any]) -> str:
     lines = ["# Coding self-distillation report", "", f"Result status: **{report['status']}**.", "",
              "Numbers show task means with pointwise 95% task-bootstrap intervals and explicit eligible-task denominators. Partial means describe the eligible subset; they do not establish gains across all tasks. Pending measurements are not zeros.", "",
-             "## Correctness and evaluation stages", "", "| Method | Round | Stage | Status | Pass@1 | Samples |", "| --- | ---: | --- | --- | --- | ---: |"]
+             "## Correctness and evaluation stages", "", "| Method | Round | Stage | Status | Pass@16 | Pass@64 | Samples |", "| --- | ---: | --- | --- | --- | --- | ---: |"]
     for stage in report["stages"]:
         metrics = stage["metrics"]
         lines.append("| " + " | ".join(map(_cell, [stage["method"], stage["round"], stage["stage"], stage["status"],
-                     _formatted(metrics["pass_at_1"] if metrics else None), metrics["sample_count"] if metrics else "pending"])) + " |")
+                     *[_formatted(metrics["pass_at_k"].get(k) if metrics else None) for k in ("16", "64")],
+                     metrics["sample_count"] if metrics else "pending"])) + " |")
     lines += ["", "## Correct implementation richness and annotated strategy coverage", "",
               "Implementation coverage uses conservative Python AST fingerprints. These are implementation proxies, not algorithm identities. Strategy coverage uses supplied independent labels only; incomplete annotations remain unavailable. Wrong completions remain in the draw population.", "",
               "| Stage | Draw budget K | Correct AST richness @K | Annotated strategy coverage |", "| --- | ---: | --- | --- |"]
     for stage in report["stages"]:
         metrics = stage["metrics"]
-        if not metrics:
-            lines.append(f"| {_cell(stage['id'])} | pending | pending | pending |")
-            continue
-        for k in sorted(metrics["implementation_coverage_at_k"], key=int):
-            lines.append(f"| {_cell(stage['id'])} | {k} | {_formatted(metrics['implementation_coverage_at_k'][k])} | {_formatted(metrics['strategy_coverage_at_k'][k])} |")
+        for k in ("16", "64"):
+            implementation = metrics["implementation_coverage_at_k"].get(k) if metrics else None
+            strategy = metrics["strategy_coverage_at_k"].get(k) if metrics else None
+            lines.append(f"| {_cell(stage['id'])} | {k} | {_formatted(implementation)} | {_formatted(strategy)} |")
     lines += ["", "## Coverage at a fixed correct-sample budget", "",
               "These conditional estimates use only correct samples and require at least the displayed number of correct samples per task. Different eligible-task populations must not be interpreted as whole-task improvements.", "",
               "| Stage | Correct-sample budget b | Correct-conditioned AST richness @b | Annotated strategy coverage |", "| --- | ---: | --- | --- |"]
     for stage in report["stages"]:
         metrics = stage["metrics"]
-        lines.append("| " + " | ".join(map(_cell, [stage["id"], metrics["correct_budget"] if metrics else "pending",
-                     _formatted(metrics["implementation_correct_matched_coverage"] if metrics else None),
-                     _formatted(metrics["strategy_correct_matched_coverage"] if metrics else None)])) + " |")
+        budgets = sorted(metrics["implementation_correct_matched_coverage_at_budgets"], key=int) if metrics else ["pending"]
+        for budget in budgets:
+            lines.append("| " + " | ".join(map(_cell, [stage["id"], budget,
+                         _formatted(metrics["implementation_correct_matched_coverage_at_budgets"].get(budget) if metrics else None),
+                         _formatted(metrics["strategy_correct_matched_coverage_at_budgets"].get(budget) if metrics else None)])) + " |")
     lines += ["", "## Paired comparisons", "",
-              f"Deltas are candidate minus reference. Correctness noninferiority uses an absolute margin of {report['comparison_settings']['correctness_margin']:.3f} and the lower endpoint of a two-sided 95% paired task-bootstrap interval. It requires all tasks. These are descriptive statistical outputs, not automatic claims of algorithm diversity or a successful research result.", "",
-              "| Candidate | Reference | Status | Correctness delta | Noninferiority | Reason |", "| --- | --- | --- | --- | --- | --- |"]
+              "Deltas are candidate minus reference at draw budgets 16 and 64. Missing budgets remain pending. These descriptive estimates do not establish algorithm diversity or an automatic research conclusion.", "",
+              "| Candidate | Reference | Status | ΔPass@16 | ΔPass@64 | Reason |", "| --- | --- | --- | --- | --- | --- |"]
     for comparison in report["comparisons"]:
         paired = comparison["result"]
-        check = paired["correctness"]["noninferior"] if paired else None
-        label = "unavailable" if check is None else ("criterion met" if check else "criterion not met")
         lines.append("| " + " | ".join(map(_cell, [comparison["candidate"], comparison["reference"], comparison["status"],
-                     _formatted(paired["correctness"]["delta"] if paired else None), label, comparison["reason"] or "—"])) + " |")
+                     *[_formatted(paired["pass_at_k"].get(k) if paired else None) for k in ("16", "64")],
+                     comparison["reason"] or "—"])) + " |")
     lines += ["", "Coverage and entropy deltas, including their intervals and paired eligibility, are included in the JSON report. Comparisons require matching explicit sampling and evaluation protocols, task IDs, metric budgets, and per-task sample counts.", "",
               "## Budgets and training", "", "| Stage | Generated samples | Generation tokens | Prompt tokens |", "| --- | ---: | ---: | ---: |"]
     for stage in report["stages"]:
@@ -290,7 +291,21 @@ def _markdown(report: Mapping[str, Any]) -> str:
                          resource.get('stage', filename), resource.get('elapsed_seconds', 'unavailable'),
                          resource.get('cuda_peak_allocated_bytes', 'unavailable'),
                          resource.get('cuda_peak_reserved_bytes', 'unavailable')])) + ' |')
-    lines += ["", "The JSON report preserves generation budgets, training statistics, full sampling metadata, evaluation provenance, and eligibility details. Sampling budget and correctness can change observed diversity; no model-performance claim follows from a report being complete.", ""]
+    lines += ["", "## Appendix: Pass@1 and correctness noninferiority", "",
+              "Pass@1 and the original correctness criterion are retained as supplementary diagnostics. They do not determine the main Pass@16/Pass@64 and diversity conclusions.", "",
+              "| Stage | Pass@1 |", "| --- | --- |"]
+    for stage in report["stages"]:
+        metrics = stage["metrics"]
+        lines.append(f"| {_cell(stage['id'])} | {_formatted(metrics['pass_at_1'] if metrics else None)} |")
+    lines += ["", f"Correctness noninferiority uses the task-macro correct fraction (Pass@1), an absolute margin of {report['comparison_settings']['correctness_margin']:.3f}, and the lower endpoint of a two-sided 95% paired task-bootstrap interval. It requires all tasks.", "",
+              "| Candidate | Reference | Status | Pass@1 delta | Noninferiority | Reason |", "| --- | --- | --- | --- | --- | --- |"]
+    for comparison in report["comparisons"]:
+        paired = comparison["result"]
+        check = paired["correctness"]["noninferior"] if paired else None
+        label = "unavailable" if check is None else ("criterion met" if check else "criterion not met")
+        lines.append("| " + " | ".join(map(_cell, [comparison["candidate"], comparison["reference"], comparison["status"],
+                     _formatted(paired["correctness"]["delta"] if paired else None), label, comparison["reason"] or "—"])) + " |")
+    lines += ["", "The JSON report preserves all metric budgets, Pass@1 and correctness comparisons, generation budgets, training statistics, full sampling metadata, evaluation provenance, and eligibility details. Sampling budget and correctness can change observed diversity; no model-performance claim follows from a report being complete.", ""]
     return "\n".join(lines)
 
 
