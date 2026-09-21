@@ -1,0 +1,23 @@
+{
+  "status": "large_artifact_upload_cancelled_by_user",
+  "experiment_processes": "stopped",
+  "evaluation_completion": {
+    "SSD_MBPP_five_rounds": "completed",
+    "historical_HumanEvalPlus_four_arms": "completed",
+    "historical_APPS_Intro_four_arms": "completed",
+    "CodeContests": "partial_232_samples",
+    "LiveCodeBench": "partial_288_samples",
+    "new_64_sample_evaluations": "not_started"
+  },
+  "github_complete_archives": [
+    "software_and_future_experiments.tar.gz",
+    "paused_execution_state.tar.gz",
+    "run_task_snapshots.tar.gz"
+  ],
+  "not_fully_backed_up": [
+    "SSD_five_round_model_archives",
+    "raw_results_and_prepared_data",
+    "extra_reproducibility_cache"
+  ],
+  "note": "Stopping processes is not completing evaluation. Local originals remain available. Do not infer recovery of SSD checkpoints from the software backup."
+}
