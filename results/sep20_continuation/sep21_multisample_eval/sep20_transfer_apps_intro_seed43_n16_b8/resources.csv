@@ -1,0 +1,13 @@
+id,method,round,stage,status,elapsed_seconds,cuda_peak_allocated_bytes,cuda_peak_reserved_bytes,attempt_count,resources_path
+base,base,0,evaluation_generation,completed,5690.0317990919575,4130455552,4710203392,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/base/evaluation_generation.resources.json
+base,base,0,model_loading,completed,3.415693075978197,3088346624,3286237184,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/base/model_loading.resources.json
+base,base,0,verification_and_metrics,completed,195.08948686299846,3096866304,4607442944,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/base/verification_and_metrics.resources.json
+plain/round_5,plain,5,evaluation_generation,completed,5100.362694742042,4130445824,4672454656,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/plain/round_5/evaluation_generation.resources.json
+plain/round_5,plain,5,model_loading,completed,1.3028196269879118,3096866304,3307208704,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/plain/round_5/model_loading.resources.json
+plain/round_5,plain,5,verification_and_metrics,completed,140.27555010700598,3096866304,4569694208,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/plain/round_5/verification_and_metrics.resources.json
+spd_hard/round_5,spd_hard,5,evaluation_generation,completed,5119.448006187915,4130445824,4672454656,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spd_hard/round_5/evaluation_generation.resources.json
+spd_hard/round_5,spd_hard,5,model_loading,completed,1.0819347810465842,3096866304,3307208704,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spd_hard/round_5/model_loading.resources.json
+spd_hard/round_5,spd_hard,5,verification_and_metrics,completed,174.2148492950946,3096866304,4569694208,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spd_hard/round_5/verification_and_metrics.resources.json
+spectral_soft/round_5,spectral_soft,5,evaluation_generation,completed,5510.913375256932,4130452992,4672454656,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spectral_soft/round_5/evaluation_generation.resources.json
+spectral_soft/round_5,spectral_soft,5,model_loading,completed,1.0447804920841008,3096866304,3307208704,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spectral_soft/round_5/model_loading.resources.json
+spectral_soft/round_5,spectral_soft,5,verification_and_metrics,completed,170.10149706690572,3096866304,4569694208,1,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spectral_soft/round_5/verification_and_metrics.resources.json

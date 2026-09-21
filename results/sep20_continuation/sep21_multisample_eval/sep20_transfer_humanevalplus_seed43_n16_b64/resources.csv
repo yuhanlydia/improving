@@ -1,0 +1,13 @@
+id,method,round,stage,status,elapsed_seconds,cuda_peak_allocated_bytes,cuda_peak_reserved_bytes,attempt_count,resources_path
+base,base,0,evaluation_generation,completed,2643.9403774100356,6229723136,11836325888,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/base/evaluation_generation.resources.json
+base,base,0,model_loading,completed,4.979612536961213,3088346624,3286237184,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/base/model_loading.resources.json
+base,base,0,verification_and_metrics,completed,183.5081168799661,3096866304,11836325888,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/base/verification_and_metrics.resources.json
+plain/round_5,plain,5,evaluation_generation,completed,2626.496298920014,6272896512,14015266816,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/plain/round_5/evaluation_generation.resources.json
+plain/round_5,plain,5,model_loading,completed,1.3205553039442748,3097629184,3307208704,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/plain/round_5/model_loading.resources.json
+plain/round_5,plain,5,verification_and_metrics,completed,165.3004659949802,3097629184,14015266816,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/plain/round_5/verification_and_metrics.resources.json
+spd_hard/round_5,spd_hard,5,evaluation_generation,completed,2736.512540473952,6431325184,11454644224,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/spd_hard/round_5/evaluation_generation.resources.json
+spd_hard/round_5,spd_hard,5,model_loading,completed,2.457188030006364,3097629184,3307208704,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/spd_hard/round_5/model_loading.resources.json
+spd_hard/round_5,spd_hard,5,verification_and_metrics,completed,145.26516672910657,3097629184,11454644224,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/spd_hard/round_5/verification_and_metrics.resources.json
+spectral_soft/round_5,spectral_soft,5,evaluation_generation,completed,2601.732270266046,6052150784,11563696128,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/spectral_soft/round_5/evaluation_generation.resources.json
+spectral_soft/round_5,spectral_soft,5,model_loading,completed,2.2999666759278625,3097629184,3307208704,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/spectral_soft/round_5/model_loading.resources.json
+spectral_soft/round_5,spectral_soft,5,verification_and_metrics,completed,225.32990736002102,3097629184,11563696128,1,/root/improving/runs/sep20_transfer_humanevalplus_seed43_n16_b64/spectral_soft/round_5/verification_and_metrics.resources.json

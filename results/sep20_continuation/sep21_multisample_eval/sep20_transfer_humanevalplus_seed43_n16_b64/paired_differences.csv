@@ -1,0 +1,239 @@
+reference,candidate,kind,metric,mean,eligible_tasks,total_tasks,bootstrap_valid_replicates,ci95_low,ci95_high
+base,plain/round_5,initial_model,AST Simpson diversity,0.012416490465270952,123,164,2000,-0.016122483213937486,0.038484943638632155
+base,plain/round_5,initial_model,AST correct-label entropy,0.029678433048445245,135,164,2000,-0.0619330927286517,0.12182193791163295
+base,plain/round_5,initial_model,AST unique fraction,-0.008632776688332242,135,164,2000,-0.04212066846352802,0.022493126416837386
+base,plain/round_5,initial_model,Control-flow Simpson diversity,0.01671472159277037,123,164,2000,-0.0288587355931106,0.060881185081068746
+base,plain/round_5,initial_model,Control-flow correct-label entropy,0.03522966153819051,135,164,2000,-0.03587867110814917,0.1022615087937281
+base,plain/round_5,initial_model,Control-flow unique fraction,0.011650694984028319,135,164,2000,-0.02773578481818532,0.04912259679513316
+base,plain/round_5,initial_model,Correct AST richness @1,0.0038109756097560975,164,164,2000,-0.017911585365853657,0.025924161585365802
+base,plain/round_5,initial_model,Correct AST richness @16,0.07926829268292683,164,164,2000,-0.3048780487804878,0.45121951219512196
+base,plain/round_5,initial_model,Correct AST richness @4,0.04283704100777272,164,164,2000,-0.04858977150897881,0.1359833992227284
+base,plain/round_5,initial_model,Correct AST richness @8,0.06831210794625428,164,164,2000,-0.12275328330206378,0.2504818707715049
+base,plain/round_5,initial_model,Correct Control-flow richness @1,0.0038109756097560975,164,164,2000,-0.017911585365853657,0.025924161585365802
+base,plain/round_5,initial_model,Correct Control-flow richness @16,0.13414634146341464,164,164,2000,-0.04283536585365853,0.31722560975609676
+base,plain/round_5,initial_model,Correct Control-flow richness @4,0.012814928973465546,164,164,2000,-0.05280898217636022,0.08001842669525591
+base,plain/round_5,initial_model,Correct Control-flow richness @8,0.03373178312202702,164,164,2000,-0.07755506519226033,0.1472404272556711
+base,plain/round_5,initial_model,Correct Exact program richness @1,0.0038109756097560975,164,164,2000,-0.017911585365853657,0.025924161585365802
+base,plain/round_5,initial_model,Correct Exact program richness @16,0.2073170731707317,164,164,2000,-0.16463414634146342,0.6036585365853658
+base,plain/round_5,initial_model,Correct Exact program richness @4,0.03633074242830339,164,164,2000,-0.05309258576789063,0.1288878651835967
+base,plain/round_5,initial_model,Correct Exact program richness @8,0.09004112418746565,164,164,2000,-0.09100894024674513,0.282506573710842
+base,plain/round_5,initial_model,Correct-conditioned AST richness @16,-0.1111111111111111,9,164,2000,-2.625284090909091,2.4285714285714284
+base,plain/round_5,initial_model,Correct-conditioned AST richness @4,0.02640865760131816,109,164,2000,-0.07365960361577296,0.12375473116485268
+base,plain/round_5,initial_model,Correct-conditioned AST richness @8,0.11571946571946576,84,164,2000,-0.14863510897545376,0.3687119356008097
+base,plain/round_5,initial_model,Correct-conditioned Control-flow richness @16,-0.3333333333333333,9,164,2000,-1.0,0.42857142857142855
+base,plain/round_5,initial_model,Correct-conditioned Control-flow richness @4,0.04048286066634691,109,164,2000,-0.06351181616957018,0.14226513907548377
+base,plain/round_5,initial_model,Correct-conditioned Control-flow richness @8,0.03744853030567314,84,164,2000,-0.16268371364867892,0.23530119808965955
+base,plain/round_5,initial_model,Correct-conditioned Exact program richness @16,0.5555555555555556,9,164,2000,0.0,1.3333333333333333
+base,plain/round_5,initial_model,Correct-conditioned Exact program richness @4,0.029872268404378507,109,164,2000,-0.0024251678381142492,0.07388609537430224
+base,plain/round_5,initial_model,Correct-conditioned Exact program richness @8,0.11627340913055197,84,164,2000,0.0043800692201854865,0.2598165229131138
+base,plain/round_5,initial_model,Exact program Simpson diversity,0.006927941074282536,123,164,2000,-0.00022136418670032403,0.017010625557234465
+base,plain/round_5,initial_model,Exact program correct-label entropy,0.05058121946183194,135,164,2000,-0.03269187715459329,0.1419291326627728
+base,plain/round_5,initial_model,Exact program unique fraction,0.010347646180979515,135,164,2000,-2.656475976217163e-05,0.023209750319125318
+base,plain/round_5,initial_model,pass@1,0.0038109756097560975,164,164,2000,-0.017911585365853657,0.025924161585365802
+base,plain/round_5,initial_model,pass@16,0.012195121951219513,164,164,2000,-0.03048780487804878,0.054878048780487805
+base,plain/round_5,initial_model,pass@4,0.011608818011257037,164,164,2000,-0.016120343071562578,0.04194275998391851
+base,plain/round_5,initial_model,pass@8,0.012492182614133835,164,164,2000,-0.020672318873538383,0.04725349176568687
+base,spd_hard/round_5,initial_model,AST Simpson diversity,0.015894261294261296,125,164,2000,-0.010443045542685638,0.042035188299836726
+base,spd_hard/round_5,initial_model,AST correct-label entropy,0.05662375809184035,134,164,2000,-0.02591198804548428,0.14720030101470674
+base,spd_hard/round_5,initial_model,AST unique fraction,0.011260992324425161,134,164,2000,-0.02023061582020173,0.040996507129274586
+base,spd_hard/round_5,initial_model,Control-flow Simpson diversity,0.003003463203463198,125,164,2000,-0.041629295349673766,0.046956727314418134
+base,spd_hard/round_5,initial_model,Control-flow correct-label entropy,0.023176907339940343,134,164,2000,-0.04537783983158298,0.09105048004560506
+base,spd_hard/round_5,initial_model,Control-flow unique fraction,0.005169302090943884,134,164,2000,-0.03142984798490751,0.042753260154695015
+base,spd_hard/round_5,initial_model,Correct AST richness @1,-0.003429878048780488,164,164,2000,-0.025161966463414634,0.01715891768292678
+base,spd_hard/round_5,initial_model,Correct AST richness @16,0.1524390243902439,164,164,2000,-0.22560975609756098,0.5489329268292675
+base,spd_hard/round_5,initial_model,Correct AST richness @4,0.02920128651835967,164,164,2000,-0.0606701454033771,0.12134104462610554
+base,spd_hard/round_5,initial_model,Correct AST richness @8,0.07285661492978567,164,164,2000,-0.11318345272613563,0.26217238046506336
+base,spd_hard/round_5,initial_model,Correct Control-flow richness @1,-0.003429878048780488,164,164,2000,-0.025161966463414634,0.01715891768292678
+base,spd_hard/round_5,initial_model,Correct Control-flow richness @16,0.07317073170731707,164,164,2000,-0.10975609756097561,0.26234756097560896
+base,spd_hard/round_5,initial_model,Correct Control-flow richness @4,-0.007822969713213621,164,164,2000,-0.07109027405521309,0.0570998056821227
+base,spd_hard/round_5,initial_model,Correct Control-flow richness @8,0.0032439782439782168,164,164,2000,-0.10541024693463719,0.11085537599257111
+base,spd_hard/round_5,initial_model,Correct Exact program richness @1,-0.003429878048780488,164,164,2000,-0.025161966463414634,0.01715891768292678
+base,spd_hard/round_5,initial_model,Correct Exact program richness @16,0.09146341463414634,164,164,2000,-0.2926829268292683,0.46356707317073087
+base,spd_hard/round_5,initial_model,Correct Exact program richness @4,0.009256901634950401,164,164,2000,-0.07880863039399624,0.09429811042615915
+base,spd_hard/round_5,initial_model,Correct Exact program richness @8,0.035809786419542515,164,164,2000,-0.1467157029961908,0.2158538006708738
+base,spd_hard/round_5,initial_model,Correct-conditioned AST richness @16,0.3,10,164,2000,-1.8575892857142857,2.6666666666666665
+base,spd_hard/round_5,initial_model,Correct-conditioned AST richness @4,0.0633082452526897,108,164,2000,-0.032255550704211364,0.15139874664577047
+base,spd_hard/round_5,initial_model,Correct-conditioned AST richness @8,0.23895413529559878,82,164,2000,-0.027881551351530233,0.491784507159507
+base,spd_hard/round_5,initial_model,Correct-conditioned Control-flow richness @16,0.0,10,164,2000,-0.6666666666666666,0.6666666666666666
+base,spd_hard/round_5,initial_model,Correct-conditioned Control-flow richness @4,0.008130295630295626,108,164,2000,-0.0918565258003322,0.10892797646266544
+base,spd_hard/round_5,initial_model,Correct-conditioned Control-flow richness @8,0.016136302721668522,82,164,2000,-0.17511968566896233,0.21632159923021257
+base,spd_hard/round_5,initial_model,Correct-conditioned Exact program richness @16,0.6,10,164,2000,-0.18196022727272726,1.6
+base,spd_hard/round_5,initial_model,Correct-conditioned Exact program richness @4,0.03537033953700621,108,164,2000,-0.0024205905225356495,0.08654695300600371
+base,spd_hard/round_5,initial_model,Correct-conditioned Exact program richness @8,0.13943170650487724,82,164,2000,0.002793797952888859,0.3098253609135962
+base,spd_hard/round_5,initial_model,Exact program Simpson diversity,0.0080992784992785,125,164,2000,-0.00011353822645171209,0.019382213240269557
+base,spd_hard/round_5,initial_model,Exact program correct-label entropy,0.044790315508674884,134,164,2000,-0.03473408469976977,0.12640956670537706
+base,spd_hard/round_5,initial_model,Exact program unique fraction,0.01055238294044264,134,164,2000,-0.002277011728161153,0.026141187240989995
+base,spd_hard/round_5,initial_model,pass@1,-0.003429878048780488,164,164,2000,-0.025161966463414634,0.01715891768292678
+base,spd_hard/round_5,initial_model,pass@16,-0.006097560975609756,164,164,2000,-0.04878048780487805,0.03048780487804878
+base,spd_hard/round_5,initial_model,pass@4,-0.0005863039399624786,164,164,2000,-0.026651115652640042,0.026059618734923604
+base,spd_hard/round_5,initial_model,pass@8,-0.0013787025982147892,164,164,2000,-0.0312802627589213,0.030022777019728223
+base,spectral_soft/round_5,initial_model,AST Simpson diversity,0.028097453510676648,121,164,2000,0.0023852251407129434,0.05664855293482411
+base,spectral_soft/round_5,initial_model,AST correct-label entropy,0.04483147198569028,137,164,2000,-0.04681756134559304,0.14090538825755503
+base,spectral_soft/round_5,initial_model,AST unique fraction,0.03743642812985879,137,164,2000,0.006315508689961136,0.068360060281365
+base,spectral_soft/round_5,initial_model,Control-flow Simpson diversity,0.011482502804816845,121,164,2000,-0.031636521630338775,0.053941474289035236
+base,spectral_soft/round_5,initial_model,Control-flow correct-label entropy,0.029672173354755655,137,164,2000,-0.04308645230379025,0.10368908080084548
+base,spectral_soft/round_5,initial_model,Control-flow unique fraction,0.03545841830513363,137,164,2000,-0.0005819085121878704,0.07015381735057281
+base,spectral_soft/round_5,initial_model,Correct AST richness @1,-0.011432926829268292,164,164,2000,-0.03315548780487805,0.011432926829268292
+base,spectral_soft/round_5,initial_model,Correct AST richness @16,0.23170731707317074,164,164,2000,-0.14634146341463414,0.6160060975609748
+base,spectral_soft/round_5,initial_model,Correct AST richness @4,0.02021911015813455,164,164,2000,-0.07319502144197265,0.10872085231841327
+base,spectral_soft/round_5,initial_model,Correct AST richness @8,0.08098432732579074,164,164,2000,-0.11426490514905151,0.27231649278905373
+base,spectral_soft/round_5,initial_model,Correct Control-flow richness @1,-0.011432926829268292,164,164,2000,-0.03315548780487805,0.011432926829268292
+base,spectral_soft/round_5,initial_model,Correct Control-flow richness @16,0.12195121951219512,164,164,2000,-0.07942073170731706,0.32926829268292684
+base,spectral_soft/round_5,initial_model,Correct Control-flow richness @4,-0.003883007236665774,164,164,2000,-0.07201060372554274,0.06610300522648081
+base,spectral_soft/round_5,initial_model,Correct Control-flow richness @8,0.0211619004301931,164,164,2000,-0.09185915202683498,0.13801983247105196
+base,spectral_soft/round_5,initial_model,Correct Exact program richness @1,-0.011432926829268292,164,164,2000,-0.03315548780487805,0.011432926829268292
+base,spectral_soft/round_5,initial_model,Correct Exact program richness @16,0.07317073170731707,164,164,2000,-0.3048780487804878,0.45121951219512196
+base,spectral_soft/round_5,initial_model,Correct Exact program richness @4,-0.013220316269096763,164,164,2000,-0.1032233315465023,0.0791116657732511
+base,spectral_soft/round_5,initial_model,Correct Exact program richness @8,0.00777664070346998,164,164,2000,-0.17577087715807227,0.19361505533761628
+base,spectral_soft/round_5,initial_model,Correct-conditioned AST richness @16,0.1111111111111111,9,164,2000,-2.400714285714286,3.571726190476189
+base,spectral_soft/round_5,initial_model,Correct-conditioned AST richness @4,0.11429606718068261,104,164,2000,0.022040207849448403,0.2080485145891638
+base,spectral_soft/round_5,initial_model,Correct-conditioned AST richness @8,0.341759460052143,82,164,2000,0.06210541952504256,0.6178083698598044
+base,spectral_soft/round_5,initial_model,Correct-conditioned Control-flow richness @16,-0.2222222222222222,9,164,2000,-0.5457070707070707,0.0
+base,spectral_soft/round_5,initial_model,Correct-conditioned Control-flow richness @4,0.06630089995474613,104,164,2000,-0.04348998768116414,0.18350047646164144
+base,spectral_soft/round_5,initial_model,Correct-conditioned Control-flow richness @8,0.0633312486971023,82,164,2000,-0.13810807824512145,0.2790192075414296
+base,spectral_soft/round_5,initial_model,Correct-conditioned Exact program richness @16,0.5555555555555556,9,164,2000,-0.25,1.6666666666666667
+base,spectral_soft/round_5,initial_model,Correct-conditioned Exact program richness @4,0.059428071928071965,104,164,2000,0.0201581618224213,0.11189461255787779
+base,spectral_soft/round_5,initial_model,Correct-conditioned Exact program richness @8,0.2187682236462724,82,164,2000,0.08723588901058779,0.3857965721493117
+base,spectral_soft/round_5,initial_model,Exact program Simpson diversity,0.012005487625322333,121,164,2000,0.0034084376473313737,0.02338810847815083
+base,spectral_soft/round_5,initial_model,Exact program correct-label entropy,0.0024729268313908115,137,164,2000,-0.0830821710952784,0.09464700517256973
+base,spectral_soft/round_5,initial_model,Exact program unique fraction,0.020352913509847817,137,164,2000,0.008741910500897057,0.03410801452056119
+base,spectral_soft/round_5,initial_model,pass@1,-0.011432926829268292,164,164,2000,-0.03315548780487805,0.011432926829268292
+base,spectral_soft/round_5,initial_model,pass@16,0.012195121951219513,164,164,2000,-0.018292682926829267,0.04878048780487805
+base,spectral_soft/round_5,initial_model,pass@4,-0.005752479228088981,164,164,2000,-0.03336555213079603,0.02311260385955504
+base,spectral_soft/round_5,initial_model,pass@8,0.001721720014402942,164,164,2000,-0.026179761972444895,0.03145794246404003
+plain/round_5,spd_hard/round_5,same_round_method,AST Simpson diversity,0.0035902682387057424,128,164,2000,-0.010218873428803739,0.01629574584197692
+plain/round_5,spd_hard/round_5,same_round_method,AST correct-label entropy,0.01211197549189899,138,164,2000,-0.04176130180292448,0.06966599512156625
+plain/round_5,spd_hard/round_5,same_round_method,AST unique fraction,0.01937969437969438,138,164,2000,0.003232591200688574,0.03569639830499894
+plain/round_5,spd_hard/round_5,same_round_method,Control-flow Simpson diversity,-0.020159983245920745,128,164,2000,-0.054572755285859045,0.011595268946891842
+plain/round_5,spd_hard/round_5,same_round_method,Control-flow correct-label entropy,-0.014486455217005404,138,164,2000,-0.0693976824945668,0.03815666076371925
+plain/round_5,spd_hard/round_5,same_round_method,Control-flow unique fraction,0.0008684250532076625,138,164,2000,-0.022895594192612157,0.025129791746108972
+plain/round_5,spd_hard/round_5,same_round_method,Correct AST richness @1,-0.007240853658536586,164,164,2000,-0.020198170731707318,0.005716463414634146
+plain/round_5,spd_hard/round_5,same_round_method,Correct AST richness @16,0.07317073170731707,164,164,2000,-0.14634146341463414,0.30503048780487724
+plain/round_5,spd_hard/round_5,same_round_method,Correct AST richness @4,-0.013635754489413043,164,164,2000,-0.06379698807290274,0.03608926896274454
+plain/round_5,spd_hard/round_5,same_round_method,Correct AST richness @8,0.004544506983531374,164,164,2000,-0.09785126120491976,0.10851155788655777
+plain/round_5,spd_hard/round_5,same_round_method,Correct Control-flow richness @1,-0.007240853658536586,164,164,2000,-0.020198170731707318,0.005716463414634146
+plain/round_5,spd_hard/round_5,same_round_method,Correct Control-flow richness @16,-0.06097560975609756,164,164,2000,-0.20121951219512196,0.07317073170731707
+plain/round_5,spd_hard/round_5,same_round_method,Correct Control-flow richness @4,-0.02063789868667917,164,164,2000,-0.06050665036183329,0.01834746046636289
+plain/round_5,spd_hard/round_5,same_round_method,Correct Control-flow richness @8,-0.03048780487804878,164,164,2000,-0.1038719512195122,0.043681147781757516
+plain/round_5,spd_hard/round_5,same_round_method,Correct Exact program richness @1,-0.007240853658536586,164,164,2000,-0.020198170731707318,0.005716463414634146
+plain/round_5,spd_hard/round_5,same_round_method,Correct Exact program richness @16,-0.11585365853658537,164,164,2000,-0.3233231707317073,0.0975609756097561
+plain/round_5,spd_hard/round_5,same_round_method,Correct Exact program richness @4,-0.027073840793352986,164,164,2000,-0.07739362771374966,0.026154432457786106
+plain/round_5,spd_hard/round_5,same_round_method,Correct Exact program richness @8,-0.05423133776792314,164,164,2000,-0.15521497811131957,0.051235431235431235
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned AST richness @16,0.47058823529411764,17,164,2000,-0.363755980861244,1.3637559808612432
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned AST richness @4,0.05128544022349332,113,164,2000,0.006357548394467451,0.09802806460992299
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned AST richness @8,0.1348121291941517,89,164,2000,-0.0037039570802028764,0.29516218382705833
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned Control-flow richness @16,0.23529411764705882,17,164,2000,0.05555555555555555,0.4666666666666667
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned Control-flow richness @4,-0.010560088878672965,113,164,2000,-0.08734619126664583,0.06400611489898746
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned Control-flow richness @8,0.014063215186810682,89,164,2000,-0.10062370866681211,0.12187276440183403
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned Exact program richness @16,0.23529411764705882,17,164,2000,-0.26666666666666666,0.7648190045248862
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned Exact program richness @4,0.004990437291322245,113,164,2000,-0.01004106254106255,0.023548881346640734
+plain/round_5,spd_hard/round_5,same_round_method,Correct-conditioned Exact program richness @8,0.01872397265655695,89,164,2000,-0.04740440115440115,0.09210471214831678
+plain/round_5,spd_hard/round_5,same_round_method,Exact program Simpson diversity,0.0012521332833832855,128,164,2000,-0.0014542532002563017,0.0047147819590883785
+plain/round_5,spd_hard/round_5,same_round_method,Exact program correct-label entropy,-0.019826846768618227,138,164,2000,-0.07137066637272318,0.031582375672920944
+plain/round_5,spd_hard/round_5,same_round_method,Exact program unique fraction,0.00012381941729767715,138,164,2000,-0.007374828810064551,0.007748973091302631
+plain/round_5,spd_hard/round_5,same_round_method,pass@1,-0.007240853658536586,164,164,2000,-0.020198170731707318,0.005716463414634146
+plain/round_5,spd_hard/round_5,same_round_method,pass@16,-0.018292682926829267,164,164,2000,-0.04878048780487805,0.006097560975609756
+plain/round_5,spd_hard/round_5,same_round_method,pass@4,-0.012195121951219514,164,164,2000,-0.027522949611364245,0.003863826722058423
+plain/round_5,spd_hard/round_5,same_round_method,pass@8,-0.013870885212348626,164,164,2000,-0.0330246768813842,0.004497377622377601
+plain/round_5,spectral_soft/round_5,same_round_method,AST Simpson diversity,0.020152620747858847,126,164,2000,0.0028743097173825486,0.03803742194019972
+plain/round_5,spectral_soft/round_5,same_round_method,AST correct-label entropy,0.008179481554509786,139,164,2000,-0.056357605602568396,0.0728456627822454
+plain/round_5,spectral_soft/round_5,same_round_method,AST unique fraction,0.03568979980850485,139,164,2000,0.015438300628518021,0.0551795000931887
+plain/round_5,spectral_soft/round_5,same_round_method,Control-flow Simpson diversity,0.021429672620148808,126,164,2000,-0.0086950092825797,0.05338345209544694
+plain/round_5,spectral_soft/round_5,same_round_method,Control-flow correct-label entropy,-0.011745746836055108,139,164,2000,-0.06684636917758117,0.043276689815683334
+plain/round_5,spectral_soft/round_5,same_round_method,Control-flow unique fraction,0.015239516678365596,139,164,2000,-0.008927167987559666,0.040979264871679216
+plain/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @1,-0.01524390243902439,164,164,2000,-0.03086890243902439,0.0007621951219512195
+plain/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @16,0.1524390243902439,164,164,2000,-0.12804878048780488,0.4391768292682919
+plain/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @4,-0.02261793084963817,164,164,2000,-0.08663980836236934,0.04196688220316267
+plain/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @8,0.012672219379536467,164,164,2000,-0.11804843699660778,0.14794696495916007
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @1,-0.01524390243902439,164,164,2000,-0.03086890243902439,0.0007621951219512195
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @16,-0.012195121951219513,164,164,2000,-0.16463414634146342,0.14634146341463414
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @4,-0.016697936210131326,164,164,2000,-0.06429526266416509,0.028812650763870264
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @8,-0.01256988269183392,164,164,2000,-0.09474156432997895,0.07144641774214942
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @1,-0.01524390243902439,164,164,2000,-0.03086890243902439,0.0007621951219512195
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @16,-0.13414634146341464,164,164,2000,-0.3902439024390244,0.12804878048780488
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @4,-0.04955105869740016,164,164,2000,-0.1133401735459662,0.014941620879120814
+plain/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @8,-0.08226448348399566,164,164,2000,-0.20998884245835467,0.04879907186309593
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned AST richness @16,0.6666666666666666,12,164,2000,-0.625,2.0833333333333335
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned AST richness @4,0.07984497984497989,111,164,2000,0.01677225083475085,0.14443063741836118
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned AST richness @8,0.22544987312429168,86,164,2000,0.059541046846450466,0.40072188366669986
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Control-flow richness @16,0.16666666666666666,12,164,2000,-0.23566176470588232,0.5714285714285714
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Control-flow richness @4,0.040201040201040185,111,164,2000,-0.032385222532367024,0.11921709122430274
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Control-flow richness @8,0.06891015960783405,86,164,2000,-0.054196166659129595,0.19741426350040572
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Exact program richness @16,0.16666666666666666,12,164,2000,-0.2,0.6
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Exact program richness @4,0.026346326346326374,111,164,2000,0.008315757463987574,0.05005254005254006
+plain/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Exact program richness @8,0.0950235810700927,86,164,2000,0.022578179852276246,0.18239656645288305
+plain/round_5,spectral_soft/round_5,same_round_method,Exact program Simpson diversity,0.0047660892898988136,126,164,2000,0.0013808853936760918,0.009260518534006904
+plain/round_5,spectral_soft/round_5,same_round_method,Exact program correct-label entropy,-0.039631974089460745,139,164,2000,-0.09541935559816382,0.015455283078213549
+plain/round_5,spectral_soft/round_5,same_round_method,Exact program unique fraction,0.010010193643287167,139,164,2000,0.0031985275581226285,0.017513725054754722
+plain/round_5,spectral_soft/round_5,same_round_method,pass@1,-0.01524390243902439,164,164,2000,-0.03086890243902439,0.0007621951219512195
+plain/round_5,spectral_soft/round_5,same_round_method,pass@16,0.0,164,164,2000,-0.03048780487804878,0.03048780487804878
+plain/round_5,spectral_soft/round_5,same_round_method,pass@4,-0.017361297239346023,164,164,2000,-0.038066537121415174,0.0016095718306084058
+plain/round_5,spectral_soft/round_5,same_round_method,pass@8,-0.010770462599730891,164,164,2000,-0.03488230096461804,0.012898070763924404
+spd_hard/round_5,plain/round_5,same_round_method,AST Simpson diversity,-0.0035902682387057424,128,164,2000,-0.01629574584197692,0.010218873428803737
+spd_hard/round_5,plain/round_5,same_round_method,AST correct-label entropy,-0.01211197549189899,138,164,2000,-0.06966599512156633,0.041761301802924373
+spd_hard/round_5,plain/round_5,same_round_method,AST unique fraction,-0.01937969437969438,138,164,2000,-0.03569639830499895,-0.0032325912006885746
+spd_hard/round_5,plain/round_5,same_round_method,Control-flow Simpson diversity,0.020159983245920745,128,164,2000,-0.01159526894689185,0.05457275528585903
+spd_hard/round_5,plain/round_5,same_round_method,Control-flow correct-label entropy,0.014486455217005404,138,164,2000,-0.03815666076371931,0.06939768249456679
+spd_hard/round_5,plain/round_5,same_round_method,Control-flow unique fraction,-0.0008684250532076625,138,164,2000,-0.025129791746108975,0.022895594192612147
+spd_hard/round_5,plain/round_5,same_round_method,Correct AST richness @1,0.007240853658536586,164,164,2000,-0.005716463414634146,0.020198170731707318
+spd_hard/round_5,plain/round_5,same_round_method,Correct AST richness @16,-0.07317073170731707,164,164,2000,-0.305030487804878,0.14634146341463414
+spd_hard/round_5,plain/round_5,same_round_method,Correct AST richness @4,0.013635754489413043,164,164,2000,-0.03608926896274456,0.06379698807290272
+spd_hard/round_5,plain/round_5,same_round_method,Correct AST richness @8,-0.004544506983531374,164,164,2000,-0.1085115578865579,0.09785126120491967
+spd_hard/round_5,plain/round_5,same_round_method,Correct Control-flow richness @1,0.007240853658536586,164,164,2000,-0.005716463414634146,0.020198170731707318
+spd_hard/round_5,plain/round_5,same_round_method,Correct Control-flow richness @16,0.06097560975609756,164,164,2000,-0.07317073170731707,0.20121951219512196
+spd_hard/round_5,plain/round_5,same_round_method,Correct Control-flow richness @4,0.02063789868667917,164,164,2000,-0.018347460466362913,0.06050665036183329
+spd_hard/round_5,plain/round_5,same_round_method,Correct Control-flow richness @8,0.03048780487804878,164,164,2000,-0.043681147781757516,0.1038719512195122
+spd_hard/round_5,plain/round_5,same_round_method,Correct Exact program richness @1,0.007240853658536586,164,164,2000,-0.005716463414634146,0.020198170731707318
+spd_hard/round_5,plain/round_5,same_round_method,Correct Exact program richness @16,0.11585365853658537,164,164,2000,-0.0975609756097561,0.3233231707317065
+spd_hard/round_5,plain/round_5,same_round_method,Correct Exact program richness @4,0.027073840793352986,164,164,2000,-0.026154432457786116,0.07739362771374962
+spd_hard/round_5,plain/round_5,same_round_method,Correct Exact program richness @8,0.05423133776792314,164,164,2000,-0.051235431235431235,0.15521497811131926
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned AST richness @16,-0.47058823529411764,17,164,2000,-1.3637559808612438,0.3637559808612434
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned AST richness @4,-0.05128544022349332,113,164,2000,-0.098028064609923,-0.0063575483944675075
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned AST richness @8,-0.1348121291941517,89,164,2000,-0.29516218382705833,0.0037039570802028265
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned Control-flow richness @16,-0.23529411764705882,17,164,2000,-0.4666666666666667,-0.05555555555555555
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned Control-flow richness @4,0.010560088878672965,113,164,2000,-0.06400611489898747,0.08734619126664572
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned Control-flow richness @8,-0.014063215186810682,89,164,2000,-0.12187276440183413,0.100623708666812
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned Exact program richness @16,-0.23529411764705882,17,164,2000,-0.7648190045248868,0.26666666666666666
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned Exact program richness @4,-0.004990437291322245,113,164,2000,-0.02354888134664076,0.010041062541062533
+spd_hard/round_5,plain/round_5,same_round_method,Correct-conditioned Exact program richness @8,-0.01872397265655695,89,164,2000,-0.09210471214831684,0.04740440115440107
+spd_hard/round_5,plain/round_5,same_round_method,Exact program Simpson diversity,-0.0012521332833832855,128,164,2000,-0.004714781959088379,0.0014542532002562996
+spd_hard/round_5,plain/round_5,same_round_method,Exact program correct-label entropy,0.019826846768618227,138,164,2000,-0.03158237567292095,0.07137066637272306
+spd_hard/round_5,plain/round_5,same_round_method,Exact program unique fraction,-0.00012381941729767715,138,164,2000,-0.007748973091302633,0.007374828810064549
+spd_hard/round_5,plain/round_5,same_round_method,pass@1,0.007240853658536586,164,164,2000,-0.005716463414634146,0.020198170731707318
+spd_hard/round_5,plain/round_5,same_round_method,pass@16,0.018292682926829267,164,164,2000,-0.006097560975609756,0.04878048780487805
+spd_hard/round_5,plain/round_5,same_round_method,pass@4,0.012195121951219514,164,164,2000,-0.0038638267220584277,0.027522949611364245
+spd_hard/round_5,plain/round_5,same_round_method,pass@8,0.013870885212348626,164,164,2000,-0.004497377622377624,0.03302467688138417
+spd_hard/round_5,spectral_soft/round_5,same_round_method,AST Simpson diversity,0.011304073704073705,125,164,2000,-0.006967731157731157,0.029527327103893046
+spd_hard/round_5,spectral_soft/round_5,same_round_method,AST correct-label entropy,1.2937680613885577e-05,137,164,2000,-0.06837562684370439,0.06977710957038667
+spd_hard/round_5,spectral_soft/round_5,same_round_method,AST unique fraction,0.016689666780907657,137,164,2000,-0.0034584125249052257,0.036647473282889934
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Control-flow Simpson diversity,0.026778266178266178,125,164,2000,-0.0054986292875262655,0.060165114428362566
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Control-flow correct-label entropy,0.00658940988163786,137,164,2000,-0.052681834636374505,0.06388316705688996
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Control-flow unique fraction,0.014587227452190954,137,164,2000,-0.011335499643158093,0.04159386783556289
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @1,-0.008003048780487805,164,164,2000,-0.023628048780487805,0.008003048780487805
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @16,0.07926829268292683,164,164,2000,-0.18902439024390244,0.3538109756097553
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @4,-0.00898217636022513,164,164,2000,-0.07254472661484855,0.05498081948539259
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct AST richness @8,0.00812771239600509,164,164,2000,-0.12150718015047282,0.14174531430628984
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @1,-0.008003048780487805,164,164,2000,-0.023628048780487805,0.008003048780487805
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @16,0.04878048780487805,164,164,2000,-0.09146341463414634,0.18902439024390244
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @4,0.003939962476547839,164,164,2000,-0.04036350844277674,0.04724596287858473
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Control-flow richness @8,0.01791792218621486,164,164,2000,-0.05864785282468213,0.0939673351716034
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @1,-0.008003048780487805,164,164,2000,-0.023628048780487805,0.008003048780487805
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @16,-0.018292682926829267,164,164,2000,-0.27439024390243905,0.24390243902439024
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @4,-0.022477217904047178,164,164,2000,-0.08419508844813722,0.04111732779415701
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct Exact program richness @8,-0.028033145716072547,164,164,2000,-0.1531191369606004,0.1035127423389618
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned AST richness @16,0.45454545454545453,11,164,2000,-0.4,1.4545454545454546
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned AST richness @4,0.03884591453398797,109,164,2000,-0.025107059784472814,0.10281538741018866
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned AST richness @8,0.1425113838906942,87,164,2000,-0.02784817375606854,0.31374660501652324
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Control-flow richness @16,0.0,11,164,2000,-0.44469696969696965,0.45568181818181197
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Control-flow richness @4,0.025324471654746897,109,164,2000,-0.0504808245874856,0.09743680609065217
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Control-flow richness @8,0.06905725181587252,87,164,2000,-0.05593917040646693,0.19739988329196226
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Exact program richness @16,0.09090909090909091,11,164,2000,0.0,0.30019230769230665
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Exact program richness @4,0.021656172573603798,109,164,2000,0.008407810872096608,0.03785596298515488
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Correct-conditioned Exact program richness @8,0.07477694719074028,87,164,2000,0.024611616324851593,0.13524472403610666
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Exact program Simpson diversity,0.00352203352203352,125,164,2000,0.0013707840525281636,0.006140366344332277
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Exact program correct-label entropy,-0.017279375447135505,137,164,2000,-0.07813960424124067,0.041853161626359624
+spd_hard/round_5,spectral_soft/round_5,same_round_method,Exact program unique fraction,0.01003160464839297,137,164,2000,0.0037684501156205158,0.017338329652628204
+spd_hard/round_5,spectral_soft/round_5,same_round_method,pass@1,-0.008003048780487805,164,164,2000,-0.023628048780487805,0.008003048780487805
+spd_hard/round_5,spectral_soft/round_5,same_round_method,pass@16,0.018292682926829267,164,164,2000,-0.012195121951219513,0.04893292682926746
+spd_hard/round_5,spectral_soft/round_5,same_round_method,pass@4,-0.005166175288126506,164,164,2000,-0.023915170195658003,0.012747755293486969
+spd_hard/round_5,spectral_soft/round_5,same_round_method,pass@8,0.0031004226126177354,164,164,2000,-0.019117511891902136,0.0262941919191919

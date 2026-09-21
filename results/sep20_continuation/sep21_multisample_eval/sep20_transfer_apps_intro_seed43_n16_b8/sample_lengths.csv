@@ -1,0 +1,5 @@
+id,method,round,stage,samples,samples_with_token_count,generation_tokens,prompt_tokens,mean_generation_tokens,median_generation_tokens,p95_generation_tokens,length_capped_samples,length_capped_fraction,raw_records_path
+base,base,0,evaluation,3200,3200,851860,1518352,266.20625,230.0,592.0999999999995,4,0.00125,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/base/evaluation.jsonl
+plain/round_5,plain,5,evaluation,3200,3200,824973,1518352,257.8040625,232.5,524.0,2,0.000625,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/plain/round_5/evaluation.jsonl
+spd_hard/round_5,spd_hard,5,evaluation,3200,3200,826614,1518352,258.316875,232.0,525.0499999999997,3,0.0009375,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spd_hard/round_5/evaluation.jsonl
+spectral_soft/round_5,spectral_soft,5,evaluation,3200,3200,884832,1518352,276.51,249.0,551.0,6,0.001875,/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8/spectral_soft/round_5/evaluation.jsonl

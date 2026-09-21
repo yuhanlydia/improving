@@ -1,0 +1,12 @@
+id,method,round,stage,samples,samples_with_token_count,generation_tokens,prompt_tokens,mean_generation_tokens,median_generation_tokens,p95_generation_tokens,length_capped_samples,length_capped_fraction,raw_records_path
+base,base,0,evaluation,8000,8000,1956808,526192,244.601,227.0,512.0,410,0.05125,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/base/evaluation.jsonl
+ssd/round_1,ssd,1,train,4656,4656,1311746,307328,281.73238831615123,272.0,512.0,354,0.07603092783505154,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_1/train.jsonl
+ssd/round_1,ssd,1,evaluation,8000,8000,1755723,526192,219.465375,194.0,486.0,301,0.037625,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_1/evaluation.jsonl
+ssd/round_2,ssd,2,train,4656,4656,1220162,307328,262.0622852233677,246.0,512.0,321,0.06894329896907217,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_2/train.jsonl
+ssd/round_2,ssd,2,evaluation,8000,8000,1635816,526192,204.477,179.0,463.0,253,0.031625,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_2/evaluation.jsonl
+ssd/round_3,ssd,3,train,4656,4656,1152549,307328,247.54059278350516,230.0,512.0,315,0.06765463917525773,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_3/train.jsonl
+ssd/round_3,ssd,3,evaluation,8000,8000,1485364,526192,185.6705,162.0,426.0,155,0.019375,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_3/evaluation.jsonl
+ssd/round_4,ssd,4,train,4656,4656,1075697,307328,231.03457903780068,211.0,512.0,278,0.05970790378006873,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_4/train.jsonl
+ssd/round_4,ssd,4,evaluation,8000,8000,1425795,526192,178.224375,156.0,392.0,124,0.0155,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_4/evaluation.jsonl
+ssd/round_5,ssd,5,train,4656,4656,1052246,307328,225.99785223367698,207.0,511.0,230,0.04939862542955326,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/train.jsonl
+ssd/round_5,ssd,5,evaluation,8000,8000,1501593,526192,187.699125,168.0,405.0,110,0.01375,/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/evaluation.jsonl

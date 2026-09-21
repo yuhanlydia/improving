@@ -1,0 +1,13 @@
+reference,candidate,kind,metric,mean_ratio,eligible_tasks,total_tasks,bootstrap_valid_replicates,definition,ci95_low,ci95_high
+base,plain/round_5,initial_model,Correct AST richness @1,0.9818181818181818,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8961012987012986,1.0705037803069042
+base,plain/round_5,initial_model,Correct AST richness @16,0.9323671497584541,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8319995951417005,1.0409181096681095
+base,plain/round_5,initial_model,Correct AST richness @4,0.9595848727014568,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8742848860146668,1.0485191374080214
+base,plain/round_5,initial_model,Correct AST richness @8,0.9458389580573215,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8555829768512079,1.0411323634727594
+base,spd_hard/round_5,initial_model,Correct AST richness @1,0.9616161616161616,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.876743389614527,1.0504936945676273
+base,spd_hard/round_5,initial_model,Correct AST richness @16,0.9082125603864735,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.808292885375494,1.0156995159797853
+base,spd_hard/round_5,initial_model,Correct AST richness @4,0.940495929529245,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.855784776614361,1.0295050485586557
+base,spd_hard/round_5,initial_model,Correct AST richness @8,0.9250145929371577,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8358941778483948,1.0206344184286673
+base,spectral_soft/round_5,initial_model,Correct AST richness @1,0.903030303030303,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.814732771968893,0.9939525219794427
+base,spectral_soft/round_5,initial_model,Correct AST richness @16,0.891304347826087,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.7911447778236099,0.9937571446322067
+base,spectral_soft/round_5,initial_model,Correct AST richness @4,0.8958818886236996,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8064503266104822,0.9860821420965106
+base,spectral_soft/round_5,initial_model,Correct AST richness @8,0.8934398652573861,200,200,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.7992029779471789,0.9884112007123362

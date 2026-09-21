@@ -1,0 +1,21 @@
+reference,candidate,kind,metric,mean_ratio,eligible_tasks,total_tasks,bootstrap_valid_replicates,definition,ci95_low,ci95_high
+base,ssd/round_1,initial_model,Correct AST richness @1,0.9996694214876033,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9741804917638917,1.0282419877526296
+base,ssd/round_1,initial_model,Correct AST richness @16,0.9634268537074149,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9234047900749168,1.004200645301503
+base,ssd/round_1,initial_model,Correct AST richness @4,0.9787109786039986,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9467788611859311,1.012298211837418
+base,ssd/round_1,initial_model,Correct AST richness @8,0.9701335515883619,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9342715581672212,1.0070576753384548
+base,ssd/round_2,initial_model,Correct AST richness @1,0.9735537190082645,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9446946314670446,1.0024434465112746
+base,ssd/round_2,initial_model,Correct AST richness @16,0.9293587174348698,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8824128407597811,0.9789272731807982
+base,ssd/round_2,initial_model,Correct AST richness @4,0.9490257804279201,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9137794257689079,0.9853845683877185
+base,ssd/round_2,initial_model,Correct AST richness @8,0.9379429449692763,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8972299206362965,0.9809324057243546
+base,ssd/round_3,initial_model,Correct AST richness @1,0.9679338842975207,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9379856571067874,0.998706602894278
+base,ssd/round_3,initial_model,Correct AST richness @16,0.932865731462926,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8840939208655021,0.9845172605961974
+base,ssd/round_3,initial_model,Correct AST richness @4,0.9454524728165558,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9082690740240615,0.9849917301545473
+base,ssd/round_3,initial_model,Correct AST richness @8,0.9401469825070896,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8972016716966632,0.9870520864055023
+base,ssd/round_4,initial_model,Correct AST richness @1,0.9808264462809918,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9492688250523301,1.015504430413316
+base,ssd/round_4,initial_model,Correct AST richness @16,0.939879759519038,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8936472912582346,0.9932031287728144
+base,ssd/round_4,initial_model,Correct AST richness @4,0.9557295685724309,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9185719986577909,0.9987572233404608
+base,ssd/round_4,initial_model,Correct AST richness @8,0.9459604624860655,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.904899008962862,0.9946534005065304
+base,ssd/round_5,initial_model,Correct AST richness @1,0.9510743801652892,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9175212638584379,0.9850842928133303
+base,ssd/round_5,initial_model,Correct AST richness @16,0.9293587174348698,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8801626377750401,0.9810016706054083
+base,ssd/round_5,initial_model,Correct AST richness @4,0.9396352157137846,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.9010990740257451,0.9805410706157017
+base,ssd/round_5,initial_model,Correct AST richness @8,0.9326924309907444,500,500,2000,"ratio of task-macro richness, not mean task ratios or fingerprint identity overlap",0.8895472122723158,0.9788233118187384

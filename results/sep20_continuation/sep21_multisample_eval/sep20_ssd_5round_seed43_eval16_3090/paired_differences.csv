@@ -1,0 +1,307 @@
+reference,candidate,kind,metric,mean,eligible_tasks,total_tasks,bootstrap_valid_replicates,ci95_low,ci95_high
+base,ssd/round_1,initial_model,AST Simpson diversity,-0.02571830703409651,285,500,2000,-0.0458375993986279,-0.007203211130709023
+base,ssd/round_1,initial_model,AST correct-label entropy,-0.038764817217017945,317,500,2000,-0.09286300067105174,0.016098451812477862
+base,ssd/round_1,initial_model,AST unique fraction,-0.026627639797986803,317,500,2000,-0.04690091911669909,-0.006912877966528575
+base,ssd/round_1,initial_model,Control-flow Simpson diversity,-0.0006186893028998244,285,500,2000,-0.028902505617242332,0.0286175703105705
+base,ssd/round_1,initial_model,Control-flow correct-label entropy,0.021263802704683973,317,500,2000,-0.023320332705165925,0.06807952011519433
+base,ssd/round_1,initial_model,Control-flow unique fraction,-0.004692354613490262,317,500,2000,-0.02708300630806166,0.017243736656488446
+base,ssd/round_1,initial_model,Correct AST richness @1,-0.000125,500,500,2000,-0.010125,0.01075
+base,ssd/round_1,initial_model,Correct AST richness @16,-0.146,500,500,2000,-0.314,0.016
+base,ssd/round_1,initial_model,Correct AST richness @4,-0.026679120879120874,500,500,2000,-0.06775071428571428,0.014964945054945054
+base,ssd/round_1,initial_model,Correct AST richness @8,-0.06696006216006216,500,500,2000,-0.15134302641802647,0.01580410644910642
+base,ssd/round_1,initial_model,Correct Control-flow richness @1,-0.0001249999999999999,500,500,2000,-0.010125,0.01075
+base,ssd/round_1,initial_model,Correct Control-flow richness @16,0.044,500,500,2000,-0.052,0.142
+base,ssd/round_1,initial_model,Correct Control-flow richness @4,0.012440659340659337,500,500,2000,-0.016388131868131876,0.04264675824175822
+base,ssd/round_1,initial_model,Correct Control-flow richness @8,0.02481787101787102,500,500,2000,-0.027330372960372953,0.0790743628593628
+base,ssd/round_1,initial_model,Correct Exact program richness @1,-0.00012500000000000022,500,500,2000,-0.010125,0.01075
+base,ssd/round_1,initial_model,Correct Exact program richness @16,-0.34,500,500,2000,-0.5381,-0.148
+base,ssd/round_1,initial_model,Correct Exact program richness @4,-0.045809890109890096,500,500,2000,-0.09038151098901095,-0.00195931318681318
+base,ssd/round_1,initial_model,Correct Exact program richness @8,-0.13331266511266512,500,500,2000,-0.2302502836052836,-0.0426709090909091
+base,ssd/round_1,initial_model,Correct-conditioned AST richness @16,0.1388888888888889,36,500,2000,-0.7858082706766917,1.0005952380952348
+base,ssd/round_1,initial_model,Correct-conditioned AST richness @4,-0.07260959418635768,241,500,2000,-0.13993805933435563,-0.008600679277452759
+base,ssd/round_1,initial_model,Correct-conditioned AST richness @8,-0.17872773804977196,177,500,2000,-0.35892351798217714,-0.005902706350605633
+base,ssd/round_1,initial_model,Correct-conditioned Control-flow richness @16,0.2222222222222222,36,500,2000,-0.1111111111111111,0.5405405405405406
+base,ssd/round_1,initial_model,Correct-conditioned Control-flow richness @4,0.028651408526927186,241,500,2000,-0.04755129969116251,0.10399534299478809
+base,ssd/round_1,initial_model,Correct-conditioned Control-flow richness @8,0.035852973141108725,177,500,2000,-0.11216479325371084,0.18526826646318162
+base,ssd/round_1,initial_model,Correct-conditioned Exact program richness @16,-1.3055555555555556,36,500,2000,-2.3333333333333335,-0.39967741935484047
+base,ssd/round_1,initial_model,Correct-conditioned Exact program richness @4,-0.121985045843967,241,500,2000,-0.17573267069406387,-0.07151950976676545
+base,ssd/round_1,initial_model,Correct-conditioned Exact program richness @8,-0.43688176230549114,177,500,2000,-0.6133341452785896,-0.2827410148971238
+base,ssd/round_1,initial_model,Exact program Simpson diversity,-0.025275815802131594,285,500,2000,-0.038312590576784045,-0.012987415698372121
+base,ssd/round_1,initial_model,Exact program correct-label entropy,-0.06541770078843434,317,500,2000,-0.12134109882639042,-0.010084576558260464
+base,ssd/round_1,initial_model,Exact program unique fraction,-0.041923888414424695,317,500,2000,-0.05688140073420902,-0.028466240462841495
+base,ssd/round_1,initial_model,pass@1,-0.000125,500,500,2000,-0.010125,0.01075
+base,ssd/round_1,initial_model,pass@16,-0.002,500,500,2000,-0.026,0.02
+base,ssd/round_1,initial_model,pass@4,0.0066120879120879095,500,500,2000,-0.0063422802197802206,0.019608021978021962
+base,ssd/round_1,initial_model,pass@8,0.006406371406371406,500,500,2000,-0.010267264957264956,0.022507684537684532
+base,ssd/round_2,initial_model,AST Simpson diversity,-0.010269173301088194,282,500,2000,-0.033543017912290675,0.012115327419338956
+base,ssd/round_2,initial_model,AST correct-label entropy,-0.0675868515060761,316,500,2000,-0.13311961609215592,0.001156646268585185
+base,ssd/round_2,initial_model,AST unique fraction,-0.01494898824803888,316,500,2000,-0.03620946069029693,0.006164014648938534
+base,ssd/round_2,initial_model,Control-flow Simpson diversity,0.006266625415561589,282,500,2000,-0.025310875682374417,0.037367620439747576
+base,ssd/round_2,initial_model,Control-flow correct-label entropy,0.02582760949202083,316,500,2000,-0.020131430238416275,0.07733396045451771
+base,ssd/round_2,initial_model,Control-flow unique fraction,0.014437052925976968,316,500,2000,-0.009661615363850646,0.03725008671698383
+base,ssd/round_2,initial_model,Correct AST richness @1,-0.01,500,500,2000,-0.021125,0.000875
+base,ssd/round_2,initial_model,Correct AST richness @16,-0.282,500,500,2000,-0.474,-0.08395000000000027
+base,ssd/round_2,initial_model,Correct AST richness @4,-0.06388021978021978,500,500,2000,-0.10944571428571429,-0.01808159340659342
+base,ssd/round_2,initial_model,Correct AST richness @8,-0.13913084693084693,500,500,2000,-0.23472391608391607,-0.04234564491064495
+base,ssd/round_2,initial_model,Correct Control-flow richness @1,-0.01,500,500,2000,-0.021125,0.000875
+base,ssd/round_2,initial_model,Correct Control-flow richness @16,0.06,500,500,2000,-0.04,0.164
+base,ssd/round_2,initial_model,Correct Control-flow richness @4,0.0014021978021977971,500,500,2000,-0.032216868131868144,0.03561228021978017
+base,ssd/round_2,initial_model,Correct Control-flow richness @8,0.018923076923076928,500,500,2000,-0.0394281585081585,0.07689475524475521
+base,ssd/round_2,initial_model,Correct Exact program richness @1,-0.01,500,500,2000,-0.021125,0.000875
+base,ssd/round_2,initial_model,Correct Exact program richness @16,-0.462,500,500,2000,-0.67205,-0.262
+base,ssd/round_2,initial_model,Correct Exact program richness @4,-0.07176483516483514,500,500,2000,-0.1187604945054945,-0.02806708791208793
+base,ssd/round_2,initial_model,Correct Exact program richness @8,-0.18557948717948716,500,500,2000,-0.28339686868686864,-0.08935537296037295
+base,ssd/round_2,initial_model,Correct-conditioned AST richness @16,0.3611111111111111,36,500,2000,-0.4146849593495935,1.1667857142857136
+base,ssd/round_2,initial_model,Correct-conditioned AST richness @4,-0.09124269189204255,231,500,2000,-0.17055866125587762,-0.011893259678260298
+base,ssd/round_2,initial_model,Correct-conditioned AST richness @8,-0.2766885569211151,172,500,2000,-0.4999687756238654,-0.04659957611344348
+base,ssd/round_2,initial_model,Correct-conditioned Control-flow richness @16,0.027777777777777776,36,500,2000,-0.34147946084724007,0.35135135135135137
+base,ssd/round_2,initial_model,Correct-conditioned Control-flow richness @4,0.08689019013694337,231,500,2000,0.017099397309883607,0.15949646758777536
+base,ssd/round_2,initial_model,Correct-conditioned Control-flow richness @8,0.1503799817753306,172,500,2000,0.00904859257318274,0.2946805599195732
+base,ssd/round_2,initial_model,Correct-conditioned Exact program richness @16,-0.5277777777777778,36,500,2000,-1.4736842105263157,0.3333333333333333
+base,ssd/round_2,initial_model,Correct-conditioned Exact program richness @4,-0.09918338035221148,231,500,2000,-0.16025248370587347,-0.03940878978825409
+base,ssd/round_2,initial_model,Correct-conditioned Exact program richness @8,-0.4043097729144241,172,500,2000,-0.6019112082195914,-0.2258955311622428
+base,ssd/round_2,initial_model,Exact program Simpson diversity,-0.012275018126081956,282,500,2000,-0.028081362914257817,0.0035554157656991167
+base,ssd/round_2,initial_model,Exact program correct-label entropy,-0.09542340524867533,316,500,2000,-0.15941788950214816,-0.03028587314292221
+base,ssd/round_2,initial_model,Exact program unique fraction,-0.03703127919900072,316,500,2000,-0.05452821599915512,-0.019706104027299935
+base,ssd/round_2,initial_model,pass@1,-0.01,500,500,2000,-0.021125,0.000875
+base,ssd/round_2,initial_model,pass@16,-0.01,500,500,2000,-0.032,0.01
+base,ssd/round_2,initial_model,pass@4,-0.00594725274725275,500,500,2000,-0.020655961538461543,0.008166428571428559
+base,ssd/round_2,initial_model,pass@8,-0.004293084693084693,500,500,2000,-0.020844996114996114,0.011689432789432786
+base,ssd/round_3,initial_model,AST Simpson diversity,-0.030984079639993622,279,500,2000,-0.05711572305272538,-0.006587415036978355
+base,ssd/round_3,initial_model,AST correct-label entropy,-0.08619118079732734,310,500,2000,-0.15406478829799308,-0.015868253242460956
+base,ssd/round_3,initial_model,AST unique fraction,-0.022912271420335938,310,500,2000,-0.04661334772257175,-0.0010502468897108006
+base,ssd/round_3,initial_model,Control-flow Simpson diversity,-0.00718485019560288,279,500,2000,-0.03822048434700974,0.021078899491558802
+base,ssd/round_3,initial_model,Control-flow correct-label entropy,0.003838821466684585,310,500,2000,-0.044652888228656595,0.05445231149505486
+base,ssd/round_3,initial_model,Control-flow unique fraction,0.012026083235760656,310,500,2000,-0.012289223952512786,0.03507623590167782
+base,ssd/round_3,initial_model,Correct AST richness @1,-0.012125,500,500,2000,-0.023878125,-0.0004906250000000511
+base,ssd/round_3,initial_model,Correct AST richness @16,-0.268,500,500,2000,-0.476,-0.06
+base,ssd/round_3,initial_model,Correct AST richness @4,-0.06835824175824175,500,500,2000,-0.11816708791208792,-0.018662939560439608
+base,ssd/round_3,initial_model,Correct AST richness @8,-0.13418943278943277,500,500,2000,-0.23621008935508936,-0.02823871794871797
+base,ssd/round_3,initial_model,Correct Control-flow richness @1,-0.012125,500,500,2000,-0.023878125,-0.0004906250000000511
+base,ssd/round_3,initial_model,Correct Control-flow richness @16,0.028,500,500,2000,-0.07204999999999999,0.13404999999999972
+base,ssd/round_3,initial_model,Correct Control-flow richness @4,-0.01451978021978022,500,500,2000,-0.050758873626373616,0.022066153846153836
+base,ssd/round_3,initial_model,Correct Control-flow richness @8,-0.0032525252525252533,500,500,2000,-0.06275015928515928,0.05698293706293704
+base,ssd/round_3,initial_model,Correct Exact program richness @1,-0.012125,500,500,2000,-0.023878125,-0.0004906250000000511
+base,ssd/round_3,initial_model,Correct Exact program richness @16,-0.382,500,500,2000,-0.596,-0.172
+base,ssd/round_3,initial_model,Correct Exact program richness @4,-0.06253296703296703,500,500,2000,-0.11165936813186812,-0.013272527472527483
+base,ssd/round_3,initial_model,Correct Exact program richness @8,-0.15093286713286716,500,500,2000,-0.2528491181041181,-0.04768151903651914
+base,ssd/round_3,initial_model,Correct-conditioned AST richness @16,0.32432432432432434,37,500,2000,-0.7430357142857144,1.4211032388663964
+base,ssd/round_3,initial_model,Correct-conditioned AST richness @4,-0.09498536011141051,238,500,2000,-0.18442997298879926,-0.015535716869556083
+base,ssd/round_3,initial_model,Correct-conditioned AST richness @8,-0.19218987170794397,166,500,2000,-0.4543749025781112,0.04950011813285731
+base,ssd/round_3,initial_model,Correct-conditioned Control-flow richness @16,-0.08108108108108109,37,500,2000,-0.4800689655172414,0.33357142857142724
+base,ssd/round_3,initial_model,Correct-conditioned Control-flow richness @4,0.02803799841614968,238,500,2000,-0.05499722612033639,0.11095971784504541
+base,ssd/round_3,initial_model,Correct-conditioned Control-flow richness @8,0.04004569727461291,166,500,2000,-0.12090898027491438,0.2050722024643848
+base,ssd/round_3,initial_model,Correct-conditioned Exact program richness @16,-0.4594594594594595,37,500,2000,-1.5667857142857142,0.5558333333333318
+base,ssd/round_3,initial_model,Correct-conditioned Exact program richness @4,-0.035892025807992174,238,500,2000,-0.09234694584654105,0.017019589074120347
+base,ssd/round_3,initial_model,Correct-conditioned Exact program richness @8,-0.21463523090029116,166,500,2000,-0.41819093565164994,-0.029334273285789688
+base,ssd/round_3,initial_model,Exact program Simpson diversity,-0.009940318542469078,279,500,2000,-0.023245129370839595,0.002128833883601827
+base,ssd/round_3,initial_model,Exact program correct-label entropy,-0.07263891809592557,310,500,2000,-0.1323088021313395,-0.010212126047230116
+base,ssd/round_3,initial_model,Exact program unique fraction,-0.02495876882973657,310,500,2000,-0.042897417002938684,-0.008358711764598228
+base,ssd/round_3,initial_model,pass@1,-0.012125,500,500,2000,-0.023878125,-0.0004906250000000511
+base,ssd/round_3,initial_model,pass@16,-0.008,500,500,2000,-0.034,0.018
+base,ssd/round_3,initial_model,pass@4,-0.00530769230769231,500,500,2000,-0.020362719780219782,0.010374999999999997
+base,ssd/round_3,initial_model,pass@8,-0.003819580419580419,500,500,2000,-0.022521581196581195,0.0155374087024087
+base,ssd/round_4,initial_model,AST Simpson diversity,-0.02458583829551571,279,500,2000,-0.04853836700674492,-0.0009538363014872792
+base,ssd/round_4,initial_model,AST correct-label entropy,-0.0867872190584635,310,500,2000,-0.1533565378388472,-0.01374994443024355
+base,ssd/round_4,initial_model,AST unique fraction,-0.02627588361459329,310,500,2000,-0.04998650331872988,-0.003724508167384719
+base,ssd/round_4,initial_model,Control-flow Simpson diversity,0.004689416517373511,279,500,2000,-0.028720649183713854,0.03919349438988766
+base,ssd/round_4,initial_model,Control-flow correct-label entropy,0.022212712761753253,310,500,2000,-0.028419143623088554,0.07485385066153775
+base,ssd/round_4,initial_model,Control-flow unique fraction,0.01432477916348884,310,500,2000,-0.013290154429197149,0.04101402627483322
+base,ssd/round_4,initial_model,Correct AST richness @1,-0.00725,500,500,2000,-0.019875,0.005753124999999983
+base,ssd/round_4,initial_model,Correct AST richness @16,-0.24,500,500,2000,-0.436,-0.026
+base,ssd/round_4,initial_model,Correct AST richness @4,-0.05547912087912086,500,500,2000,-0.10436598901098901,-0.0015971153846154591
+base,ssd/round_4,initial_model,Correct AST richness @8,-0.12115571095571095,500,500,2000,-0.21935963869463873,-0.011619401709401761
+base,ssd/round_4,initial_model,Correct Control-flow richness @1,-0.00725,500,500,2000,-0.019875,0.005753124999999983
+base,ssd/round_4,initial_model,Correct Control-flow richness @16,0.074,500,500,2000,-0.028,0.186
+base,ssd/round_4,initial_model,Correct Control-flow richness @4,0.0033659340659340556,500,500,2000,-0.03239093406593408,0.04102357142857139
+base,ssd/round_4,initial_model,Correct Control-flow richness @8,0.028477855477855484,500,500,2000,-0.030875419580419585,0.09222366744366746
+base,ssd/round_4,initial_model,Correct Exact program richness @1,-0.00725,500,500,2000,-0.019875,0.005753124999999983
+base,ssd/round_4,initial_model,Correct Exact program richness @16,-0.19,500,500,2000,-0.40605,0.03604999999999972
+base,ssd/round_4,initial_model,Correct Exact program richness @4,-0.026003296703296704,500,500,2000,-0.07787923076923076,0.02875945054945052
+base,ssd/round_4,initial_model,Correct Exact program richness @8,-0.06613038073038073,500,500,2000,-0.1720516783216783,0.045131658896658745
+base,ssd/round_4,initial_model,Correct-conditioned AST richness @16,-0.14285714285714285,28,500,2000,-1.6392210144927535,1.3157894736842106
+base,ssd/round_4,initial_model,Correct-conditioned AST richness @4,-0.09430510638137755,236,500,2000,-0.1769290752602367,-0.01390411409672875
+base,ssd/round_4,initial_model,Correct-conditioned AST richness @8,-0.2612934124698831,170,500,2000,-0.5011415604791181,-0.02080224314980424
+base,ssd/round_4,initial_model,Correct-conditioned Control-flow richness @16,-0.32142857142857145,28,500,2000,-0.8333333333333334,0.15384615384615385
+base,ssd/round_4,initial_model,Correct-conditioned Control-flow richness @4,0.07543247712739236,236,500,2000,-0.004306272556724644,0.15688955809229876
+base,ssd/round_4,initial_model,Correct-conditioned Control-flow richness @8,0.08685830509359924,170,500,2000,-0.07189145151115788,0.25067988026525356
+base,ssd/round_4,initial_model,Correct-conditioned Exact program richness @16,0.0,28,500,2000,-1.8004545454545455,1.7409722222222208
+base,ssd/round_4,initial_model,Correct-conditioned Exact program richness @4,0.002253208185411603,236,500,2000,-0.05162941989704283,0.05665623313059208
+base,ssd/round_4,initial_model,Correct-conditioned Exact program richness @8,-0.06616148557325026,170,500,2000,-0.2649084344676641,0.1212488999096141
+base,ssd/round_4,initial_model,Exact program Simpson diversity,0.0011454793712858222,279,500,2000,-0.010371032550825957,0.012987644987797035
+base,ssd/round_4,initial_model,Exact program correct-label entropy,-0.032291104299443874,310,500,2000,-0.09405186643705049,0.03326554466093562
+base,ssd/round_4,initial_model,Exact program unique fraction,-0.013750044758109274,310,500,2000,-0.03308982180613256,0.0037133760017814895
+base,ssd/round_4,initial_model,pass@1,-0.00725,500,500,2000,-0.019875,0.005753124999999983
+base,ssd/round_4,initial_model,pass@16,-0.004,500,500,2000,-0.032,0.022
+base,ssd/round_4,initial_model,pass@4,-0.0027549450549450563,500,500,2000,-0.019598379120879122,0.013597637362637357
+base,ssd/round_4,initial_model,pass@8,-0.002478166278166278,500,500,2000,-0.02174749028749029,0.016392327117327115
+base,ssd/round_5,initial_model,AST Simpson diversity,-0.004779140051867323,275,500,2000,-0.027620126051933393,0.01759497410017131
+base,ssd/round_5,initial_model,AST correct-label entropy,-0.08018172393408886,308,500,2000,-0.14647962750353968,-0.013552736427369212
+base,ssd/round_5,initial_model,AST unique fraction,-0.008537223959301881,308,500,2000,-0.032832296484706446,0.013808881320453643
+base,ssd/round_5,initial_model,Control-flow Simpson diversity,0.010985842440387892,275,500,2000,-0.021759737388142675,0.044441355848660734
+base,ssd/round_5,initial_model,Control-flow correct-label entropy,-0.006224785024628162,308,500,2000,-0.05582215900293019,0.04790499319292976
+base,ssd/round_5,initial_model,Control-flow unique fraction,0.025086043105523627,308,500,2000,-0.001648246411832914,0.05008315943765718
+base,ssd/round_5,initial_model,Correct AST richness @1,-0.0185,500,500,2000,-0.031628125,-0.005375
+base,ssd/round_5,initial_model,Correct AST richness @16,-0.282,500,500,2000,-0.49205,-0.072
+base,ssd/round_5,initial_model,Correct AST richness @4,-0.07564835164835164,500,500,2000,-0.12692749999999997,-0.023882197802197823
+base,ssd/round_5,initial_model,Correct AST richness @8,-0.1509024087024087,500,500,2000,-0.2557030885780886,-0.04713580031080031
+base,ssd/round_5,initial_model,Correct Control-flow richness @1,-0.0185,500,500,2000,-0.031628125,-0.005375
+base,ssd/round_5,initial_model,Correct Control-flow richness @16,-0.022,500,500,2000,-0.13205,0.098
+base,ssd/round_5,initial_model,Correct Control-flow richness @4,-0.03695164835164836,500,500,2000,-0.07513648351648353,0.0031950824175823876
+base,ssd/round_5,initial_model,Correct Control-flow richness @8,-0.03664926184926185,500,500,2000,-0.10240372571872572,0.03425399766899762
+base,ssd/round_5,initial_model,Correct Exact program richness @1,-0.0185,500,500,2000,-0.031628125,-0.005375
+base,ssd/round_5,initial_model,Correct Exact program richness @16,-0.15,500,500,2000,-0.37605,0.07004999999999974
+base,ssd/round_5,initial_model,Correct Exact program richness @4,-0.032975824175824175,500,500,2000,-0.08583901098901098,0.019467774725274625
+base,ssd/round_5,initial_model,Correct Exact program richness @8,-0.053209324009324016,500,500,2000,-0.1625299728049728,0.054453356643356605
+base,ssd/round_5,initial_model,Correct-conditioned AST richness @16,-0.5666666666666667,30,500,2000,-1.9713235294117648,0.8848214285714274
+base,ssd/round_5,initial_model,Correct-conditioned AST richness @4,-0.02617142744261387,236,500,2000,-0.10793371912534575,0.05101182825954393
+base,ssd/round_5,initial_model,Correct-conditioned AST richness @8,-0.02834120364240848,166,500,2000,-0.2937337588834814,0.2105526608790483
+base,ssd/round_5,initial_model,Correct-conditioned Control-flow richness @16,-0.43333333333333335,30,500,2000,-1.0400869565217392,0.21436335403726664
+base,ssd/round_5,initial_model,Correct-conditioned Control-flow richness @4,0.02140039809531334,236,500,2000,-0.06032880543550414,0.10510644371891978
+base,ssd/round_5,initial_model,Correct-conditioned Control-flow richness @8,-0.035218797266990065,166,500,2000,-0.19483743339993348,0.11941002972801129
+base,ssd/round_5,initial_model,Correct-conditioned Exact program richness @16,-0.13333333333333333,30,500,2000,-1.406387867647059,1.035957792207791
+base,ssd/round_5,initial_model,Correct-conditioned Exact program richness @4,0.10672404337658575,236,500,2000,0.04896039599660865,0.16078077300628318
+base,ssd/round_5,initial_model,Correct-conditioned Exact program richness @8,0.3041600300636445,166,500,2000,0.09825639028884216,0.4951277623665407
+base,ssd/round_5,initial_model,Exact program Simpson diversity,0.026065944156853246,275,500,2000,0.011493470470460308,0.04114359076216932
+base,ssd/round_5,initial_model,Exact program correct-label entropy,-0.0026312378961946942,308,500,2000,-0.06629350018279133,0.060594329311013585
+base,ssd/round_5,initial_model,Exact program unique fraction,0.014036783923147559,308,500,2000,-0.0049397282488070175,0.03210485985788405
+base,ssd/round_5,initial_model,pass@1,-0.0185,500,500,2000,-0.031628125,-0.005375
+base,ssd/round_5,initial_model,pass@16,-0.012,500,500,2000,-0.04,0.016
+base,ssd/round_5,initial_model,pass@4,-0.010899999999999998,500,500,2000,-0.027218269230769233,0.006380631868131858
+base,ssd/round_5,initial_model,pass@8,-0.010635586635586638,500,500,2000,-0.030722665112665113,0.010026604506604506
+ssd/round_1,ssd/round_2,adjacent_round,AST Simpson diversity,0.009170278051396932,286,500,2000,-0.012518038099817198,0.03156868298635462
+ssd/round_1,ssd/round_2,adjacent_round,AST correct-label entropy,-0.047624199828060126,313,500,2000,-0.10320236665526696,0.0077177759283328954
+ssd/round_1,ssd/round_2,adjacent_round,AST unique fraction,0.009213253023157177,313,500,2000,-0.010478796388754655,0.029316199342952064
+ssd/round_1,ssd/round_2,adjacent_round,Control-flow Simpson diversity,0.009592709155646218,286,500,2000,-0.019374810410251027,0.037180077808987
+ssd/round_1,ssd/round_2,adjacent_round,Control-flow correct-label entropy,0.00020824214910382437,313,500,2000,-0.043653906849776,0.04159314529996508
+ssd/round_1,ssd/round_2,adjacent_round,Control-flow unique fraction,0.02598376508120917,313,500,2000,0.0034681232740873254,0.04826856609506384
+ssd/round_1,ssd/round_2,adjacent_round,Correct AST richness @1,-0.009875,500,500,2000,-0.020125,-0.00025
+ssd/round_1,ssd/round_2,adjacent_round,Correct AST richness @16,-0.136,500,500,2000,-0.29005,0.026
+ssd/round_1,ssd/round_2,adjacent_round,Correct AST richness @4,-0.0372010989010989,500,500,2000,-0.07557815934065933,0.0023968956043955163
+ssd/round_1,ssd/round_2,adjacent_round,Correct AST richness @8,-0.07217078477078477,500,500,2000,-0.1500131118881119,0.008374646464646389
+ssd/round_1,ssd/round_2,adjacent_round,Correct Control-flow richness @1,-0.009875,500,500,2000,-0.020125,-0.0002500000000000002
+ssd/round_1,ssd/round_2,adjacent_round,Correct Control-flow richness @16,0.016,500,500,2000,-0.074,0.10604999999999973
+ssd/round_1,ssd/round_2,adjacent_round,Correct Control-flow richness @4,-0.011038461538461542,500,500,2000,-0.04001335164835165,0.017727692307692264
+ssd/round_1,ssd/round_2,adjacent_round,Correct Control-flow richness @8,-0.005894794094794097,500,500,2000,-0.055684339549339545,0.04512256410256409
+ssd/round_1,ssd/round_2,adjacent_round,Correct Exact program richness @1,-0.009875,500,500,2000,-0.020125,-0.00025
+ssd/round_1,ssd/round_2,adjacent_round,Correct Exact program richness @16,-0.122,500,500,2000,-0.3,0.052
+ssd/round_1,ssd/round_2,adjacent_round,Correct Exact program richness @4,-0.025954945054945052,500,500,2000,-0.06852587912087912,0.01416302197802193
+ssd/round_1,ssd/round_2,adjacent_round,Correct Exact program richness @8,-0.052266822066822066,500,500,2000,-0.1382848407148407,0.031045792540792438
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned AST richness @16,0.0,33,500,2000,-0.6970454545454546,0.8058712121212104
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned AST richness @4,-0.009302494196111207,235,500,2000,-0.07704808002841146,0.061662801293252606
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned AST richness @8,-0.03775462632605491,175,500,2000,-0.205556319083493,0.14770306631271687
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned Control-flow richness @16,-0.21212121212121213,33,500,2000,-0.5278186274509804,0.07149470899470863
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned Control-flow richness @4,0.055238000769915675,235,500,2000,-0.014062070307260291,0.12586840763182405
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned Control-flow richness @8,0.09031254459825891,175,500,2000,-0.028613327680030203,0.20624623455454527
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned Exact program richness @16,0.5151515151515151,33,500,2000,-0.12909592529711375,1.225875576036866
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned Exact program richness @4,0.0106506732038647,235,500,2000,-0.04831392446155375,0.06987207393860619
+ssd/round_1,ssd/round_2,adjacent_round,Correct-conditioned Exact program richness @8,0.0547274947274947,175,500,2000,-0.10979715239710254,0.2204137008583675
+ssd/round_1,ssd/round_2,adjacent_round,Exact program Simpson diversity,0.010947347136158327,286,500,2000,-0.005028771960513194,0.027001813121303973
+ssd/round_1,ssd/round_2,adjacent_round,Exact program correct-label entropy,-0.045043182542402374,313,500,2000,-0.10118716125431969,0.008120539878372173
+ssd/round_1,ssd/round_2,adjacent_round,Exact program unique fraction,0.005073445368972526,313,500,2000,-0.010590266600518043,0.021364874515370797
+ssd/round_1,ssd/round_2,adjacent_round,pass@1,-0.009875,500,500,2000,-0.020125,-0.00025
+ssd/round_1,ssd/round_2,adjacent_round,pass@16,-0.008,500,500,2000,-0.032,0.016
+ssd/round_1,ssd/round_2,adjacent_round,pass@4,-0.012559340659340659,500,500,2000,-0.027720961538461538,0.002554065934065928
+ssd/round_1,ssd/round_2,adjacent_round,pass@8,-0.0106994560994561,500,500,2000,-0.029240621600621606,0.007736460761460759
+ssd/round_2,ssd/round_3,adjacent_round,AST Simpson diversity,-0.015440450014918094,282,500,2000,-0.041109808655552665,0.008669335520369355
+ssd/round_2,ssd/round_3,adjacent_round,AST correct-label entropy,-0.0075277416282827775,313,500,2000,-0.07089304441519304,0.05028505033369634
+ssd/round_2,ssd/round_3,adjacent_round,AST unique fraction,-0.004165890907104966,313,500,2000,-0.02457609274498253,0.015220081386644121
+ssd/round_2,ssd/round_3,adjacent_round,Control-flow Simpson diversity,-0.013822524992737761,282,500,2000,-0.04455514054308537,0.016843079541241066
+ssd/round_2,ssd/round_3,adjacent_round,Control-flow correct-label entropy,-0.015492172945784697,313,500,2000,-0.05967812183947196,0.02826780293021314
+ssd/round_2,ssd/round_3,adjacent_round,Control-flow unique fraction,-0.0013067824968783376,313,500,2000,-0.02548266526233921,0.022261895449728647
+ssd/round_2,ssd/round_3,adjacent_round,Correct AST richness @1,-0.002125,500,500,2000,-0.01275,0.00825
+ssd/round_2,ssd/round_3,adjacent_round,Correct AST richness @16,0.014,500,500,2000,-0.164,0.188
+ssd/round_2,ssd/round_3,adjacent_round,Correct AST richness @4,-0.004478021978021978,500,500,2000,-0.045347335164835155,0.038401236263736226
+ssd/round_2,ssd/round_3,adjacent_round,Correct AST richness @8,0.0049414141414141355,500,500,2000,-0.08021549339549341,0.08952955710955711
+ssd/round_2,ssd/round_3,adjacent_round,Correct Control-flow richness @1,-0.002125,500,500,2000,-0.01275,0.00825
+ssd/round_2,ssd/round_3,adjacent_round,Correct Control-flow richness @16,-0.032,500,500,2000,-0.124,0.056
+ssd/round_2,ssd/round_3,adjacent_round,Correct Control-flow richness @4,-0.015921978021978023,500,500,2000,-0.04504837912087912,0.0138273901098901
+ssd/round_2,ssd/round_3,adjacent_round,Correct Control-flow richness @8,-0.02217560217560218,500,500,2000,-0.07146934343434344,0.026694083139083124
+ssd/round_2,ssd/round_3,adjacent_round,Correct Exact program richness @1,-0.002125,500,500,2000,-0.01275,0.00825
+ssd/round_2,ssd/round_3,adjacent_round,Correct Exact program richness @16,0.08,500,500,2000,-0.09405,0.2560499999999997
+ssd/round_2,ssd/round_3,adjacent_round,Correct Exact program richness @4,0.00923186813186813,500,500,2000,-0.030814807692307697,0.05050381868131867
+ssd/round_2,ssd/round_3,adjacent_round,Correct Exact program richness @8,0.03464662004662003,500,500,2000,-0.045871647241647245,0.11727185703185698
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned AST richness @16,-0.12903225806451613,31,500,2000,-1.241594827586207,0.9462972972972954
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned AST richness @4,-0.01281071729789678,234,500,2000,-0.08752109135890129,0.05654083950112783
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned AST richness @8,0.0706000348857492,168,500,2000,-0.13075038010235374,0.2512812790643987
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned Control-flow richness @16,0.03225806451612903,31,500,2000,-0.32454954954954957,0.40013513513513443
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned Control-flow richness @4,-0.09595788826558056,234,500,2000,-0.15964323667378974,-0.03231782267496555
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned Control-flow richness @8,-0.08349923885638172,168,500,2000,-0.20761800797025048,0.03651881364458018
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned Exact program richness @16,-0.25806451612903225,31,500,2000,-1.1668103448275862,0.6538793103448274
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned Exact program richness @4,0.06569330479586889,234,500,2000,0.013166979848376836,0.11867025342545227
+ssd/round_2,ssd/round_3,adjacent_round,Correct-conditioned Exact program richness @8,0.17717897182182904,168,500,2000,0.0214029073508988,0.32396448371219394
+ssd/round_2,ssd/round_3,adjacent_round,Exact program Simpson diversity,0.007773668411966287,282,500,2000,-0.007849025735030518,0.022146018491836943
+ssd/round_2,ssd/round_3,adjacent_round,Exact program correct-label entropy,0.032004909993416764,313,500,2000,-0.023472732617892796,0.0828992704920531
+ssd/round_2,ssd/round_3,adjacent_round,Exact program unique fraction,0.014663469296057155,313,500,2000,-0.0007306025897859288,0.029631225071520596
+ssd/round_2,ssd/round_3,adjacent_round,pass@1,-0.002125,500,500,2000,-0.01275,0.00825
+ssd/round_2,ssd/round_3,adjacent_round,pass@16,0.002,500,500,2000,-0.02,0.024
+ssd/round_2,ssd/round_3,adjacent_round,pass@4,0.0006395604395604426,500,500,2000,-0.012978543956043954,0.0146412912087912
+ssd/round_2,ssd/round_3,adjacent_round,pass@8,0.0004735042735042763,500,500,2000,-0.015841767676767673,0.017576705516705517
+ssd/round_3,ssd/round_4,adjacent_round,AST Simpson diversity,-0.007822455322455325,280,500,2000,-0.030063958665439174,0.015917041688470263
+ssd/round_3,ssd/round_4,adjacent_round,AST correct-label entropy,-0.001171930507678185,312,500,2000,-0.05538716994997054,0.05731784336845375
+ssd/round_3,ssd/round_4,adjacent_round,AST unique fraction,-0.006177062787639709,312,500,2000,-0.023825351363440994,0.012688489981407152
+ssd/round_3,ssd/round_4,adjacent_round,Control-flow Simpson diversity,0.007614171542742971,280,500,2000,-0.021836486372170064,0.03925583623919741
+ssd/round_3,ssd/round_4,adjacent_round,Control-flow correct-label entropy,0.019495186785235912,312,500,2000,-0.026688414234630007,0.06816186079963099
+ssd/round_3,ssd/round_4,adjacent_round,Control-flow unique fraction,0.0006928434813050193,312,500,2000,-0.022392097266474884,0.022395146706638513
+ssd/round_3,ssd/round_4,adjacent_round,Correct AST richness @1,0.004875,500,500,2000,-0.0047531249999999995,0.015003124999999982
+ssd/round_3,ssd/round_4,adjacent_round,Correct AST richness @16,0.028,500,500,2000,-0.128,0.19
+ssd/round_3,ssd/round_4,adjacent_round,Correct AST richness @4,0.012879120879120886,500,500,2000,-0.026302664835164823,0.054367335164835114
+ssd/round_3,ssd/round_4,adjacent_round,Correct AST richness @8,0.013033721833721848,500,500,2000,-0.06462365578865578,0.09336978632478625
+ssd/round_3,ssd/round_4,adjacent_round,Correct Control-flow richness @1,0.004875,500,500,2000,-0.0047531249999999995,0.015003124999999982
+ssd/round_3,ssd/round_4,adjacent_round,Correct Control-flow richness @16,0.046,500,500,2000,-0.048,0.14004999999999973
+ssd/round_3,ssd/round_4,adjacent_round,Correct Control-flow richness @4,0.017885714285714272,500,500,2000,-0.012129615384615397,0.05013412087912086
+ssd/round_3,ssd/round_4,adjacent_round,Correct Control-flow richness @8,0.031730380730380724,500,500,2000,-0.020614028749028745,0.08695810411810408
+ssd/round_3,ssd/round_4,adjacent_round,Correct Exact program richness @1,0.004875,500,500,2000,-0.0047531249999999995,0.015003124999999982
+ssd/round_3,ssd/round_4,adjacent_round,Correct Exact program richness @16,0.192,500,500,2000,0.024,0.372
+ssd/round_3,ssd/round_4,adjacent_round,Correct Exact program richness @4,0.03652967032967031,500,500,2000,-0.0022183241758241806,0.0773736538461538
+ssd/round_3,ssd/round_4,adjacent_round,Correct Exact program richness @8,0.08480248640248642,500,500,2000,0.002566996891996906,0.1698449922299922
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned AST richness @16,0.4,25,500,2000,-0.5557971014492754,1.2964975845410618
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned AST richness @4,-0.007929359163927065,243,500,2000,-0.06891445866672766,0.058491464427232596
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned AST richness @8,-0.028213969493039257,172,500,2000,-0.17495099398387653,0.13645606138545305
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned Control-flow richness @16,0.16,25,500,2000,-0.2633097165991903,0.5555555555555556
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned Control-flow richness @4,0.05583234780765644,243,500,2000,-0.010597971871569686,0.12063369881560917
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned Control-flow richness @8,0.057659911148283276,172,500,2000,-0.06625383571904647,0.18549702970825968
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned Exact program richness @16,1.0,25,500,2000,-0.17879464285714286,2.2175120772946855
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned Exact program richness @4,0.03757043139759189,243,500,2000,-0.006189042684379334,0.0847976787899749
+ssd/round_3,ssd/round_4,adjacent_round,Correct-conditioned Exact program richness @8,0.16735615805383244,172,500,2000,0.01755855616428866,0.32553844208777394
+ssd/round_3,ssd/round_4,adjacent_round,Exact program Simpson diversity,0.00473101303458446,280,500,2000,-0.006286108512818418,0.016463459497105645
+ssd/round_3,ssd/round_4,adjacent_round,Exact program correct-label entropy,0.042249465840245325,312,500,2000,-0.00887372525575164,0.09947440630569322
+ssd/round_3,ssd/round_4,adjacent_round,Exact program unique fraction,0.010278356792779867,312,500,2000,-0.0033339346711151858,0.025066879494733345
+ssd/round_3,ssd/round_4,adjacent_round,pass@1,0.004875,500,500,2000,-0.0047531249999999995,0.015003124999999982
+ssd/round_3,ssd/round_4,adjacent_round,pass@16,0.004,500,500,2000,-0.02,0.028
+ssd/round_3,ssd/round_4,adjacent_round,pass@4,0.0025527472527472526,500,500,2000,-0.010971428571428571,0.0167289835164835
+ssd/round_3,ssd/round_4,adjacent_round,pass@8,0.0013414141414141384,500,500,2000,-0.01616008547008547,0.019112090132090125
+ssd/round_4,ssd/round_5,adjacent_round,AST Simpson diversity,0.02347143761734509,281,500,2000,0.00028045219659708414,0.04757261601676494
+ssd/round_4,ssd/round_5,adjacent_round,AST correct-label entropy,0.0030971365813549645,311,500,2000,-0.056389829084967404,0.05981159620417058
+ssd/round_4,ssd/round_5,adjacent_round,AST unique fraction,0.01827242960683475,311,500,2000,-0.0016412260803938996,0.036988442801324614
+ssd/round_4,ssd/round_5,adjacent_round,Control-flow Simpson diversity,-0.0058236544001668555,281,500,2000,-0.03459854630910155,0.023239936237617664
+ssd/round_4,ssd/round_5,adjacent_round,Control-flow correct-label entropy,-0.033007978933015894,311,500,2000,-0.07761527858835783,0.011239654970765667
+ssd/round_4,ssd/round_5,adjacent_round,Control-flow unique fraction,0.010996613247417105,311,500,2000,-0.012161408794926182,0.03308020620715213
+ssd/round_4,ssd/round_5,adjacent_round,Correct AST richness @1,-0.01125,500,500,2000,-0.020878125,-0.0015
+ssd/round_4,ssd/round_5,adjacent_round,Correct AST richness @16,-0.042,500,500,2000,-0.204,0.116
+ssd/round_4,ssd/round_5,adjacent_round,Correct AST richness @4,-0.020169230769230773,500,500,2000,-0.06083958791208791,0.01870277472527471
+ssd/round_4,ssd/round_5,adjacent_round,Correct AST richness @8,-0.029746697746697734,500,500,2000,-0.10980360528360526,0.047480229215229194
+ssd/round_4,ssd/round_5,adjacent_round,Correct Control-flow richness @1,-0.01125,500,500,2000,-0.020878125,-0.0015
+ssd/round_4,ssd/round_5,adjacent_round,Correct Control-flow richness @16,-0.096,500,500,2000,-0.186,-0.004
+ssd/round_4,ssd/round_5,adjacent_round,Correct Control-flow richness @4,-0.04031758241758241,500,500,2000,-0.06992689560439559,-0.013693763736263749
+ssd/round_4,ssd/round_5,adjacent_round,Correct Control-flow richness @8,-0.06512711732711733,500,500,2000,-0.11558041958041956,-0.01734517482517489
+ssd/round_4,ssd/round_5,adjacent_round,Correct Exact program richness @1,-0.01125,500,500,2000,-0.020878125,-0.0015
+ssd/round_4,ssd/round_5,adjacent_round,Correct Exact program richness @16,0.04,500,500,2000,-0.14,0.214
+ssd/round_4,ssd/round_5,adjacent_round,Correct Exact program richness @4,-0.006972527472527467,500,500,2000,-0.048121813186813175,0.030796373626373618
+ssd/round_4,ssd/round_5,adjacent_round,Correct Exact program richness @8,0.012921056721056711,500,500,2000,-0.07311867132867134,0.09587792540792538
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned AST richness @16,-0.047619047619047616,21,500,2000,-1.1578947368421053,1.0526315789473684
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned AST richness @4,0.088860791985792,240,500,2000,0.02568811409913532,0.15508691435762417
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned AST richness @8,0.18907706977882419,171,500,2000,0.012232975598811754,0.3680848597650545
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned Control-flow richness @16,-0.14285714285714285,21,500,2000,-0.47058823529411764,0.22234848484848416
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned Control-flow richness @4,-0.03575480075480075,240,500,2000,-0.10356058450987782,0.026913186737372016
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned Control-flow richness @8,-0.08128453742488834,171,500,2000,-0.19662729696799763,0.032371585393594755
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned Exact program richness @16,0.7619047619047619,21,500,2000,-0.363755980861244,1.9002272727272713
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned Exact program richness @4,0.11093792781292781,240,500,2000,0.06329744750561207,0.15634232397405695
+ssd/round_4,ssd/round_5,adjacent_round,Correct-conditioned Exact program richness @8,0.302062589781888,171,500,2000,0.149168669829493,0.44547323757919743
+ssd/round_4,ssd/round_5,adjacent_round,Exact program Simpson diversity,0.026602282652104715,281,500,2000,0.014890965213734066,0.03958954514600949
+ssd/round_4,ssd/round_5,adjacent_round,Exact program correct-label entropy,0.027064507143247603,311,500,2000,-0.027611731307311184,0.08079281609971706
+ssd/round_4,ssd/round_5,adjacent_round,Exact program unique fraction,0.0292149303001393,311,500,2000,0.013961457613866145,0.043820103691288886
+ssd/round_4,ssd/round_5,adjacent_round,pass@1,-0.01125,500,500,2000,-0.020878125,-0.0015000000000000002
+ssd/round_4,ssd/round_5,adjacent_round,pass@16,-0.008,500,500,2000,-0.032,0.016
+ssd/round_4,ssd/round_5,adjacent_round,pass@4,-0.008145054945054945,500,500,2000,-0.020522280219780212,0.004470412087912087
+ssd/round_4,ssd/round_5,adjacent_round,pass@8,-0.008157420357420356,500,500,2000,-0.02455680264180264,0.00823821678321676

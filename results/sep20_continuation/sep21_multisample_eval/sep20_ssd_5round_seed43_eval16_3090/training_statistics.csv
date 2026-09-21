@@ -1,0 +1,6 @@
+id,method,round,examples,optimizer_steps,mean_loss,epochs,truncated_examples,truncated_tokens,supervised_tokens_per_epoch,trainable_parameter_count,loss_scope,seed
+ssd/round_1,ssd,1,4656,291,1.3872394959515928,1,0,0,1614418,2179072,all,44
+ssd/round_2,ssd,2,4656,291,1.3669333655476774,1,0,0,1522834,2179072,all,45
+ssd/round_3,ssd,3,4656,291,1.3296882664893603,1,0,0,1455221,2179072,all,46
+ssd/round_4,ssd,4,4656,291,1.3016503546066915,1,0,0,1378369,2179072,all,47
+ssd/round_5,ssd,5,4656,291,1.2608390893479906,1,0,0,1354918,2179072,all,48
