@@ -1,0 +1,27 @@
+{
+  "samples": 3200,
+  "tasks": 200,
+  "prompt_tokens": 1518352,
+  "generation_tokens": 884832,
+  "length_capped_samples": 6,
+  "protocol": {
+    "model_identity": "b3e4e78d1c9f48cdc2af29e81402f31ab3ab083fe9a89d7aa0b552fd28d1f96f",
+    "prompts": "915cbe574a4b52ce901dc5da0244f65139fd4479b0ab15752e06dfa934e0ea79",
+    "settings": {
+      "batch_size": 8,
+      "max_new_tokens": 1024,
+      "max_prompt_tokens": 4096,
+      "temperature": 0.8,
+      "top_p": 0.95,
+      "top_k": 0,
+      "task_batch_size": 8,
+      "sequence_batch_size": 8,
+      "samples": 16
+    },
+    "seed": 43,
+    "method": "spectral_soft",
+    "round": 5,
+    "stage": "evaluation",
+    "format": 1
+  }
+}

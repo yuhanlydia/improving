@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "benchmark": "apps_intro",
+  "source_run": "/root/improving/runs/historical_seed43_restored",
+  "student_round": 5,
+  "task_count": 200,
+  "samples_per_task": 16,
+  "training_on_target": false,
+  "calibration_on_target": false,
+  "generation": {
+    "max_prompt_tokens": 4096,
+    "max_new_tokens": 1024,
+    "batch_size": 8,
+    "sequence_batch_size": 8,
+    "task_batch_size": 8
+  },
+  "results": {
+    "status": "completed",
+    "completed": [
+      "base",
+      "plain/round_5",
+      "spectral_soft/round_5",
+      "spd_hard/round_5"
+    ],
+    "unavailable_checkpoints": [],
+    "missing_checkpoints": [],
+    "training_performed": false,
+    "output_dir": "/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8"
+  },
+  "evaluation_protocol": "recorded_function_or_stdin_adapter_with_benchmark_tests"
+}
