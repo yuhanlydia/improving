@@ -1,0 +1,56 @@
+{
+  "created_epoch": 1789971392.5825422,
+  "purpose": "Exact MBPP splits and EvalPlus oracle outputs/timing cache for migration",
+  "pickle_note": "The .pkl is a locally generated EvalPlus 0.3.1 ground-truth cache for the public HumanEvalPlus v0.1.10 benchmark. It includes oracle outputs and base_time/plus_time. It was not deserialized during backup. Validate its SHA before allowing the trusted matching EvalPlus runtime to load it; do not unpickle arbitrary files.",
+  "files": [
+    {
+      "source": "/root/improving/data/mbpp/calibration.jsonl",
+      "tar_path": "repo/data/mbpp/calibration.jsonl",
+      "restore_to": "${REPO_ROOT}/data/mbpp/calibration.jsonl",
+      "size": 54854,
+      "sha256": "03615911776944799ec245fdea662074efa08c5959a8d5374c1273855651e773"
+    },
+    {
+      "source": "/root/improving/data/mbpp/eval.jsonl",
+      "tar_path": "repo/data/mbpp/eval.jsonl",
+      "restore_to": "${REPO_ROOT}/data/mbpp/eval.jsonl",
+      "size": 552682,
+      "sha256": "40eedcea0fe25ab2ae6f3c9abb5a8f947dff31fd32314693bae511d599afb379"
+    },
+    {
+      "source": "/root/improving/data/mbpp/preparation_manifest.jsonl",
+      "tar_path": "repo/data/mbpp/preparation_manifest.jsonl",
+      "restore_to": "${REPO_ROOT}/data/mbpp/preparation_manifest.jsonl",
+      "size": 11962,
+      "sha256": "44b93728cd27cf8a0d67cf7cdec52544dc93f493f15dd9f2e3a088c6b2827556"
+    },
+    {
+      "source": "/root/improving/data/mbpp/train.jsonl",
+      "tar_path": "repo/data/mbpp/train.jsonl",
+      "restore_to": "${REPO_ROOT}/data/mbpp/train.jsonl",
+      "size": 317065,
+      "sha256": "2fe6ffac66966370f62554439ff70dda216f0b0192e84d421cbe986229fa8f15"
+    },
+    {
+      "source": "/root/improving/data/mbpp/validation.jsonl",
+      "tar_path": "repo/data/mbpp/validation.jsonl",
+      "restore_to": "${REPO_ROOT}/data/mbpp/validation.jsonl",
+      "size": 33999,
+      "sha256": "d5c54d12b809c76a7c1b5f15081a562e72f5f1300f428baa990e63026a6e67dd"
+    },
+    {
+      "source": "/root/.cache/evalplus/HumanEvalPlus-v0.1.10.jsonl",
+      "tar_path": "cache/evalplus/HumanEvalPlus-v0.1.10.jsonl",
+      "restore_to": "${HOME}/.cache/evalplus/HumanEvalPlus-v0.1.10.jsonl",
+      "size": 7714666,
+      "sha256": "42526ec0e7d5f3ee0b06d6ced98f8c8bae3d76519151bfb3d36f79010645bd7f"
+    },
+    {
+      "source": "/root/.cache/evalplus/fe585eb4df8c88d844eeb463ea4d0302.pkl",
+      "tar_path": "cache/evalplus/fe585eb4df8c88d844eeb463ea4d0302.pkl",
+      "restore_to": "${HOME}/.cache/evalplus/fe585eb4df8c88d844eeb463ea4d0302.pkl",
+      "size": 254640034,
+      "sha256": "6c67d90873a7f530ec75d51868ada29e870ebcd69d69fefc9653d2019ffc8c81"
+    }
+  ]
+}

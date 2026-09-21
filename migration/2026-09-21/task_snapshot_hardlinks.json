@@ -1,0 +1,10 @@
+[
+  {
+    "path": "runs/sep20_transfer_livecodebench_seed43_n16_b64/tasks/eval.jsonl",
+    "source": "data/iclr2027/livecodebench/eval.jsonl"
+  },
+  {
+    "path": "runs/sep20_transfer_livecodebench_seed43_n16_b8/tasks/eval.jsonl",
+    "source": "data/iclr2027/livecodebench/eval.jsonl"
+  }
+]
