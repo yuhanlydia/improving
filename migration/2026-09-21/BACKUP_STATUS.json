@@ -1,5 +1,5 @@
 {
-  "status": "large_artifact_upload_cancelled_by_user",
+  "status": "huggingface_large_artifacts_verified",
   "experiment_processes": "stopped",
   "evaluation_completion": {
     "SSD_MBPP_five_rounds": "completed",
@@ -14,10 +14,15 @@
     "paused_execution_state.tar.gz",
     "run_task_snapshots.tar.gz"
   ],
-  "not_fully_backed_up": [
-    "SSD_five_round_model_archives",
-    "raw_results_and_prepared_data",
-    "extra_reproducibility_cache"
-  ],
-  "note": "Stopping processes is not completing evaluation. Local originals remain available. Do not infer recovery of SSD checkpoints from the software backup."
+  "not_fully_backed_up": [],
+  "note": "Large experiment payloads have been verified on Hugging Face; small code/configuration/documentation/results remain on GitHub. This completes backup, not unfinished experiments. Source files are retained.",
+  "previous_status": "large_artifact_upload_cancelled_by_user",
+  "huggingface": {
+    "repository": "humanlong/improving-backup-20260921",
+    "revision": "b13e9e2b672c8c2149041623a306eb059e8aa80b",
+    "private": true,
+    "payload_files": 9312,
+    "logical_bytes": 18050046827,
+    "verification": "HF_BACKUP_VERIFICATION.json"
+  }
 }

@@ -1,6 +1,6 @@
 # 换卡备份状态
 
-代码、配置、29项后续实验任务和恢复说明已上传。用户于2026-09-21取消大文件继续上传；SSD权重、完整原始答案与数据备份未全部上传，不能用本目录替代旧磁盘。
+代码、配置、29项后续实验任务、紧凑结果和恢复说明保存在 GitHub。SSD 权重、原始答案、准备后的数据和完整迁移包已上传到私有 Hugging Face 仓库，并逐文件校验完成。下载链接、固定 revision 和校验结果见 [HUGGINGFACE_BACKUP.md](HUGGINGFACE_BACKUP.md)。
 
 ## 已完成的评估
 
@@ -15,4 +15,4 @@
 
 目前所有GPU实验进程已停止。停止不代表评估完成。
 
-完整的软件包分片位于chunks/software_and_future_experiments.tar.gz.part*；暂停状态包与run_task_snapshots包也已完整上传。ARCHIVES.json含拼接后的SHA256；其他大包分片不完整，勿视为成功备份。
+GitHub 上原有的软件包、暂停状态包与 run_task_snapshots 分片保留；其他大包的旧分片仍不完整。全部完整迁移包从 Hugging Face 下载，SHA256 已与 ARCHIVES.json 核对。源文件保留，本次未重启任何实验。

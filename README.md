@@ -3,6 +3,10 @@
 本仓库只研究 **同一道 coding 题的不同正确实现/算法，在自蒸馏后是否被保留**。
 提供从数据准备、校准、生成、LoRA 微调到独立代码验证、同题覆盖统计、跨轮次报告的完整实验流程。
 
+## 大文件备份（2026-09-21）
+
+代码、配置、文档和紧凑结果保存在本仓库；实验权重、原始输出和数据备份已上传到 [私有 Hugging Face 仓库](https://huggingface.co/datasets/humanlong/improving-backup-20260921)。下载方式、固定 revision 和逐文件校验结果见 [备份索引](migration/2026-09-21/HUGGINGFACE_BACKUP.md)。备份完成不改变尚未完成的实验状态。
+
 ## Start here: SPECTRUM ICLR 2027 extension (2026-09-20)
 
 - **Runnable experiments:** [experiments/iclr2027/README.md](experiments/iclr2027/README.md).

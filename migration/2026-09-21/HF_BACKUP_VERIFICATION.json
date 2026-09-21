@@ -1,0 +1,31 @@
+{
+  "schema": "improving-remote-backup-verification-v1",
+  "verified_at": "2026-09-21T06:43:30.806617+00:00",
+  "repository": "humanlong/improving-backup-20260921",
+  "repo_type": "dataset",
+  "private": true,
+  "verified_revision": "b13e9e2b672c8c2149041623a306eb059e8aa80b",
+  "source_git_commit": "5bc6575bd0cf1aa7c4d05e60e3a41ac77fbd12c1",
+  "expected_files": 9315,
+  "checked_files": 9315,
+  "lfs_files": 714,
+  "logical_bytes": 18054869952,
+  "errors": [],
+  "status": "complete",
+  "method": "Every path and size checked against remote immutable revision; LFS SHA256 or Git blob SHA1 matched to local bytes. Source SHA256 manifest provided.",
+  "excluded_regenerable_directories": [
+    ".git",
+    ".venv",
+    ".venv-ua-rl",
+    ".pytest_cache",
+    "experiments/iclr2027/__pycache__",
+    "runs/sep20_control/__pycache__",
+    "runs/sep20_scale_qwen3b_runtime/src/improving/__pycache__",
+    "runs/sep20_ssd_runtime/src/improving/__pycache__",
+    "runs/sep20_transfer_runtime/scripts/__pycache__",
+    "runs/sep20_transfer_runtime/src/improving/__pycache__",
+    "scripts/__pycache__",
+    "src/improving/__pycache__",
+    "tests/__pycache__"
+  ]
+}
