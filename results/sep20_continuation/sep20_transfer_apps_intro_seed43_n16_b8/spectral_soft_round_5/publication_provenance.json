@@ -1,0 +1,64 @@
+{
+  "part_id": "sep20_transfer_apps_intro_seed43_n16_b8/spectral_soft_round_5",
+  "source_root": "/root/improving/runs/sep20_transfer_apps_intro_seed43_n16_b8",
+  "source_digest": "f37eb41749f70c16ae9b4c4228f587c636d11623553e41125a6d9d30e8c2cb70",
+  "files": [
+    {
+      "source_relative_path": "complete.json",
+      "source_sha256": "357e7a1b19d9e524be90c76eb282a8795cdf09602f59233ac575eb118030c5ee",
+      "source_bytes": 954
+    },
+    {
+      "source_relative_path": "evaluation.jsonl.budget.json",
+      "source_sha256": "d5a475a95361740270955fd0493ac3d5a1bb24abb4b82812cc3061cebfc406b2",
+      "source_bytes": 683
+    },
+    {
+      "source_relative_path": "evaluation.metrics.json",
+      "source_sha256": "af946b50cd9cfa12cbbddf461cf5bb41bb05dac5ab1e2a9243a11e62ab748331",
+      "source_bytes": 829879
+    },
+    {
+      "source_relative_path": "evaluation.verified.jsonl",
+      "source_sha256": "e1967f4acc9fd86923e31b02a25d108e0331120a3133e4dde4b87f52cfec3cd6",
+      "source_bytes": 13655112
+    },
+    {
+      "source_relative_path": "evaluation_generation.resources.json",
+      "source_sha256": "8484e6f77f76a78fb6564e841363ac6b5f528c2cea2b378c919657c2685398ae",
+      "source_bytes": 1201
+    },
+    {
+      "source_relative_path": "model_loading.resources.json",
+      "source_sha256": "f709db033350cc9b5b2e4dd4eb428a82c8ddd8b457f329a3f7e33e2a6653367b",
+      "source_bytes": 1187
+    },
+    {
+      "source_relative_path": "run_manifest.json",
+      "source_sha256": "263d3c2c97694d9e6a9d9e714399a89c5ea65769ba9923fc947ec945cfd59912",
+      "source_bytes": 23390
+    },
+    {
+      "source_relative_path": "verification_and_metrics.resources.json",
+      "source_sha256": "08c9ded1e8a9c0aecf1d4be107e2a745908707cdca072c93bfe9a4b07dea8d95",
+      "source_bytes": 1209
+    }
+  ],
+  "metrics_implementation_sha256": "9e2fc30e1c8df0c9d9ff95f6a025f69245226efb6cf29ee9738243b30a311528",
+  "format": "compact_evidence_v1",
+  "excluded": [
+    "model weights",
+    "datasets and task prompts/tests",
+    "generated program text and token ids",
+    "secrets"
+  ],
+  "recomputable": [
+    "pass@k from correctness labels",
+    "AST richness from implementation_proxy hashes",
+    "control-flow and exact-program richness from hashes"
+  ],
+  "limitations": [
+    "Program tests cannot be rerun from this compact archive.",
+    "Token Jaccard and fresh AST canonicalization need original program text, retained on the experiment machine."
+  ]
+}
