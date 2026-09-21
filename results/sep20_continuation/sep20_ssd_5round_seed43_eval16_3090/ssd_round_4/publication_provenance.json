@@ -1,0 +1,79 @@
+{
+  "part_id": "sep20_ssd_5round_seed43_eval16_3090/ssd_round_4",
+  "source_root": "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+  "source_digest": "2defb9f4815ce2b911e29d9ab098ce5975846af6ed808b60796a9222b4f7a6a3",
+  "files": [
+    {
+      "source_relative_path": "complete.json",
+      "source_sha256": "f516366b1aa1a38b0c4e3234eabc33796f279854c99b0dee0ae893be5739dd64",
+      "source_bytes": 2217
+    },
+    {
+      "source_relative_path": "evaluation.jsonl.budget.json",
+      "source_sha256": "e84809dd57f7e2fc521e08a39afa6e5decde4589292075b88ef23e6e893ee2a0",
+      "source_bytes": 679
+    },
+    {
+      "source_relative_path": "evaluation.metrics.json",
+      "source_sha256": "c26b1719b18043433110f7af426451b35cd262621695bc21679cc52875929203",
+      "source_bytes": 2163792
+    },
+    {
+      "source_relative_path": "evaluation.verified.jsonl",
+      "source_sha256": "c2d049c63b64b8a4db19af716b521cf414cb928197dcfe34f51d27e0ecd504e8",
+      "source_bytes": 23145524
+    },
+    {
+      "source_relative_path": "model_loading.resources.json",
+      "source_sha256": "15fd27cf2fb8a883aca36ee1169ff2cc8000dd02b2764bd173dcd8f800f90dad",
+      "source_bytes": 1187
+    },
+    {
+      "source_relative_path": "post_training_evaluation.resources.json",
+      "source_sha256": "2d189d37b0044c6beb492df38e7d73399f7c5c62a73e03d1d80d3fd5afc76d9e",
+      "source_bytes": 1213
+    },
+    {
+      "source_relative_path": "run_manifest.json",
+      "source_sha256": "2eb83a954c318802b8adbd3f64f481ed32666d0f9d07def7c7f0544a9b0dbac0",
+      "source_bytes": 22817
+    },
+    {
+      "source_relative_path": "sft.resources.json",
+      "source_sha256": "224000763c03bd477c546eaff201ab0e0be1c7f673cb2b799cefec8ec0636afb",
+      "source_bytes": 1171
+    },
+    {
+      "source_relative_path": "train.jsonl.budget.json",
+      "source_sha256": "3aaf7133e56bcb57d254729067db6e377d6a619e9e8a1a7a334f75bbf901f80c",
+      "source_bytes": 677
+    },
+    {
+      "source_relative_path": "training_generation.resources.json",
+      "source_sha256": "489eae7f75c88877e075cc79eae16361815961d5c696cae32a2e2830ff2563e4",
+      "source_bytes": 1197
+    },
+    {
+      "source_relative_path": "training_stats.json",
+      "source_sha256": "1728146bb2240786505f993bd98233b440279030086baabb75cc93a0f8abe94c",
+      "source_bytes": 270
+    }
+  ],
+  "metrics_implementation_sha256": "9e2fc30e1c8df0c9d9ff95f6a025f69245226efb6cf29ee9738243b30a311528",
+  "format": "compact_evidence_v1",
+  "excluded": [
+    "model weights",
+    "datasets and task prompts/tests",
+    "generated program text and token ids",
+    "secrets"
+  ],
+  "recomputable": [
+    "pass@k from correctness labels",
+    "AST richness from implementation_proxy hashes",
+    "control-flow and exact-program richness from hashes"
+  ],
+  "limitations": [
+    "Program tests cannot be rerun from this compact archive.",
+    "Token Jaccard and fresh AST canonicalization need original program text, retained on the experiment machine."
+  ]
+}
