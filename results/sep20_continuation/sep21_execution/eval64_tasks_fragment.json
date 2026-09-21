@@ -1,0 +1,1018 @@
+{
+  "tasks": [
+    {
+      "id": "eval64_historical_mbpp_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_control/eval64_mbpp.py",
+        "--run-dir",
+        "/root/improving/runs/historical_seed43_restored",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_historical_mbpp_seed43_n64_b8",
+        "--methods",
+        "plain,spectral_soft,spd_hard",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 40,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/historical_seed43_restored/manifest.json",
+        "/root/improving/runs/historical_seed43_restored/tasks/train.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/calibration.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/validation.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/tokenizer.json",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_mbpp_seed43_n64_b8/eval64_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "mbpp"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_mbpp_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_historical_humanevalplus_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/historical_seed43_restored",
+        "--benchmark",
+        "humanevalplus",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_historical_humanevalplus_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "plain,spectral_soft,spd_hard",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 41,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/historical_seed43_restored/manifest.json",
+        "/root/improving/runs/historical_seed43_restored/tasks/train.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/calibration.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/validation.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/tokenizer.json",
+        "/root/improving/data/iclr2027/humanevalplus/manifest.json",
+        "/root/improving/data/iclr2027/humanevalplus/eval.jsonl",
+        "/root/improving/data/iclr2027/humanevalplus/dataset_metadata.json",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_humanevalplus_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "humanevalplus"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_humanevalplus_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_historical_apps_intro_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/historical_seed43_restored",
+        "--benchmark",
+        "apps_intro",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_historical_apps_intro_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "plain,spectral_soft,spd_hard",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 42,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/historical_seed43_restored/manifest.json",
+        "/root/improving/runs/historical_seed43_restored/tasks/train.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/calibration.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/validation.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/tokenizer.json",
+        "/root/improving/data/iclr2027/apps_intro/manifest.json",
+        "/root/improving/data/iclr2027/apps_intro/eval.jsonl",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_apps_intro_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "apps_intro"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_apps_intro_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_historical_codecontests_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/historical_seed43_restored",
+        "--benchmark",
+        "codecontests",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_historical_codecontests_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "plain,spectral_soft,spd_hard",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 43,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/historical_seed43_restored/manifest.json",
+        "/root/improving/runs/historical_seed43_restored/tasks/train.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/calibration.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/validation.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/tokenizer.json",
+        "/root/improving/data/iclr2027/codecontests/manifest.json",
+        "/root/improving/data/iclr2027/codecontests/eval.jsonl",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_codecontests_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "codecontests"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_codecontests_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_historical_livecodebench_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/historical_seed43_restored",
+        "--benchmark",
+        "livecodebench",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_historical_livecodebench_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "plain,spectral_soft,spd_hard",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 44,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 10737418240,
+      "requires_paths": [
+        "/root/improving/runs/historical_seed43_restored/manifest.json",
+        "/root/improving/runs/historical_seed43_restored/tasks/train.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/calibration.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/validation.jsonl",
+        "/root/improving/runs/historical_seed43_restored/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/plain/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spectral_soft/round_5/model/tokenizer.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/config.json",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/model.safetensors",
+        "/root/improving/runs/historical_seed43_restored/spd_hard/round_5/model/tokenizer.json",
+        "/root/improving/data/iclr2027/livecodebench/manifest.json",
+        "/root/improving/data/iclr2027/livecodebench/eval.jsonl",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_livecodebench_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "livecodebench"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_historical_livecodebench_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 10GiB including 2.43GB LCB snapshot copy plus generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_ssd_mbpp_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_control/eval64_mbpp.py",
+        "--run-dir",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_ssd_mbpp_seed43_n64_b8",
+        "--methods",
+        "ssd",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 45,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/manifest.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/train.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/calibration.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/validation.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/config.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/model.safetensors",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/complete.json",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_mbpp_seed43_n64_b8/eval64_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "mbpp"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_mbpp_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_ssd_humanevalplus_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+        "--benchmark",
+        "humanevalplus",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_ssd_humanevalplus_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "ssd",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 46,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/manifest.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/train.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/calibration.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/validation.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/config.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/model.safetensors",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/complete.json",
+        "/root/improving/data/iclr2027/humanevalplus/manifest.json",
+        "/root/improving/data/iclr2027/humanevalplus/eval.jsonl",
+        "/root/improving/data/iclr2027/humanevalplus/dataset_metadata.json",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_humanevalplus_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "humanevalplus"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_humanevalplus_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_ssd_apps_intro_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+        "--benchmark",
+        "apps_intro",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_ssd_apps_intro_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "ssd",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 47,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/manifest.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/train.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/calibration.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/validation.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/config.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/model.safetensors",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/complete.json",
+        "/root/improving/data/iclr2027/apps_intro/manifest.json",
+        "/root/improving/data/iclr2027/apps_intro/eval.jsonl",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_apps_intro_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "apps_intro"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_apps_intro_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_ssd_codecontests_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+        "--benchmark",
+        "codecontests",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_ssd_codecontests_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "ssd",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 48,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 4294967296,
+      "requires_paths": [
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/manifest.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/train.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/calibration.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/validation.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/config.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/model.safetensors",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/complete.json",
+        "/root/improving/data/iclr2027/codecontests/manifest.json",
+        "/root/improving/data/iclr2027/codecontests/eval.jsonl",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_codecontests_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "codecontests"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_codecontests_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 4GiB for independent n64 generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    },
+    {
+      "id": "eval64_ssd_livecodebench_b8",
+      "command": [
+        "/root/improving/.venv/bin/python",
+        "-u",
+        "/root/improving/runs/sep20_control/limited_gpu_runner.py",
+        "--memory-cap-mb",
+        "5120",
+        "--script",
+        "/root/improving/runs/sep20_transfer_runtime/experiments/iclr2027/transfer.py",
+        "--run-dir",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090",
+        "--benchmark",
+        "livecodebench",
+        "--benchmark-root",
+        "/root/improving/data/iclr2027",
+        "--output-dir",
+        "/root/improving/runs/sep21_eval64_ssd_livecodebench_seed43_n64_b8",
+        "--round",
+        "5",
+        "--methods",
+        "ssd",
+        "--samples",
+        "64",
+        "--sequence-batch-size",
+        "8",
+        "--max-prompt-tokens",
+        "4096",
+        "--max-new-tokens",
+        "1024",
+        "--bootstrap-samples",
+        "2000",
+        "--timeout",
+        "30",
+        "--memory-mb",
+        "1024",
+        "--backend",
+        "local",
+        "--allow-unsafe-local",
+        "--resume"
+      ],
+      "cwd": "/root/improving",
+      "ready": true,
+      "priority": 49,
+      "min_free_mb": 6120,
+      "estimated_peak_mb": 5632,
+      "min_disk_free_bytes": 10737418240,
+      "requires_paths": [
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/manifest.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/train.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/calibration.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/validation.jsonl",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/tasks/eval.jsonl",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/config.json",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/model.safetensors",
+        "/root/.cache/huggingface/hub/models--Qwen--Qwen2.5-Coder-1.5B-Instruct/snapshots/2e1fd397ee46e1388853d2af2c993145b0f1098a/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/config.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/model.safetensors",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model/tokenizer.json",
+        "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/complete.json",
+        "/root/improving/data/iclr2027/livecodebench/manifest.json",
+        "/root/improving/data/iclr2027/livecodebench/eval.jsonl",
+        "/root/improving/runs/sep20_control/scale_batch_qwen3b_configuration_ready.json"
+      ],
+      "env": {
+        "PYTHONPATH": "/root/improving/runs/sep20_transfer_runtime/src",
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "TOKENIZERS_PARALLELISM": "false",
+        "HF_HUB_OFFLINE": "1",
+        "TRANSFORMERS_OFFLINE": "1"
+      },
+      "completion_checks": [
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_livecodebench_seed43_n64_b8/transfer_complete.json",
+          "equals": {
+            "status": "completed",
+            "samples_per_task": 64,
+            "benchmark": "livecodebench"
+          }
+        },
+        {
+          "path": "/root/improving/runs/sep21_eval64_ssd_livecodebench_seed43_n64_b8/run_status.json",
+          "equals": {
+            "status": "completed"
+          }
+        }
+      ],
+      "notes": "Independent NEW n64 population, seed43, round5, batch8; frozen runtime; do not mix n16 outputs. Allocator cap5120MiB excludes CUDA context; no GPU probe performed. Reserve 10GiB including 2.43GB LCB snapshot copy plus generation/verified artifacts. Admission waits for 3B batch probe/configuration so n64 does not prevent the first training preflight; scheduler may interleave when memory allows."
+    }
+  ],
+  "dependency_retention_gates": {
+    "historical": [
+      {
+        "task_id": "eval64_historical_mbpp_b8",
+        "marker": "/root/improving/runs/sep21_eval64_historical_mbpp_seed43_n64_b8/eval64_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_historical_humanevalplus_b8",
+        "marker": "/root/improving/runs/sep21_eval64_historical_humanevalplus_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_historical_apps_intro_b8",
+        "marker": "/root/improving/runs/sep21_eval64_historical_apps_intro_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_historical_codecontests_b8",
+        "marker": "/root/improving/runs/sep21_eval64_historical_codecontests_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_historical_livecodebench_b8",
+        "marker": "/root/improving/runs/sep21_eval64_historical_livecodebench_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      }
+    ],
+    "ssd": [
+      {
+        "task_id": "eval64_ssd_mbpp_b8",
+        "marker": "/root/improving/runs/sep21_eval64_ssd_mbpp_seed43_n64_b8/eval64_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_ssd_humanevalplus_b8",
+        "marker": "/root/improving/runs/sep21_eval64_ssd_humanevalplus_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_ssd_apps_intro_b8",
+        "marker": "/root/improving/runs/sep21_eval64_ssd_apps_intro_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_ssd_codecontests_b8",
+        "marker": "/root/improving/runs/sep21_eval64_ssd_codecontests_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      },
+      {
+        "task_id": "eval64_ssd_livecodebench_b8",
+        "marker": "/root/improving/runs/sep21_eval64_ssd_livecodebench_seed43_n64_b8/transfer_complete.json",
+        "equals": {
+          "status": "completed",
+          "samples_per_task": 64
+        },
+        "require_scheduler_status": "completed",
+        "require_pid_exited": true
+      }
+    ]
+  },
+  "base_revision": "2e1fd397ee46e1388853d2af2c993145b0f1098a",
+  "historical_base_note": "Historical source lacks base complete marker/revision; HF offline mode resolves existing pinned cached main. MBPP adapter explicitly pins same revision.",
+  "protocol": {
+    "seed": 43,
+    "samples": 64,
+    "batch": 8,
+    "bootstrap_samples": 2000,
+    "ks": [
+      1,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "correct_budgets": [
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "mbpp_tokens": [
+      1024,
+      512
+    ],
+    "transfer_tokens": [
+      4096,
+      1024
+    ]
+  }
+}

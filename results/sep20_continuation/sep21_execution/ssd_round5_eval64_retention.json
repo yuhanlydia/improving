@@ -1,0 +1,80 @@
+{
+  "status": "retained_pending_eval64",
+  "recorded_at": "2026-09-21T05:09:28.836920+00:00",
+  "protected_model": "/root/improving/runs/sep20_ssd_5round_seed43_eval16_3090/ssd/round_5/model",
+  "policy": "Retain the complete SSD round_5 model until all five listed n64 tasks have verified completed markers, scheduler status completed, and exited PIDs. This record grants no deletion authorization.",
+  "required_tasks": [
+    {
+      "task_id": "eval64_ssd_mbpp_b8",
+      "marker": "/root/improving/runs/sep21_eval64_ssd_mbpp_seed43_n64_b8/eval64_complete.json",
+      "equals": {
+        "status": "completed",
+        "samples_per_task": 64
+      },
+      "require_scheduler_status": "completed",
+      "require_pid_exited": true
+    },
+    {
+      "task_id": "eval64_ssd_humanevalplus_b8",
+      "marker": "/root/improving/runs/sep21_eval64_ssd_humanevalplus_seed43_n64_b8/transfer_complete.json",
+      "equals": {
+        "status": "completed",
+        "samples_per_task": 64
+      },
+      "require_scheduler_status": "completed",
+      "require_pid_exited": true
+    },
+    {
+      "task_id": "eval64_ssd_apps_intro_b8",
+      "marker": "/root/improving/runs/sep21_eval64_ssd_apps_intro_seed43_n64_b8/transfer_complete.json",
+      "equals": {
+        "status": "completed",
+        "samples_per_task": 64
+      },
+      "require_scheduler_status": "completed",
+      "require_pid_exited": true
+    },
+    {
+      "task_id": "eval64_ssd_codecontests_b8",
+      "marker": "/root/improving/runs/sep21_eval64_ssd_codecontests_seed43_n64_b8/transfer_complete.json",
+      "equals": {
+        "status": "completed",
+        "samples_per_task": 64
+      },
+      "require_scheduler_status": "completed",
+      "require_pid_exited": true
+    },
+    {
+      "task_id": "eval64_ssd_livecodebench_b8",
+      "marker": "/root/improving/runs/sep21_eval64_ssd_livecodebench_seed43_n64_b8/transfer_complete.json",
+      "equals": {
+        "status": "completed",
+        "samples_per_task": 64
+      },
+      "require_scheduler_status": "completed",
+      "require_pid_exited": true
+    }
+  ],
+  "existing_worker_audit": {
+    "ssd_archive_worker.py": "main loops range(1,5), only rounds1..4; round5 excluded",
+    "scale_final_archive.py": "allowlist resolves only sep20_scale_{qwen3b,qwen7b,deepseek6.7b} run roots; original1.5B SSD run excluded",
+    "hf_cache_rotation.py": "allowlists HF history cache and Qwen7B base cache; original SSD checkpoint outside both"
+  },
+  "no_current_deletion_path_found": true,
+  "protocol_check": {
+    "mbpp_source_max_prompt_tokens": 1024,
+    "mbpp_source_max_new_tokens": 512,
+    "eval64_max_prompt_tokens": 1024,
+    "eval64_max_new_tokens": 512,
+    "temperature": 0.8,
+    "top_p": 0.95,
+    "top_k": 0,
+    "batch_override": 8,
+    "samples_override": 64
+  },
+  "completion_contract": {
+    "mbpp": "eval64_complete.json has status completed, benchmark mbpp, samples_per_task64; write occurs after successful export",
+    "transfer": "frozen transfer.py writes transfer_complete.json status completed, matching benchmark, samples_per_task=args.samples after successful export",
+    "run_status": "frozen evaluate_checkpoints writes status completed or partial; completion requires completed for all10 tasks"
+  }
+}

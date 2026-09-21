@@ -1,0 +1,8 @@
+{
+  "started_at": "2026-09-20T17:16:55.597983+00:00",
+  "deadline_epoch": null,
+  "max_gpu_processes": 2,
+  "ssd_reserved_mb": 10000,
+  "gpu_index": 0,
+  "run_until_complete": true
+}

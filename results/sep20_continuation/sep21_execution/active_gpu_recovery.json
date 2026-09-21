@@ -1,0 +1,17 @@
+{
+  "pid": 299236,
+  "sampled_epoch": 1789966570.749493,
+  "chunk_count": 44,
+  "last_chunk_epoch": 1789963456.712343,
+  "recovery_dir": "/root/improving/runs/sep20_control/he_stall_recovery_1789966569378534136",
+  "settings_max_gpu_processes": 0,
+  "last_chunk_age_seconds": 3114.038091659546,
+  "sigterm_epoch": 1789966588.9837697,
+  "terminated_pid": 299236,
+  "termination_signal": "SIGTERM",
+  "research_restarted": false,
+  "short_cuda_diagnostic": "passed 1024x1024 matmul in 0.097s, 20MiB reserved",
+  "probe_report": "/root/improving/runs/preflight/cc_lcb_memory_stress_1789966636303984022/report.json",
+  "probe_status": "completed",
+  "updated_epoch": 1789966773.9216714
+}
