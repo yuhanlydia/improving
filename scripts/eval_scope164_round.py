@@ -45,8 +45,12 @@ def main():
         raise ValueError('Unexpected training source or round')
     stage = source / args.method / f'round_{args.round}'
     checkpoint = stage / 'model'
-    if not args.validate_only and (not (stage / 'complete.json').exists() or not (checkpoint / 'config.json').exists()):
-        raise ValueError('Selected checkpoint is incomplete')
+    # The merged model is immutable once SFT statistics are committed.  The
+    # source run may still be evaluating MBPP, so external evaluation can start
+    # without waiting for that independent scoring stage.
+    if not args.validate_only and (not (stage / 'training_stats.json').exists()
+                                   or not (checkpoint / 'config.json').exists()):
+        raise ValueError('Selected post-SFT checkpoint is incomplete')
     task_path = DATA_ROOT / args.benchmark / 'eval.jsonl'
     prepared = json.loads((task_path.parent / 'manifest.json').read_text())
     tasks = read_jsonl(task_path)
