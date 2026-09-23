@@ -184,6 +184,94 @@ def test_report_discovers_existing_rounds_without_manifest_and_supports_output_p
     assert output.with_suffix(".md").exists()
 
 
+def make_saved_checkpoint_run(path, methods=("spectral_soft",), rounds=(5,), diagnostics=True):
+    make_run(path, methods=("plain", "spectral_soft"), rounds=5)
+    manifest = json.loads((path / "manifest.json").read_text())
+    manifest.update(purpose="saved_checkpoint_evaluation_without_training",
+                    protocol={"methods": list(methods), "rounds": list(rounds)})
+    if diagnostics is None:
+        manifest["config"].pop("diagnostics")
+    else:
+        manifest["config"]["diagnostics"]["evaluate_generation_policy"] = diagnostics
+    write_json(path / "manifest.json", manifest)
+
+
+@pytest.mark.parametrize("diagnostics", [True, False, None])
+def test_saved_checkpoint_report_uses_requested_scope_and_disables_generation_diagnostics(tmp_path, diagnostics):
+    make_saved_checkpoint_run(tmp_path, diagnostics=diagnostics)
+    write_stage(tmp_path)
+    write_stage(tmp_path, "spectral_soft", 5)
+    # Neither inherited training configuration nor unrelated directories may
+    # add unrequested methods or intermediate rounds to a post-hoc report.
+    write_stage(tmp_path, "plain", 5)
+    write_stage(tmp_path, "spectral_soft", 1)
+    write_stage(tmp_path, "spectral_soft", 5, "generation_policy")
+    manifest_before = (tmp_path / "manifest.json").read_bytes()
+
+    report = build_report(tmp_path)
+
+    assert report["status"] == "complete"
+    assert {stage["id"]: stage["status"] for stage in report["stages"]} == {
+        "base/evaluation": "available",
+        "spectral_soft/round_5/generation_policy": "not_requested",
+        "spectral_soft/round_5/evaluation": "available",
+    }
+    assert set(report["rounds"]) == {"spectral_soft/round_5"}
+    assert {item["candidate"] for item in report["comparisons"]} == {
+        "spectral_soft/round_5/evaluation"}
+    assert (tmp_path / "manifest.json").read_bytes() == manifest_before
+
+
+def test_saved_checkpoint_report_keeps_missing_requested_round_pending(tmp_path):
+    make_saved_checkpoint_run(tmp_path, rounds=(2, 5))
+    write_stage(tmp_path)
+    write_stage(tmp_path, "spectral_soft", 5)
+
+    report = build_report(tmp_path)
+
+    assert report["status"] == "pending"
+    assert set(report["rounds"]) == {"spectral_soft/round_2", "spectral_soft/round_5"}
+    missing = next(stage for stage in report["stages"]
+                   if stage["id"] == "spectral_soft/round_2/evaluation")
+    assert missing["status"] == "pending_metrics"
+    assert missing["metrics"] is None
+
+
+def test_saved_checkpoint_report_supports_base_only_scope(tmp_path):
+    make_saved_checkpoint_run(tmp_path, methods=())
+    write_stage(tmp_path)
+
+    report = build_report(tmp_path)
+
+    assert report["status"] == "complete"
+    assert [stage["id"] for stage in report["stages"]] == ["base/evaluation"]
+    assert report["rounds"] == {}
+
+
+@pytest.mark.parametrize("protocol", [
+    None,
+    {},
+    {"methods": "spectral_soft", "rounds": [5]},
+    {"methods": ["spectral_soft", "spectral_soft"], "rounds": [5]},
+    {"methods": ["../outside"], "rounds": [5]},
+    {"methods": ["base"], "rounds": [5]},
+    {"methods": [None], "rounds": [5]},
+    {"methods": ["spectral_soft"], "rounds": []},
+    {"methods": ["spectral_soft"], "rounds": "5"},
+    {"methods": ["spectral_soft"], "rounds": [True]},
+    {"methods": ["spectral_soft"], "rounds": [0]},
+    {"methods": ["spectral_soft"], "rounds": [5, 5]},
+])
+def test_saved_checkpoint_report_rejects_invalid_scope_instead_of_inheriting_training_rounds(tmp_path, protocol):
+    make_saved_checkpoint_run(tmp_path)
+    manifest = json.loads((tmp_path / "manifest.json").read_text())
+    manifest["protocol"] = protocol
+    write_json(tmp_path / "manifest.json", manifest)
+
+    with pytest.raises(ValueError, match="saved-checkpoint.*scope"):
+        build_report(tmp_path)
+
+
 def test_main_report_uses_16_and_64_and_preserves_pass1_in_appendix_and_json(tmp_path):
     make_run(tmp_path, methods=("spectral_soft",))
     for method, index in [("base", 0), ("spectral_soft", 1)]:

@@ -7,14 +7,19 @@
 
 代码、配置、文档和紧凑结果保存在本仓库；实验权重、原始输出和数据备份已上传到 [私有 Hugging Face 仓库](https://huggingface.co/datasets/humanlong/improving-backup-20260921)。下载方式、固定 revision 和逐文件校验结果见 [备份索引](migration/2026-09-21/HUGGINGFACE_BACKUP.md)。备份完成不改变尚未完成的实验状态。
 
-## Start here: SPECTRUM ICLR 2027 extension (2026-09-20)
+## Start here: final SPECTRUM study (2026-09-23)
 
+- **Final bounded study (2026-09-23):** [run once, then write](experiments/final_study/README.md).
+  Three-seed Plain/SSD/SPECTRUM confirmation, four single-round diagnostic arms,
+  paired generation/student measurements and final HumanEval+/APPS transfer.
+  Fixed total: 49 method-seed-rounds; no test-set winner selection or automatic
+  training extension. Existing results remain unchanged.
 - **Runnable experiments:** [experiments/iclr2027/README.md](experiments/iclr2027/README.md).
 - **Current complete manuscript:** [paper/iclr2027/main.tex](paper/iclr2027/main.tex), with the appendix in the same file; [PDF](paper/iclr2027/main.pdf).
 - **Figures and editable design specifications:** [paper/iclr2027/FIGURE_PROMPTS.md](paper/iclr2027/FIGURE_PROMPTS.md).
 - **Literature and novelty audit:** [docs/sep20_literature.md](docs/sep20_literature.md).
 
-This is the current five-round experiment suite. It records **64 evaluation samples per task at every round**, full per-task outputs, 2,000 task-bootstrap resamples, resource/length summaries and every student checkpoint. Primary methods are Plain / SSD / SPECTRUM. [UA-RL (adapted)](docs/ua_rl_baseline.md) is a separate semantic-judge RL comparator. Rank truncation appears only as a design ablation. The suite includes three training seeds, targeted operator controls, 3B/7B and another model family, plus four frozen-student transfer datasets in addition to MBPP.
+For the final run, follow **[experiments/final_study/README.md](experiments/final_study/README.md)**. The broader ICLR extension below remains available for earlier experiments; its optional scale and dataset expansion are outside the fixed final-study budget. It records **64 evaluation samples per task at every round**, full per-task outputs, 2,000 task-bootstrap resamples, resource/length summaries and every student checkpoint. Primary methods are Plain / SSD / SPECTRUM. [UA-RL (adapted)](docs/ua_rl_baseline.md) is a separate semantic-judge RL comparator. Rank truncation appears only as a design ablation. The broader suite includes three training seeds, targeted operator controls, 3B/7B and another model family, plus four frozen-student transfer datasets in addition to MBPP.
 
 ```bash
 python -m pip install -e '.[train,analysis,evalplus]'

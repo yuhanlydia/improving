@@ -285,10 +285,18 @@ def _operator_diagnostics(model, operators, covariances, method, settings):
         delta = folded.to(device='cpu', dtype=torch.float64) - weight64
         weight_norm = float(torch.linalg.vector_norm(weight64))
         spectrum = torch.linalg.eigvalsh(op)
+        scalar_gain = float(spectrum.mean())
+        operator_norm = float(torch.linalg.vector_norm(op))
+        nonscalar_norm = float(torch.linalg.vector_norm(op - scalar_gain * identity))
         diagnostics[name] = {
             'method': method, 'dimension': dimension, 'configured_hard_rank': rank,
             'eigenvalue_min': float(spectrum.min()), 'eigenvalue_max': float(spectrum.max()),
-            'operator_frobenius_norm': float(torch.linalg.vector_norm(op)),
+            'operator_eigenvalues': spectrum.tolist(),
+            'mean_eigenvalue': scalar_gain,
+            'nonscalar_frobenius_norm': nonscalar_norm,
+            'nonscalar_fraction_of_operator_norm': nonscalar_norm / operator_norm
+                if operator_norm > 0 else None,
+            'operator_frobenius_norm': operator_norm,
             'frobenius_distance_from_identity': distance,
             'spectral_soft_distance_from_identity': target,
             'matching_contract': 'operator_distance_from_identity_frobenius' if matched else 'none',

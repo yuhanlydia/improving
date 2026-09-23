@@ -134,12 +134,13 @@ def _overview(summary: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _stage(root: Path, method: str, round_index: int, stage: str,
-           requested: bool = True) -> tuple[dict[str, Any], dict[str, Any] | None]:
+           requested: bool = True, *, include_existing: bool = True) -> tuple[dict[str, Any], dict[str, Any] | None]:
     relative = "base" if method == "base" else f"{method}/round_{round_index}"
     directory = root / relative
     path = directory / f"{stage}.metrics.json"
-    summary = _read_optional(path)
-    budget = _first_optional(directory / f"{stage}.jsonl.budget.json", directory / f"{stage}.budget.json")
+    summary = _read_optional(path) if include_existing else None
+    budget = (_first_optional(directory / f"{stage}.jsonl.budget.json", directory / f"{stage}.budget.json")
+              if include_existing else None)
     if summary is None:
         status = "pending_metrics" if requested else "not_requested"
     elif "aggregate" not in summary or "per_task" not in summary:
@@ -156,7 +157,8 @@ def _stage(root: Path, method: str, round_index: int, stage: str,
         "status": status, "metrics_path": str(path),
         "metrics": _overview(summary) if status == "available" else None,
         "budget": budget,
-        "resources": {item.name: _read_optional(item) for item in sorted(directory.glob('*.resources.json'))},
+        "resources": ({item.name: _read_optional(item) for item in sorted(directory.glob('*.resources.json'))}
+                      if include_existing else {}),
         "raw_records_path": str(directory / f'{stage}.jsonl'),
         "verified_records_path": str(directory / f'{stage}.verified.jsonl'),
         "per_task_metrics_retained": bool(summary and summary.get('per_task')),
@@ -316,13 +318,35 @@ def _write(path: Path, text: str) -> None:
     temporary.replace(path)
 
 
+def _saved_checkpoint_scope(manifest: Mapping[str, Any] | None) -> set[tuple[str, int]] | None:
+    """Use the actual evaluation request, not its inherited training schedule."""
+    if not manifest or manifest.get("purpose") != "saved_checkpoint_evaluation_without_training":
+        return None
+    protocol = manifest.get("protocol")
+    if not isinstance(protocol, Mapping):
+        raise ValueError("invalid saved-checkpoint report scope: protocol must be an object")
+    methods, rounds = protocol.get("methods"), protocol.get("rounds")
+    if not isinstance(methods, list) or any(
+            not isinstance(method, str) or not method.strip() or method != method.strip()
+            or method in {"base", ".", ".."} or "/" in method or "\\" in method
+            for method in methods):
+        raise ValueError("invalid saved-checkpoint report scope: methods must be method directory names")
+    if (not isinstance(rounds, list) or not rounds
+            or any(type(index) is not int or index < 1 for index in rounds)
+            or len(set(methods)) != len(methods) or len(set(rounds)) != len(rounds)):
+        raise ValueError("invalid saved-checkpoint report scope: methods and positive integer rounds must be unique")
+    return {(method, index) for method in methods for index in rounds}
+
+
 def build_report(run_dir: str | Path, output_path: str | Path | None = None) -> dict[str, Any]:
     """Write an overview JSON and Markdown pair, and return its JSON contents.
 
     Defaults to run_dir/report.json and report.md. output_path may name either
     a .json or .md file; the other format uses the same stem. A suffixless path
     is treated as a filename stem. Configured missing stages are pending;
-    existing method/round directories are also discovered without a manifest.
+    existing method/round directories are also discovered for training runs or
+    without a manifest. Saved-checkpoint evaluations use only protocol.methods
+    and protocol.rounds; generation-policy diagnostics are not requested.
 
     evaluation.correctness_margin (default 0), evaluation.bootstrap_samples
     (default 1000), and config.seed determine paired comparisons. Explicit
@@ -334,6 +358,7 @@ def build_report(run_dir: str | Path, output_path: str | Path | None = None) -> 
         raise FileNotFoundError(f"run directory does not exist: {root}")
     manifest = _read_optional(root / "manifest.json")
     config = manifest.get("config", {}) if manifest else {}
+    saved_scope = _saved_checkpoint_scope(manifest)
     stage_rows: list[dict[str, Any]] = []
     summaries = {}
     rounds: dict[str, Any] = {}
@@ -341,14 +366,16 @@ def build_report(run_dir: str | Path, output_path: str | Path | None = None) -> 
     stage_rows.append(base)
     if summary is not None:
         summaries[base["id"]] = summary
-    planned = {(method, round_index) for method in config.get("methods", [])
-               for round_index in range(1, config.get("rounds", 1) + 1)}
-    for directory in root.iterdir():
-        if directory.is_dir() and directory.name != "base":
-            for child in directory.iterdir():
-                match = re.fullmatch(r"round_([1-9][0-9]*)", child.name)
-                if child.is_dir() and match:
-                    planned.add((directory.name, int(match.group(1))))
+    planned = saved_scope
+    if planned is None:
+        planned = {(method, round_index) for method in config.get("methods", [])
+                   for round_index in range(1, config.get("rounds", 1) + 1)}
+        for directory in root.iterdir():
+            if directory.is_dir() and directory.name != "base":
+                for child in directory.iterdir():
+                    match = re.fullmatch(r"round_([1-9][0-9]*)", child.name)
+                    if child.is_dir() and match:
+                        planned.add((directory.name, int(match.group(1))))
     for method, round_index in sorted(planned):
         relative = f"{method}/round_{round_index}"
         directory = root / relative
@@ -358,8 +385,11 @@ def build_report(run_dir: str | Path, output_path: str | Path | None = None) -> 
             "calibration_provenance": _read_optional(directory / 'calibration_provenance.json'),
         }
         for stage in ("generation_policy", "evaluation"):
-            requested = stage == "evaluation" or config.get("diagnostics", {}).get("evaluate_generation_policy", True)
-            row, summary = _stage(root, method, round_index, stage, requested)
+            evaluation_only = saved_scope is not None and stage == "generation_policy"
+            requested = stage == "evaluation" or (
+                not evaluation_only and config.get("diagnostics", {}).get("evaluate_generation_policy", True))
+            row, summary = _stage(root, method, round_index, stage, requested,
+                                  include_existing=not evaluation_only)
             stage_rows.append(row)
             if summary is not None:
                 summaries[row["id"]] = summary

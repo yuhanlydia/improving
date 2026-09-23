@@ -456,7 +456,9 @@ def evaluate_checkpoints(run_dir, output_dir, *, samples=64, rounds=None, method
         atomic_json(target_manifest, {'schema_version': 1, 'fingerprint': fingerprint,
                     'purpose': 'saved_checkpoint_evaluation_without_training', 'protocol': protocol,
                     'config': {**config, 'methods': selected_methods, 'model': settings,
-                               'generation': {**generation, 'eval_samples': samples}, 'evaluation': evaluation},
+                               'generation': {**generation, 'eval_samples': samples}, 'evaluation': evaluation,
+                               'diagnostics': {**config.get('diagnostics', {}),
+                                               'evaluate_generation_policy': False}},
                     'selected_task_ids': {name: [task['task_id'] for task in rows]
                                           for name, rows in {**fit_snapshots, 'eval': tasks}.items()},
                     'unavailable_checkpoints': missing})

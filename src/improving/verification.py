@@ -131,23 +131,64 @@ resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu + 1))
 resource.setrlimit(resource.RLIMIT_FSIZE, (1048576, 1048576))
 resource.setrlimit(resource.RLIMIT_NOFILE, (64, 64))
 resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+
+def failure_detail(error, phase):
+    # Do not call a candidate-defined exception __str__ or argument __repr__.
+    args = BaseException.args.__get__(error)
+    parts = [arg[:512] if type(arg) is str else str(arg)[:512]
+             for arg in args[:4] if any(type(arg) is primitive for primitive in (str, int, float, bool, type(None)))]
+    frames = []
+    tb = BaseException.__traceback__.__get__(error)
+    while tb is not None:
+        frame = tb.tb_frame.f_code
+        if type(frame.co_filename) is str and frame.co_filename in ("candidate.py", "tests.py"):
+            frames.append({"filename": frame.co_filename, "lineno": tb.tb_lineno,
+                           "name": str.__getitem__(frame.co_name, slice(0, 128))})
+            frames = frames[-4:]
+        tb = tb.tb_next
+    error_type = type(error)
+    if any(base is SyntaxError for base in type.__dict__["__mro__"].__get__(error_type)):
+        filename = SyntaxError.filename.__get__(error)
+        lineno = SyntaxError.lineno.__get__(error)
+        if type(filename) is str and filename in ("candidate.py", "tests.py") and type(lineno) is int and lineno > 0:
+            frames.append({"filename": filename, "lineno": lineno, "name": "<module>"})
+    exception_type = type.__dict__["__name__"].__get__(error_type)
+    return {"phase": phase, "exception_type": str.__getitem__(exception_type, slice(0, 128)),
+            "message": " ".join(parts)[:512], "frames": frames[-4:]}
+
+failure = None
+phase = "candidate_compile"
 try:
     candidate = compile(payload["code"], "candidate.py", "exec")
-except (SyntaxError, ValueError, TypeError, MemoryError):
+except (SyntaxError, ValueError, TypeError, MemoryError) as error:
     status = "compile_error"
+    failure = error
 else:
+    phase = "candidate_exec"
     try:
         namespace = {"__name__": "__main__"}
         with open(os.devnull, "w") as sink:
             with contextlib.redirect_stdout(sink), contextlib.redirect_stderr(sink):
                 exec(candidate, namespace)
-                exec(compile(payload["tests"], "tests.py", "exec"), namespace)
+                phase = "tests_compile"
+                compiled_tests = compile(payload["tests"], "tests.py", "exec")
+                phase = "tests_exec"
+                exec(compiled_tests, namespace)
         status = "passed"
-    except AssertionError:
+    except AssertionError as error:
         status = "failed"
-    except BaseException:
+        failure = error
+    except BaseException as error:
         status = "runtime_error"
+        failure = error
+# The original status channel is independent of optional diagnostics.
 print(payload["marker"] + status, flush=True)
+if failure is not None:
+    try:
+        detail = {"status": status, **failure_detail(failure, phase)}
+        print(payload["marker"] + "error:" + json.dumps(detail), flush=True)
+    except BaseException:
+        pass  # A diagnostic failure never changes a completed failing status.
 '''
 
 
@@ -162,8 +203,67 @@ def _read_status(output: Any, marker: str, returncode: int) -> str:
     return "runtime_error"
 
 
-def _execute(code: str, tests: str, *, backend: str, timeout: float, memory_mb: int, pids_limit: int, docker_image: str, docker: str | None) -> str:
+def _unknown_verification_error(message: str = "No trustworthy failure diagnostic was emitted.") -> dict[str, Any]:
+    return {"phase": "unknown", "exception_type": None, "message": message, "frames": []}
+
+
+def _diagnostic_text(value: str, limit: int) -> str:
+    # Never publish absolute host paths embedded in exception messages/names.
+    bounded = value[:limit]
+    return re.sub(r"(?:[A-Za-z]:[\\/]|/|\\\\)[^\s'\"<>\[\](),;]*", "<path>", bounded)[:limit]
+
+
+def _read_verification_error(output: Any, marker: str, returncode: int, status: str) -> dict[str, Any]:
+    """Read only the auxiliary nonce channel; never infer exceptions from stderr.
+
+    Like the original status marker this is not an anti-cheating boundary:
+    hostile code can inspect the wrapper. Missing/duplicate/malformed markers
+    and interrupted processes carry no attributable failure phase.
+    """
+    unknown = _unknown_verification_error()
+    if returncode != 0 or status not in {"failed", "compile_error", "runtime_error"}:
+        return unknown
+    try:
+        output.seek(0)
+        content = output.read(1048576).decode("utf-8", errors="replace")
+        statuses = re.findall(re.escape(marker) + r"(passed|failed|compile_error|runtime_error)(?:\r?\n|$)", content)
+        prefix = marker + "error:"
+        matches = [line[len(prefix):] for line in content.splitlines() if line.startswith(prefix)]
+        if statuses != [status] or len(matches) != 1 or not 1 <= len(matches[0]) <= 16384:
+            return unknown
+        detail = json.loads(matches[0])
+        if (not isinstance(detail, dict) or detail.get("status") != status
+                or detail.get("phase") not in {"candidate_compile", "candidate_exec", "tests_compile", "tests_exec"}
+                or not isinstance(detail.get("exception_type"), str)
+                or not isinstance(detail.get("message"), str)
+                or not isinstance(detail.get("frames"), list)):
+            return unknown
+        frames = []
+        for frame in detail["frames"][-4:]:
+            if (not isinstance(frame, dict) or frame.get("filename") not in {"candidate.py", "tests.py"}
+                    or type(frame.get("lineno")) is not int or frame["lineno"] < 1
+                    or not isinstance(frame.get("name"), str)):
+                return unknown
+            frames.append({"filename": frame["filename"], "lineno": frame["lineno"],
+                           "name": _diagnostic_text(frame["name"], 128)})
+        return {"phase": detail["phase"],
+                "exception_type": _diagnostic_text(detail["exception_type"], 128),
+                "message": _diagnostic_text(detail["message"], 512), "frames": frames}
+    except (ValueError, TypeError, OSError, OverflowError, RecursionError):
+        return unknown
+
+
+def _execute(code: str, tests: str, *, backend: str, timeout: float, memory_mb: int, pids_limit: int, docker_image: str, docker: str | None, error_details: dict[str, Any] | None = None) -> str:
+    """Preserve the status-string API, optionally filling failure diagnostics."""
+    if error_details is not None:
+        error_details.clear()
+        error_details.update(_unknown_verification_error())
     marker = f"__IMPROVING_{uuid.uuid4().hex}__:"
+    def read_result(output, returncode):
+        status = _read_status(output, marker, returncode)
+        if error_details is not None and status != "passed":
+            error_details.update(_read_verification_error(output, marker, returncode, status))
+        return status
     with tempfile.TemporaryDirectory(prefix="improving-verify-") as directory, tempfile.TemporaryFile() as output:
         directory_path = Path(directory)
         directory_path.chmod(0o755)
@@ -195,13 +295,13 @@ def _execute(code: str, tests: str, *, backend: str, timeout: float, memory_mb: 
                     pass
             if result.returncode in (125, 126, 127):
                 raise RuntimeError("Docker verification could not start; ensure the daemon and requested Python image are available (images are never pulled automatically)")
-            return _read_status(output, marker, result.returncode)
+            return read_result(output, result.returncode)
         process = subprocess.Popen([sys.executable, "-I", str(runner), str(payload)], cwd=directory,
             stdout=output, stderr=output, start_new_session=True,
             env={"PATH": os.defpath, "PYTHONHASHSEED": "0", "LANG": "C.UTF-8"})
         try:
             process.wait(timeout=timeout)
-            return _read_status(output, marker, process.returncode)
+            return read_result(output, process.returncode)
         except subprocess.TimeoutExpired:
             return "timeout"
         finally:
@@ -221,6 +321,9 @@ def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Map
     execution is only for explicitly trusted fixtures and provides no host
     filesystem/network isolation. Infrastructure failures raise; they are not
     mislabeled as model failures. Empty and invalid samples remain in output.
+    Failure diagnostics are captured prospectively in the same execution.
+    A phase names the wrapper stage, not fault ownership: candidate functions
+    called by tests can fail during tests_exec and appear in candidate frames.
     """
     task_rows = validate_tasks(tasks)
     rows = _validate_groups(task_rows, records, expected_samples)
@@ -255,9 +358,12 @@ def verify_completions(tasks: Iterable[Mapping[str, Any]], records: Iterable[Map
         raise RuntimeError("Docker is required by default; install/start Docker and prepare its Python image. Local trusted execution requires explicit allow_unsafe_local=True")
     def verify_one(row: dict[str, Any]) -> dict[str, Any]:
         code = _solution_code(task_map[row["task_id"]], row["completion"], code_extraction)
+        error_details = _unknown_verification_error("No executable code after extraction.")
         status = "empty" if not code.strip() else _execute(code, tests[row["task_id"]], backend=backend,
-            timeout=timeout, memory_mb=memory_mb, pids_limit=pids_limit, docker_image=docker_image, docker=docker)
+            timeout=timeout, memory_mb=memory_mb, pids_limit=pids_limit, docker_image=docker_image, docker=docker,
+            error_details=error_details)
         return {**row, "code": code, "correct": status == "passed", "status": status,
+                "verification_error": None if status == "passed" else error_details,
                 "code_extraction": code_extraction,
                 "evaluation_provenance": {**evaluation_provenance,
                     "task_harness_sha256": stable_hash(_task_harness(task_map[row["task_id"]], tests[row["task_id"]]))},
