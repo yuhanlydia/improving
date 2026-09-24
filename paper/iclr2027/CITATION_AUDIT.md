@@ -26,6 +26,7 @@ Citations distinguish source attribution from experimental evidence. All perform
 | Accumulating real and synthetic data can mitigate recursive collapse. | `gerstgrasser2024accumulating` — <https://arxiv.org/abs/2404.01413> | Data accumulation setting. Our protocol does not accumulate earlier corpora. | Existing primary-source metadata retained. |
 | Spectral activation editing is prior model-control work. | `qiu2024sea` — <https://proceedings.neurips.cc/paper_files/paper/2024/hash/684c59d614fe6ae74a3be8c3ef07e061-Abstract-Conference.html> | Spectral editing method. | Official NeurIPS metadata inherited from audited bibliography. |
 | Standard finite-sample pass@k estimator. | `chen2021humaneval` — <https://arxiv.org/abs/2107.03374> | Evaluation methodology. | Existing primary-source metadata retained. |
+| Sampling multiple code candidates supports search over alternative implementations. | `li2022alphacode` — <https://arxiv.org/abs/2203.07814> | Primary abstract identifies large-scale sampling and behavior-based filtering as core components of AlphaCode. The citation supports code search, not a claim about our training loop. | Primary metadata and abstract checked 2026-09-24; existing bibliography entry activated. |
 
 ## Placement and unresolved bibliographic issues
 
@@ -36,3 +37,9 @@ The source ledger in `source-data/rewrite_sources.json` separately audits numeri
 ## Nine-page expansion: additional entailment checks
 
 The expanded Related Work uses the existing bibliography. Primary full texts were rechecked on 2026-09-24: SSD §2 and §4 establish raw-output CE and the precision–exploration account; CRISP §3.2 and Appendix E specify periodic teacher refresh, instruction conditioning, reverse-KL training, and no correctness filtering; the sampled-demonstration diversity paper §2–4 analyzes compatibility-driven bias; SPD §3.3 specifies reference-loss K/V-gradient geometry. The prose distinguishes these objectives and feedback sources without attributing unmeasured multi-round results to them. The extra SPECTRUM example and student objective derive from the manuscript operator and recorded implementation, not an external performance claim.
+
+## Introduction definition and citation revision
+
+The Introduction now contains 15 distinct cited works in 10 citation groups. Background self-improvement claims cite STaR/ReST-EM; code search and executable evaluation cite AlphaCode/HumanEval/EvalPlus; recursive degradation cites model-collapse and accumulation work; prior iterative SD, raw-output SSD, and demonstration-conditioned diversity receive separate attribution; reference-gradient calibration and LoRA are attributed where the method is introduced. Authors' own results point to Figure 1 and Table 1 rather than external citations. The 16-sample longitudinal pool and separate final 64-sample pool are explicitly distinguished.
+
+The second paragraph defines the studied setting as Looped Self-Distillation under a fixed information budget: no new annotations or external rollout assessments enter training, all raw records are retained, and SPECTRUM's fixed external reference anchor is reused for calibration. This operational definition is not attributed to prior papers and does not claim that self-distillation generally lacks external supervision. The manuscript now uses 23 bibliography entries, all resolved.

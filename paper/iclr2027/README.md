@@ -4,6 +4,8 @@
 
 The latest revision expands SPECTRUM's calibration interpretation, numerical gain example, explicit student objective, and generation-to-learning mechanism. Related Work now has four substantive themes. Independent **Limitations** and **Conclusion and future work** sections close the main text. Figures, experimental values, and the official template remain unchanged.
 
+The Introduction now defines the fixed information budget in its second paragraph: no new annotation or external assessment of generated rollouts enters training, while a reference anchor fixed before the loop can be reused for calibration. Fifteen cited works support the Introduction's specific background and attribution claims; the full paper uses 23 references.
+
 The positioning is **Looped Self-Distillation with a fixed reference anchor**. The same calibration examples are reused each round; geometry is re-estimated on the current model. SPECTRUM retains every raw generated completion for single-LoRA learning. It uses fixed external reference supervision, without scoring or filtering generated samples.
 
 The rewrite uses only completed MBPP, SSD, HumanEval+, and APPS Intro records. It starts no new training, sampling, or code-verification experiment. Planned scale/seed/control matrices are not numerical evidence and have been removed from result tables.
