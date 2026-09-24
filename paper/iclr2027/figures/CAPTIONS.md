@@ -1,15 +1,23 @@
-## Figure 1 — fig1_motivation.pdf
+## Figure 1
 
-Correctness does not determine correct-implementation breadth. (a) Over five rounds, Plain and SPECTRUM move toward higher pass@1 but lower correct AST richness@16 than the initial model; SPECTRUM retains more breadth. Points are task means over the same 500 MBPP tasks, with 16 samples per task and one training seed. Labels denote rounds, and connecting segments only indicate temporal order. Point estimates are shown here; task-bootstrap intervals are reported in Figure 4 and the tables. (b) An analytic example, not an empirical histogram: both distributions have correctness probability a=0.4, but conditional implementation probabilities q=(1/4,1/4,1/4,1/4) and q=(1,0,0,0), respectively. Their expected richness among four correct samples is 2.734375 and 1.
+Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies.
 
-## Figure 2 — fig2_framework.pdf
+Alt text: Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain.
 
-Looped Self-Distillation and its SPECTRUM instantiation. Each round constructs a generation operator from the current student, generates a synthetic corpus, and trains one student before repeating. In SPECTRUM, a reference-completion loss defines K/V gradient second moments. The normalized geometry yields a closed-form proximal modulation with positive gains in [1/(1+tau),1]. It is folded into the K/V weights during generation, then removed before student training. The completed loop uses 16 raw generated records per training prompt and one LoRA. The next student is evaluated under native inference. The small gain curve is an analytic illustration, not a measured spectrum or an experimental strength selection.
+## Figure 2
 
-## Figure 3 — fig3_budget.pdf
+SPECTRUM within Looped Self-Distillation. The fixed reference anchor calibrates changing native-student geometry; a temporary proximal K/V transform produces raw training data. Restoring weights and merging one LoRA yields the next student. Final inference uses no transform.
 
-Sampling budget separates correctness from implementation breadth. The final students and the initial model are evaluated with 64 samples on each of 500 MBPP tasks. Correct AST richness@k is the expected number of distinct correct normalized-AST classes within k draws without replacement from the observed pool; pass@k is the corresponding probability of at least one passing program. Only k=1,4,8,16,64 were reported. The lines join these measured budget points, and shaded bands are pointwise 95% task-bootstrap confidence intervals from 2,000 resamples; they quantify task uncertainty for one training seed, not training-seed uncertainty.
+Alt text: A fixed anchor guides per-round geometry; the model generates all raw samples, learns through one LoRA, and returns as the next native student.
 
-## Figure 4 — fig4_retention.pdf
+## Figure 3
 
-Breadth retention across repeated learning. The dominant panel shows paired changes in correct-conditioned AST richness@4 from the initial model; each estimate uses only tasks with at least four correct samples in both the current and initial evaluation. Plain has n=(245,246,240,244,241) eligible pairs and SPECTRUM has n=(242,236,244,242,245) across rounds 1–5. These are changing paired subsets, not a fixed longitudinal cohort. The supporting panel reports correct AST richness@16 on all 500 tasks. Every round uses 16 samples per task. Whiskers and bands are the reported pointwise 95% task-bootstrap confidence intervals, based on 2,000 resamples and one training seed. Differences between the two paired-to-initial curves are descriptive and are not themselves paired SPECTRUM-minus-Plain confidence intervals.
+The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed.
+
+Alt text: SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched.
+
+## Figure 4
+
+Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities.
+
+Alt text: HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs.

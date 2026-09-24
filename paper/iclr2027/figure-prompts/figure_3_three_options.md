@@ -1,125 +1,73 @@
-# Figure 3 — Sampling budget exposes retained breadth
+# Figure 3 — Does a broader learned distribution help at larger total and correct-sample budgets?
 
-## A. Evidence inventory / scientific ground truth
+## A. Evidence Inventory
 
-**Principal question.** How do total sampling budget and success probability change the breadth advantage?
+**Question:** Does a broader learned distribution help at larger total and correct-sample budgets?
 
-**Source-supported answer.** At higher budgets, SPECTRUM exposes more correct AST classes than Plain while final pass@64 is also higher.
+**Supported answer:** SPECTRUM gains correct richness over Plain at displayed k>1 and retains positive paired richness gains at b=4,8,16; its pass@1 is lower.
 
-**Source.** `results/retention_5round_train16_eval16_seed43/eval64/metrics_compact.json`; exact data also appear in `figures/figure_data.json`.
+**Fact lock:** {"base":{"Ck":[0.379437,1.266564,2.267013,4.039638,12.802],"passk_percent":[37.94375,55.076545,61.097433,65.692438,72.0]},"plain":{"Ck":[0.414469,1.166138,1.922874,3.159216,8.506],"passk_percent":[41.446875,56.541115,61.857231,65.636368,70.4]},"spectral_soft":{"Ck":[0.403313,1.243749,2.161081,3.758256,11.51],"passk_percent":[40.33125,56.214816,61.892824,66.225078,72.6]},"paired_D":{"4":{"mean":0.295425,"ci95":[0.248877,0.343169],"eligible_tasks":316},"8":{"mean":0.780096,"ci95":[0.665332,0.889468],"eligible_tasks":296},"16":{"mean":1.815723,"ci95":[1.581866,2.055081],"eligible_tasks":254}}}
 
-MEASURED: task means and pointwise 95% task-bootstrap CIs for k in {1,4,8,16,64}; Initial, Plain, SPECTRUM; 500 MBPP tasks, 64 samples per task, one training seed. DERIVED: only unit conversion of pass fractions to percent. MISSING: k=32 estimates, per-task raw samples, seed-to-seed uncertainty, any fitted asymptotic coverage curve. No AUC or extrapolation is available.
+**Missing/boundary:** No measured k=32 value or new generations; no seed uncertainty or scaling-law fit.
 
-## B. Three candidates
+**Design skill:** `designing-experiment-figures`. **Production:** `programmatic-figure-spec`.
 
-| Option | Evidence organization / topology | Emphasis and main risk |
+## B. Three candidate designs
+
+| Option | Reading path | Main risk |
 |---|---|---|
-| 1 | Dominant richness curve with success side panel | This is the implemented recommendation. It highlights breadth and retains the correctness control. Risk: readers may mistake connecting segments for unmeasured budgets; caption must define them as guides. |
-| 2 | Budget-by-budget paired interval ladder | Whiskers make uncertainty and individual budgets explicit. It compresses continuity. Risk: shared native scale makes k=1 small but preserves truthful scale. |
-| 3 | Richness-first split with aligned value table | The main pattern remains visual while the success probability can be read precisely. It compresses the visual pass curve. Risk: numeric text must remain readable at full paper width. |
+| 1 | Budget curves and matched-correct effects | Misreading local/conditional evidence as a global guarantee. |
+| 2 | Exact-value budget matrix with an effect strip | Misreading local/conditional evidence as a global guarantee. |
+| 3 | Paired-budget comparisons with a conditional footer | Misreading local/conditional evidence as a global guarantee. |
 
-**Recommendation:** Option 1, which is supplied as the completed vector PDF. Every option preserves the same evidence and uses a dominant region of at least half the usable area.
+**Recommendation:** Option 1, used in the supplied manuscript, gives the principal relationship the largest area and matches the available evidence.
 
-## C. Option 1 — Dominant richness curve with success side panel
+## C. Option 1 — Budget curves and matched-correct effects
 
-### Design rationale
-This is the implemented recommendation. It highlights breadth and retains the correctness control. Risk: readers may mistake connecting segments for unmeasured budgets; caption must define them as guides.
+**Rationale:** Use a 6.65 by 2.5-inch canvas. Allocate 56% to Ck curves versus k; 23% to pass@k (%) versus k; 21% to paired Delta Db versus b with CI bars and a zero line. Total budgets are [1,4,8,16,64], with base-2 log x axes and explicit ticks. Correct budgets are [4,8,16] categorical. Label (a) Correct AST richness, (b) Task success, (c) Matched-correct gain. Use separate y scales and give the paired n values 316,296,254 in the caption.
 
-### Standalone production prompt
+### Standalone English production prompt (2579 characters)
 
-Create Figure 3 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: How do total sampling budget and success probability change the breadth advantage? The three-second takeaway is: At higher budgets, SPECTRUM exposes more correct AST classes than Plain while final pass@64 is also higher.
+```text
+Create Figure 3 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: SPECTRUM gains correct richness over Plain at displayed k>1 and retains positive paired richness gains at b=4,8,16; its pass@1 is lower. Use a 6.65 by 2.5-inch canvas. Allocate 56% to Ck curves versus k; 23% to pass@k (%) versus k; 21% to paired Delta Db versus b with CI bars and a zero line. Total budgets are [1,4,8,16,64], with base-2 log x axes and explicit ticks. Correct budgets are [4,8,16] categorical. Label (a) Correct AST richness, (b) Task success, (c) Matched-correct gain. Use separate y scales and give the paired n values 316,296,254 in the caption. Locked facts: Budget order k=[1,4,8,16,64]; paired correct budgets b=[4,8,16]. MEASURED arrays and archived intervals: {"base":{"Ck":[0.379437,1.266564,2.267013,4.039638,12.802],"passk_percent":[37.94375,55.076545,61.097433,65.692438,72.0]},"plain":{"Ck":[0.414469,1.166138,1.922874,3.159216,8.506],"passk_percent":[41.446875,56.541115,61.857231,65.636368,70.4]},"spectral_soft":{"Ck":[0.403313,1.243749,2.161081,3.758256,11.51],"passk_percent":[40.33125,56.214816,61.892824,66.225078,72.6]},"paired_D":{"4":{"mean":0.295425,"ci95":[0.248877,0.343169],"eligible_tasks":316},"8":{"mean":0.780096,"ci95":[0.665332,0.889468],"eligible_tasks":296},"16":{"mean":1.815723,"ci95":[1.581866,2.055081],"eligible_tasks":254}}} Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed. Alt text: SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched. Boundary: No measured k=32 value or new generations; no seed uncertainty or scaling-law fit. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-Use 65% of the canvas for Correct AST richness@k versus k, with a log2 x axis labeled only 1,4,8,16,64 and y starting at zero. Use 35% for pass@k (%) on an independently labeled y axis and the same budget ticks. Draw exact point estimates and reported pointwise CI bands, not new resampling. Connect adjacent reported points by straight segments. Label final richness values 12.802, 8.506, 11.510 at k=64; place the legend once in the main panel.
+**Caption:** The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed.
 
-Exact evidence and mathematical inputs to preserve:
-Initial model, Correct AST richness@k: k=1: 0.37943750 [0.34740547, 0.41365703]; k=4: 1.26656412 [1.15941525, 1.37364708]; k=8: 2.26701320 [2.07380042, 2.45909174]; k=16: 4.03963783 [3.69290328, 4.39086368]; k=64: 12.80200000 [11.69585000, 13.96810000].
-Initial model, pass@k (%): k=1: 37.94375000 [34.74054687, 41.36570312]; k=4: 55.07654491 [51.32311306, 58.90580618]; k=8: 61.09743277 [57.24928416, 64.97163629]; k=16: 65.69243831 [61.84579346, 69.52451294]; k=64: 72.00000000 [68.19500000, 75.80000000].
-Plain, Correct AST richness@k: k=1: 0.41446875 [0.38040547, 0.45168984]; k=4: 1.16613830 [1.07090341, 1.26727310]; k=8: 1.92287379 [1.75710562, 2.10157406]; k=16: 3.15921554 [2.86730684, 3.47591124]; k=64: 8.50600000 [7.60195000, 9.46405000].
-Plain, pass@k (%): k=1: 41.44687500 [38.04054687, 45.16898438]; k=4: 56.54111550 [52.68074897, 60.45970198]; k=8: 61.85723087 [57.93926136, 65.81580562]; k=16: 65.63636761 [61.66121006, 69.60772760]; k=64: 70.40000000 [66.40000000, 74.40000000].
-SPECTRUM, Correct AST richness@k: k=1: 0.40331250 [0.37115313, 0.43831797]; k=4: 1.24374904 [1.14310835, 1.34875512]; k=8: 2.16108051 [1.97638390, 2.34680530]; k=16: 3.75825577 [3.42517823, 4.10308652]; k=64: 11.51000000 [10.42400000, 12.65240000].
-SPECTRUM, pass@k (%): k=1: 40.33125000 [37.11531250, 43.83179687]; k=4: 56.21481611 [52.39757779, 60.09773592]; k=8: 61.89282396 [57.99531765, 65.81920368]; k=16: 66.22507815 [62.33787417, 70.18316379]; k=64: 72.60000000 [68.80000000, 76.60000000].
+**Alt text:** SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched.
 
-All bracketed intervals are the source-reported pointwise 95% confidence intervals from 2,000 task bootstrap resamples, not SD across seeds. Do not generate new tests, stars, uncertainty, or pseudo-replicates. Measurements derive from one training seed. No simultaneous interval guarantee is claimed. The exact sample unit, conditional eligibility and compared quantity must appear in the caption.
+## D. Option 2 — Exact-value budget matrix with an effect strip
 
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
+**Rationale:** Use a 6.65 by 3-inch canvas. In the left 60%, draw a native vector matrix with three method rows and five k columns, each cell displaying exact Ck values to three decimals and a zero-origin proportional horizontal mark. Label the raw budget columns 1,4,8,16,64. The right 40% contains pass@k curves above and paired Delta Db intervals below. Preserve the lower SPECTRUM k=1 entry; do not use winner coloring or turn the matrix into a significance heatmap.
 
-Exact text required: “Correct AST richness@k”, “pass@k (%)”, “Sampling budget k”, “Initial model”, “Plain”, “SPECTRUM”.
+### Standalone English production prompt (2605 characters)
 
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
+```text
+Create Figure 3 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: SPECTRUM gains correct richness over Plain at displayed k>1 and retains positive paired richness gains at b=4,8,16; its pass@1 is lower. Use a 6.65 by 3-inch canvas. In the left 60%, draw a native vector matrix with three method rows and five k columns, each cell displaying exact Ck values to three decimals and a zero-origin proportional horizontal mark. Label the raw budget columns 1,4,8,16,64. The right 40% contains pass@k curves above and paired Delta Db intervals below. Preserve the lower SPECTRUM k=1 entry; do not use winner coloring or turn the matrix into a significance heatmap. Locked facts: Budget order k=[1,4,8,16,64]; paired correct budgets b=[4,8,16]. MEASURED arrays and archived intervals: {"base":{"Ck":[0.379437,1.266564,2.267013,4.039638,12.802],"passk_percent":[37.94375,55.076545,61.097433,65.692438,72.0]},"plain":{"Ck":[0.414469,1.166138,1.922874,3.159216,8.506],"passk_percent":[41.446875,56.541115,61.857231,65.636368,70.4]},"spectral_soft":{"Ck":[0.403313,1.243749,2.161081,3.758256,11.51],"passk_percent":[40.33125,56.214816,61.892824,66.225078,72.6]},"paired_D":{"4":{"mean":0.295425,"ci95":[0.248877,0.343169],"eligible_tasks":316},"8":{"mean":0.780096,"ci95":[0.665332,0.889468],"eligible_tasks":296},"16":{"mean":1.815723,"ci95":[1.581866,2.055081],"eligible_tasks":254}}} Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed. Alt text: SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched. Boundary: No measured k=32 value or new generations; no seed uncertainty or scaling-law fit. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-### Caption and statistical disclosure
+**Caption:** The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed.
 
-Sampling budget separates correctness from implementation breadth. The final students and the initial model are evaluated with 64 samples on each of 500 MBPP tasks. Correct AST richness@k is the expected number of distinct correct normalized-AST classes within k draws without replacement from the observed pool; pass@k is the corresponding probability of at least one passing program. Only k=1,4,8,16,64 were reported. The lines join these measured budget points, and shaded bands are pointwise 95% task-bootstrap confidence intervals from 2,000 resamples; they quantify task uncertainty for one training seed, not training-seed uncertainty.
+**Alt text:** SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched.
 
-## D. Option 2 — Budget-by-budget paired interval ladder
+## E. Option 3 — Paired-budget comparisons with a conditional footer
 
-### Design rationale
-Whiskers make uncertainty and individual budgets explicit. It compresses continuity. Risk: shared native scale makes k=1 small but preserves truthful scale.
+**Rationale:** Use a 6.65 by 3.1-inch canvas. Top-left 55%: for each k, place three method points on the common Ck axis in separate budget rows, with a thin gray within-row connector only. Upper-right 25%: the same budget rows with pass@k (%) points on an independent axis. Bottom 20%: paired Delta Db and CI bars for b=4,8,16. This emphasizes the crossover at k=1 and the growing absolute richness contrast without asserting a fitted law.
 
-### Standalone production prompt
+### Standalone English production prompt (2574 characters)
 
-Create Figure 3 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: How do total sampling budget and success probability change the breadth advantage? The three-second takeaway is: At higher budgets, SPECTRUM exposes more correct AST classes than Plain while final pass@64 is also higher.
+```text
+Create Figure 3 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: SPECTRUM gains correct richness over Plain at displayed k>1 and retains positive paired richness gains at b=4,8,16; its pass@1 is lower. Use a 6.65 by 3.1-inch canvas. Top-left 55%: for each k, place three method points on the common Ck axis in separate budget rows, with a thin gray within-row connector only. Upper-right 25%: the same budget rows with pass@k (%) points on an independent axis. Bottom 20%: paired Delta Db and CI bars for b=4,8,16. This emphasizes the crossover at k=1 and the growing absolute richness contrast without asserting a fitted law. Locked facts: Budget order k=[1,4,8,16,64]; paired correct budgets b=[4,8,16]. MEASURED arrays and archived intervals: {"base":{"Ck":[0.379437,1.266564,2.267013,4.039638,12.802],"passk_percent":[37.94375,55.076545,61.097433,65.692438,72.0]},"plain":{"Ck":[0.414469,1.166138,1.922874,3.159216,8.506],"passk_percent":[41.446875,56.541115,61.857231,65.636368,70.4]},"spectral_soft":{"Ck":[0.403313,1.243749,2.161081,3.758256,11.51],"passk_percent":[40.33125,56.214816,61.892824,66.225078,72.6]},"paired_D":{"4":{"mean":0.295425,"ci95":[0.248877,0.343169],"eligible_tasks":316},"8":{"mean":0.780096,"ci95":[0.665332,0.889468],"eligible_tasks":296},"16":{"mean":1.815723,"ci95":[1.581866,2.055081],"eligible_tasks":254}}} Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed. Alt text: SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched. Boundary: No measured k=32 value or new generations; no seed uncertainty or scaling-law fit. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-Use a dominant 65% left panel with one horizontal row per k in ascending order. Within each row, plot Initial, Plain and SPECTRUM as offset dot-whiskers for native Correct AST richness@k; every row shares the same richness scale starting at zero. On the right, allocate 35% to the exact pass@k curves. State that the richer row values naturally grow with sampling budget. Keep all exact CIs and show no paired-difference intervals, because the listed intervals are marginal task-bootstrap intervals.
+**Caption:** The same final 64-sample pools on 500 MBPP tasks give Ck and pass@k for k=1,4,8,16,64. Paired SPECTRUM-minus-Plain Db contrasts use common eligible tasks at b=4,8,16 and archived 95% task-bootstrap intervals. One training seed.
 
-Exact evidence and mathematical inputs to preserve:
-Initial model, Correct AST richness@k: k=1: 0.37943750 [0.34740547, 0.41365703]; k=4: 1.26656412 [1.15941525, 1.37364708]; k=8: 2.26701320 [2.07380042, 2.45909174]; k=16: 4.03963783 [3.69290328, 4.39086368]; k=64: 12.80200000 [11.69585000, 13.96810000].
-Initial model, pass@k (%): k=1: 37.94375000 [34.74054687, 41.36570312]; k=4: 55.07654491 [51.32311306, 58.90580618]; k=8: 61.09743277 [57.24928416, 64.97163629]; k=16: 65.69243831 [61.84579346, 69.52451294]; k=64: 72.00000000 [68.19500000, 75.80000000].
-Plain, Correct AST richness@k: k=1: 0.41446875 [0.38040547, 0.45168984]; k=4: 1.16613830 [1.07090341, 1.26727310]; k=8: 1.92287379 [1.75710562, 2.10157406]; k=16: 3.15921554 [2.86730684, 3.47591124]; k=64: 8.50600000 [7.60195000, 9.46405000].
-Plain, pass@k (%): k=1: 41.44687500 [38.04054687, 45.16898438]; k=4: 56.54111550 [52.68074897, 60.45970198]; k=8: 61.85723087 [57.93926136, 65.81580562]; k=16: 65.63636761 [61.66121006, 69.60772760]; k=64: 70.40000000 [66.40000000, 74.40000000].
-SPECTRUM, Correct AST richness@k: k=1: 0.40331250 [0.37115313, 0.43831797]; k=4: 1.24374904 [1.14310835, 1.34875512]; k=8: 2.16108051 [1.97638390, 2.34680530]; k=16: 3.75825577 [3.42517823, 4.10308652]; k=64: 11.51000000 [10.42400000, 12.65240000].
-SPECTRUM, pass@k (%): k=1: 40.33125000 [37.11531250, 43.83179687]; k=4: 56.21481611 [52.39757779, 60.09773592]; k=8: 61.89282396 [57.99531765, 65.81920368]; k=16: 66.22507815 [62.33787417, 70.18316379]; k=64: 72.60000000 [68.80000000, 76.60000000].
+**Alt text:** SPECTRUM yields more correct structures than Plain as total budget increases, with positive richness gains when correct-sample counts are matched.
 
-All bracketed intervals are the source-reported pointwise 95% confidence intervals from 2,000 task bootstrap resamples, not SD across seeds. Do not generate new tests, stars, uncertainty, or pseudo-replicates. Measurements derive from one training seed. No simultaneous interval guarantee is claimed. The exact sample unit, conditional eligibility and compared quantity must appear in the caption.
+## F. Fidelity and QA
 
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
-
-Exact text required: “Correct AST richness@k”, “pass@k (%)”, “Sampling budget k”, “Initial model”, “Plain”, “SPECTRUM”.
-
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
-
-### Caption and statistical disclosure
-
-Sampling budget separates correctness from implementation breadth. The final students and the initial model are evaluated with 64 samples on each of 500 MBPP tasks. Correct AST richness@k is the expected number of distinct correct normalized-AST classes within k draws without replacement from the observed pool; pass@k is the corresponding probability of at least one passing program. Only k=1,4,8,16,64 were reported. The lines join these measured budget points, and shaded bands are pointwise 95% task-bootstrap confidence intervals from 2,000 resamples; they quantify task uncertainty for one training seed, not training-seed uncertainty.
-
-## E. Option 3 — Richness-first split with aligned value table
-
-### Design rationale
-The main pattern remains visual while the success probability can be read precisely. It compresses the visual pass curve. Risk: numeric text must remain readable at full paper width.
-
-### Standalone production prompt
-
-Create Figure 3 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: How do total sampling budget and success probability change the breadth advantage? The three-second takeaway is: At higher budgets, SPECTRUM exposes more correct AST classes than Plain while final pass@64 is also higher.
-
-Use a dominant 60% top richness plot with all three methods and exact CIs on logarithmic budget ticks. Use the lower 40% as a compact aligned matrix of pass@k values and their 95% intervals, with rows Initial model / Plain / SPECTRUM and columns 1 / 4 / 8 / 16 / 64. Render actual numeric data; light table rules only, no heatmap unless a true numeric color legend is supplied.
-
-Exact evidence and mathematical inputs to preserve:
-Initial model, Correct AST richness@k: k=1: 0.37943750 [0.34740547, 0.41365703]; k=4: 1.26656412 [1.15941525, 1.37364708]; k=8: 2.26701320 [2.07380042, 2.45909174]; k=16: 4.03963783 [3.69290328, 4.39086368]; k=64: 12.80200000 [11.69585000, 13.96810000].
-Initial model, pass@k (%): k=1: 37.94375000 [34.74054687, 41.36570312]; k=4: 55.07654491 [51.32311306, 58.90580618]; k=8: 61.09743277 [57.24928416, 64.97163629]; k=16: 65.69243831 [61.84579346, 69.52451294]; k=64: 72.00000000 [68.19500000, 75.80000000].
-Plain, Correct AST richness@k: k=1: 0.41446875 [0.38040547, 0.45168984]; k=4: 1.16613830 [1.07090341, 1.26727310]; k=8: 1.92287379 [1.75710562, 2.10157406]; k=16: 3.15921554 [2.86730684, 3.47591124]; k=64: 8.50600000 [7.60195000, 9.46405000].
-Plain, pass@k (%): k=1: 41.44687500 [38.04054687, 45.16898438]; k=4: 56.54111550 [52.68074897, 60.45970198]; k=8: 61.85723087 [57.93926136, 65.81580562]; k=16: 65.63636761 [61.66121006, 69.60772760]; k=64: 70.40000000 [66.40000000, 74.40000000].
-SPECTRUM, Correct AST richness@k: k=1: 0.40331250 [0.37115313, 0.43831797]; k=4: 1.24374904 [1.14310835, 1.34875512]; k=8: 2.16108051 [1.97638390, 2.34680530]; k=16: 3.75825577 [3.42517823, 4.10308652]; k=64: 11.51000000 [10.42400000, 12.65240000].
-SPECTRUM, pass@k (%): k=1: 40.33125000 [37.11531250, 43.83179687]; k=4: 56.21481611 [52.39757779, 60.09773592]; k=8: 61.89282396 [57.99531765, 65.81920368]; k=16: 66.22507815 [62.33787417, 70.18316379]; k=64: 72.60000000 [68.80000000, 76.60000000].
-
-All bracketed intervals are the source-reported pointwise 95% confidence intervals from 2,000 task bootstrap resamples, not SD across seeds. Do not generate new tests, stars, uncertainty, or pseudo-replicates. Measurements derive from one training seed. No simultaneous interval guarantee is claimed. The exact sample unit, conditional eligibility and compared quantity must appear in the caption.
-
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
-
-Exact text required: “Correct AST richness@k”, “pass@k (%)”, “Sampling budget k”, “Initial model”, “Plain”, “SPECTRUM”.
-
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
-
-### Caption and statistical disclosure
-
-Sampling budget separates correctness from implementation breadth. The final students and the initial model are evaluated with 64 samples on each of 500 MBPP tasks. Correct AST richness@k is the expected number of distinct correct normalized-AST classes within k draws without replacement from the observed pool; pass@k is the corresponding probability of at least one passing program. Only k=1,4,8,16,64 were reported. The lines join these measured budget points, and shaded bands are pointwise 95% task-bootstrap confidence intervals from 2,000 resamples; they quantify task uncertainty for one training seed, not training-seed uncertainty.
-
-## F. Cross-option fidelity checklist
-
-- Exactly three distinct evidence organizations or topologies, with the same source-supported content.
-- One dominant region occupies at least half the usable area.
-- Every numerical mark comes from the printed ledger or a labeled analytic example.
-- Reported uncertainty is task uncertainty, not training-seed uncertainty.
-- Measured aggregates are never reconstructed as fabricated empirical histograms.
-- No projection comparator appears before the ablation experiment.
-- Correct AST richness counts normalized syntax classes, not proven semantic strategies.
-- Native student evaluation, raw-data learning and temporary generation modulation remain distinct.
+- Exactly three designs encode the same facts; layout changes do not change evidence.
+- Quantitative marks come from saved measurements or explicitly defined calculations.
+- One dominant scientific panel owns at least half the usable canvas.
+- Preserve single-seed scope, pairing, eligibility, and missing information.
+- Check legibility, clipping, arrow/text collisions, units, and grayscale reproduction at final paper width.

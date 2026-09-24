@@ -7,6 +7,10 @@
 
 代码、配置、文档和紧凑结果保存在本仓库；实验权重、原始输出和数据备份已上传到 [私有 Hugging Face 仓库](https://huggingface.co/datasets/humanlong/improving-backup-20260921)。下载方式、固定 revision 和逐文件校验结果见 [备份索引](migration/2026-09-21/HUGGINGFACE_BACKUP.md)。备份完成不改变尚未完成的实验状态。
 
+## Current paper revision (2026-09-24)
+
+The [rewritten manuscript](paper/iclr2027/main.tex) and [compiled PDF](paper/iclr2027/main.pdf) use **completed results only**, with no new training or evaluation runs. The paper studies **Looped Self-Distillation with a fixed reference anchor**: references are reused throughout, geometry is recomputed each round, and every raw generated completion trains one native student without rollout scoring/filtering. It now includes the completed SSD continuation and HumanEval+/APPS transfer, plus paired analyses of saved task records, four monochrome figures, and complete [English figure prompts](paper/iclr2027/FIGURE_PROMPTS.md). The [paper audit](paper/iclr2027/PAPER_AUDIT.md) explains the narrative, evidence, and limits. Unrun seed/scale/control configurations are not reported as results.
+
 ## Start here: final SPECTRUM study (2026-09-23)
 
 - **Final bounded study (2026-09-23):** [run once, then write](experiments/final_study/README.md).

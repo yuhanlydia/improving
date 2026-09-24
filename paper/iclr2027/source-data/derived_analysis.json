@@ -1,0 +1,656 @@
+{
+  "source_commit": "ed35e52e5be4a979c87f95e803f90496750c194b",
+  "data_status": "existing samples only",
+  "transfer_comparisons": {
+    "HumanEval+": {
+      "base": {
+        "pass1": {
+          "mean": -0.011432926829268292,
+          "ci95": [
+            -0.03315548780487805,
+            0.010670731707317074
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "pass16": {
+          "mean": 0.012195121951219513,
+          "ci95": [
+            -0.018292682926829267,
+            0.04878048780487805
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "C16": {
+          "mean": 0.23170731707317074,
+          "ci95": [
+            -0.1586890243902439,
+            0.6158536585365854
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "D4": {
+          "mean": 0.11429606718068261,
+          "ci95": [
+            0.021682688305284522,
+            0.20903884310134302
+          ],
+          "n": 104,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "flow_D4": {
+          "mean": 0.06630089995474613,
+          "ci95": [
+            -0.043348391725795556,
+            0.17985995841765076
+          ],
+          "n": 104,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        }
+      },
+      "plain": {
+        "pass1": {
+          "mean": -0.01524390243902439,
+          "ci95": [
+            -0.03087842987804878,
+            0.0007621951219512195
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "pass16": {
+          "mean": 0.0,
+          "ci95": [
+            -0.03048780487804878,
+            0.03048780487804878
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "C16": {
+          "mean": 0.1524390243902439,
+          "ci95": [
+            -0.12804878048780488,
+            0.4391768292682919
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "D4": {
+          "mean": 0.07984497984497989,
+          "ci95": [
+            0.020759743259743283,
+            0.14165328165328167
+          ],
+          "n": 111,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "flow_D4": {
+          "mean": 0.040201040201040185,
+          "ci95": [
+            -0.04130984130984132,
+            0.11936954186954182
+          ],
+          "n": 111,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        }
+      },
+      "spd_hard": {
+        "pass1": {
+          "mean": -0.008003048780487805,
+          "ci95": [
+            -0.023628048780487805,
+            0.008765243902439025
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "pass16": {
+          "mean": 0.018292682926829267,
+          "ci95": [
+            -0.012195121951219513,
+            0.04878048780487805
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "C16": {
+          "mean": 0.07926829268292683,
+          "ci95": [
+            -0.1951219512195122,
+            0.3660060975609748
+          ],
+          "n": 164,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "D4": {
+          "mean": 0.03884591453398797,
+          "ci95": [
+            -0.021350667680942893,
+            0.10178335171454439
+          ],
+          "n": 109,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "flow_D4": {
+          "mean": 0.025324471654746897,
+          "ci95": [
+            -0.046717189538290446,
+            0.1002011075061534
+          ],
+          "n": 109,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        }
+      }
+    },
+    "APPS Intro": {
+      "base": {
+        "pass1": {
+          "mean": -0.015,
+          "ci95": [
+            -0.0287578125,
+            -0.0015625
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "pass16": {
+          "mean": -0.075,
+          "ci95": [
+            -0.125,
+            -0.025
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "C16": {
+          "mean": -0.225,
+          "ci95": [
+            -0.445,
+            -0.02
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "D4": {
+          "mean": -0.024974886224886216,
+          "ci95": [
+            -0.1390161921411921,
+            0.0859256819569319
+          ],
+          "n": 40,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "flow_D4": {
+          "mean": -0.06268814518814518,
+          "ci95": [
+            -0.27754104229104226,
+            0.12996982184482175
+          ],
+          "n": 40,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        }
+      },
+      "plain": {
+        "pass1": {
+          "mean": -0.0121875,
+          "ci95": [
+            -0.019375,
+            -0.005304687500000043
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "pass16": {
+          "mean": -0.015,
+          "ci95": [
+            -0.045,
+            0.015
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "C16": {
+          "mean": -0.085,
+          "ci95": [
+            -0.21012499999999998,
+            0.055
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "D4": {
+          "mean": 0.10367331081616792,
+          "ci95": [
+            0.006519842591271069,
+            0.20499610178181596
+          ],
+          "n": 42,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "flow_D4": {
+          "mean": 0.08726432297860867,
+          "ci95": [
+            -0.012711362711362712,
+            0.19582874136445558
+          ],
+          "n": 42,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        }
+      },
+      "spd_hard": {
+        "pass1": {
+          "mean": -0.0090625,
+          "ci95": [
+            -0.0159375,
+            -0.0025
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "pass16": {
+          "mean": -0.005,
+          "ci95": [
+            -0.035,
+            0.020124999999999317
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "C16": {
+          "mean": -0.035,
+          "ci95": [
+            -0.15,
+            0.085
+          ],
+          "n": 200,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "D4": {
+          "mean": 0.06698632055774914,
+          "ci95": [
+            -0.002569285872857251,
+            0.14173844013129727
+          ],
+          "n": 42,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        },
+        "flow_D4": {
+          "mean": 0.0903928082499511,
+          "ci95": [
+            -0.014683216915359737,
+            0.19243007984079408
+          ],
+          "n": 42,
+          "bootstrap_seed": 20260924,
+          "bootstrap_replicates": 2000,
+          "unit": "evaluation task; conditional on the trained checkpoints"
+        }
+      }
+    }
+  },
+  "equal_correct_count_examples": {
+    "HumanEval+ / broader": {
+      "task_id": "HumanEval/3",
+      "samples": 16,
+      "correct_count": 16,
+      "selection": "lowest numeric task ID among equal-correct-count tasks with this sign of AST richness difference",
+      "SPECTRUM": {
+        "status": "complete",
+        "counts": {
+          "6c1152b5cd9e100eaf4b73c5a02e120b4e51632720d8043e29a1727f9b073db4": 1,
+          "a5ce54d8889fd206de36f68275abe535311f09da1f30fbeea690dcff7fe6296b": 15
+        },
+        "labeled_correct_count": 16,
+        "unique_label_count": 2,
+        "unique_fraction": 0.125,
+        "effective_label_count": 1.2633812503027273,
+        "simpson_diversity": 0.125,
+        "coverage_at_k": {
+          "1": 1.0,
+          "4": 1.25,
+          "8": 1.5,
+          "16": 2.0
+        },
+        "correct_matched_coverage": 1.25,
+        "correct_matched_coverage_at_budgets": {
+          "4": 1.25,
+          "8": 1.5,
+          "16": 2.0
+        },
+        "correct_label_entropy": 0.2337916587064593
+      },
+      "Plain": {
+        "status": "complete",
+        "counts": {
+          "a5ce54d8889fd206de36f68275abe535311f09da1f30fbeea690dcff7fe6296b": 16
+        },
+        "labeled_correct_count": 16,
+        "unique_label_count": 1,
+        "unique_fraction": 0.0625,
+        "effective_label_count": 1.0,
+        "simpson_diversity": 0.0,
+        "coverage_at_k": {
+          "1": 1.0,
+          "4": 1.0,
+          "8": 1.0,
+          "16": 1.0
+        },
+        "correct_matched_coverage": 1.0,
+        "correct_matched_coverage_at_budgets": {
+          "4": 1.0,
+          "8": 1.0,
+          "16": 1.0
+        },
+        "correct_label_entropy": -0.0
+      }
+    },
+    "HumanEval+ / narrower": {
+      "task_id": "HumanEval/2",
+      "samples": 16,
+      "correct_count": 12,
+      "selection": "lowest numeric task ID among equal-correct-count tasks with this sign of AST richness difference",
+      "SPECTRUM": {
+        "status": "complete",
+        "counts": {
+          "1eb5ab12c84fdb106b7c65527f406f1923685df4a3e834d45eea6c5f2c8d06c7": 1,
+          "28a35d44e5531e132510bdd7a08ea2ef519c7fc93d55fc15d42291b7b68d4893": 1,
+          "544324f440554df2172ba1ab829ecd122ad8ebffcf12327ab53f608ee9db9cb6": 1,
+          "8709c8cf1f89d865ab3eac3344c5a10d524e59c5c5cf96d4d4201f96e1caf320": 1,
+          "97a83c172566058907b8e199a62b3c97f103e7155758516e66c21c21ebe8c4ed": 1,
+          "9dc455574404cce29c5b65eddaaf7de5a1f9dce6c19fb1d95615314de93d93fe": 1,
+          "ade89092787a3b7ec7c78b463e47fb659922e6ca0acf9bd2291931a4bacec768": 1,
+          "c5d69cebad6078b74e731c1f6935585117a47f1406d07fb6dc90ae8bb47632b1": 1,
+          "ce04b62d3c69380661a6a01d7fc229ffc520dc45e41d3a7fa5269291ba110150": 2,
+          "d55c640367bc106e0eb56efb86983c3d2d1fa4119050028cf0b255df7b3ac692": 1,
+          "e7bee9b86b386f1385044e01f21b7ceec98057057c85e9eeb7c71ab62c92d7fb": 1
+        },
+        "labeled_correct_count": 12,
+        "unique_label_count": 11,
+        "unique_fraction": 0.9166666666666666,
+        "effective_label_count": 10.690784617684074,
+        "simpson_diversity": 0.9848484848484849,
+        "coverage_at_k": {
+          "1": 0.75,
+          "4": 2.9499999999999997,
+          "8": 5.766666666666667,
+          "16": 11.0
+        },
+        "correct_matched_coverage": 3.909090909090909,
+        "correct_matched_coverage_at_budgets": {
+          "4": 3.909090909090909,
+          "8": 7.575757575757575,
+          "16": null
+        },
+        "correct_label_entropy": 2.3693821196946763
+      },
+      "Plain": {
+        "status": "complete",
+        "counts": {
+          "02d141201a39c3b8f1d40e8e52b0f71c74fefa4883e2fbf8ada0ee5431273bcd": 1,
+          "97a83c172566058907b8e199a62b3c97f103e7155758516e66c21c21ebe8c4ed": 1,
+          "ac0b29702f47cde2ff3eb4733bd48c7e3c3f4c6e46dd5511f64ac9214706db92": 1,
+          "b0049fc5fa415ab13eda5bacf50577e91a97cde0890512fadfdbcbdfb7fdbc7d": 1,
+          "ce04b62d3c69380661a6a01d7fc229ffc520dc45e41d3a7fa5269291ba110150": 1,
+          "cf5d68e6c5a6e097ea3ab1a3b3d35c94c85830596e9d25d08993860bf7fe9826": 1,
+          "d438c6ba09d8191f75c5d98f463b39c11fbbc9409193e9d0013f3fd28e163a0a": 1,
+          "d4b657ee5052c3ef9de3445779439dbb58eeae6e153c493fec85004daeb12e70": 1,
+          "d7791a4cdc8ab32e22435203b6bd8d5f4b8d60104ec652c4a4468f13880883f8": 1,
+          "e03074ad506deaa680fc22025ce4cf826b7f1a791e27a7d88ab73a3811a75aee": 1,
+          "e80e8db9c832625607e69fe17da6a4c47ab99a423a03ad144e9a32dfbce42650": 1,
+          "fe68e5c9982695bbfbc69a50f4b9ba56e0d1280a1199f69f0ed257b449078dfa": 1
+        },
+        "labeled_correct_count": 12,
+        "unique_label_count": 12,
+        "unique_fraction": 1.0,
+        "effective_label_count": 12.0,
+        "simpson_diversity": 1.0,
+        "coverage_at_k": {
+          "1": 0.75,
+          "4": 2.9999999999999996,
+          "8": 6.0,
+          "16": 12.0
+        },
+        "correct_matched_coverage": 4.0,
+        "correct_matched_coverage_at_budgets": {
+          "4": 4.0,
+          "8": 8.0,
+          "16": null
+        },
+        "correct_label_entropy": 2.4849066497880004
+      }
+    },
+    "APPS Intro / broader": {
+      "task_id": "AppsIntro/4136",
+      "samples": 16,
+      "correct_count": 15,
+      "selection": "lowest numeric task ID among equal-correct-count tasks with this sign of AST richness difference",
+      "SPECTRUM": {
+        "status": "complete",
+        "counts": {
+          "2c1bc3e616fa9e2c840a326008d67a9f526df68a314bc071658b4a7f47fdbc0c": 1,
+          "49af7b7e205a963b92b3fa12af9e84934152a682d5f852105d7651794fbf776b": 3,
+          "578ab1f1d6e536e42fc44949ca9d038ff3cd75d48d07bea1c81419e4020e5c67": 1,
+          "5a5da3d03abe4fa2ada28568433cf86dfe54bf2b745aed93b05e9b31034d343e": 2,
+          "672381be746a518f65790286263f038bef81b474b6af6697f823173393dd099b": 1,
+          "69ddc2b70fc295f8a8155243927de5487586a150c84265a17e948b13880b89f8": 1,
+          "73bdfc3f2c0dc871391725930b55a15abdb220956b004e3cdb484ed75b4ad142": 1,
+          "7a7832550eb6ac8f50276120aeaf28b1a90485354408004d84bd8d31d4950ef4": 1,
+          "9791319a2b3d7a5daf21cbc1f53b1a24ed80816b71f8bfd74f6f236f3d1c4833": 1,
+          "bf5911ac0e4591daeba3776537cf159daa7ec734b3a8bb2bfad8c6b7ac81e589": 1,
+          "db38fab409e9c94283e90d022f67dd871106085267b17f647cc0c803bc0ad2c7": 2
+        },
+        "labeled_correct_count": 15,
+        "unique_label_count": 11,
+        "unique_fraction": 0.7333333333333333,
+        "effective_label_count": 10.009038104159249,
+        "simpson_diversity": 0.9523809523809523,
+        "coverage_at_k": {
+          "1": 0.9375,
+          "4": 3.5071428571428567,
+          "8": 6.433333333333334,
+          "16": 11.0
+        },
+        "correct_matched_coverage": 3.7230769230769227,
+        "correct_matched_coverage_at_budgets": {
+          "4": 3.7230769230769227,
+          "8": 6.78974358974359,
+          "16": null
+        },
+        "correct_label_entropy": 2.3034884952192693
+      },
+      "Plain": {
+        "status": "complete",
+        "counts": {
+          "2c1bc3e616fa9e2c840a326008d67a9f526df68a314bc071658b4a7f47fdbc0c": 1,
+          "49af7b7e205a963b92b3fa12af9e84934152a682d5f852105d7651794fbf776b": 4,
+          "578ab1f1d6e536e42fc44949ca9d038ff3cd75d48d07bea1c81419e4020e5c67": 1,
+          "5a5da3d03abe4fa2ada28568433cf86dfe54bf2b745aed93b05e9b31034d343e": 2,
+          "672381be746a518f65790286263f038bef81b474b6af6697f823173393dd099b": 1,
+          "73bdfc3f2c0dc871391725930b55a15abdb220956b004e3cdb484ed75b4ad142": 1,
+          "a0073ccf6e5b551ed990da6c84ebe17fc11840af1e0eea874c4b84e19f11cc9b": 1,
+          "a677825bced91f324f5a3b039aa0d58d415f5c5a966880dff463b5ed669575f7": 1,
+          "bf5911ac0e4591daeba3776537cf159daa7ec734b3a8bb2bfad8c6b7ac81e589": 1,
+          "db38fab409e9c94283e90d022f67dd871106085267b17f647cc0c803bc0ad2c7": 2
+        },
+        "labeled_correct_count": 15,
+        "unique_label_count": 10,
+        "unique_fraction": 0.6666666666666666,
+        "effective_label_count": 8.615237662477762,
+        "simpson_diversity": 0.9238095238095239,
+        "coverage_at_k": {
+          "1": 0.9375,
+          "4": 3.378021978021978,
+          "8": 5.994871794871795,
+          "16": 10.0
+        },
+        "correct_matched_coverage": 3.577289377289377,
+        "correct_matched_coverage_at_budgets": {
+          "4": 3.577289377289377,
+          "8": 6.3076923076923075,
+          "16": null
+        },
+        "correct_label_entropy": 2.1535324566542537
+      }
+    },
+    "APPS Intro / narrower": {
+      "task_id": "AppsIntro/4401",
+      "samples": 16,
+      "correct_count": 14,
+      "selection": "lowest numeric task ID among equal-correct-count tasks with this sign of AST richness difference",
+      "SPECTRUM": {
+        "status": "complete",
+        "counts": {
+          "5a671a52d76f86c8080215001defcef1f10d441e17a5c817e7cbd79580ca58ad": 1,
+          "5be1738a113f41056cc67042d9abb7ce272891448832f5df10f9bd1d9aea2e2b": 1,
+          "5ce7ebe607bab6ea4e055bcb938eab9e4345e3512449f0c88843431df345b6f8": 7,
+          "9fde6896fc41826761d99de0c8fc867333a3b125ffa35ac3da116035d0736050": 1,
+          "f2e35dc015700a49c6c7af41cc32500cf48e322706849d133925e8a998cbaafe": 2,
+          "fa74ccca334763d06e47cb131304ea85ef68b7ea2d25e187657e387d133071df": 2
+        },
+        "labeled_correct_count": 14,
+        "unique_label_count": 6,
+        "unique_fraction": 0.42857142857142855,
+        "effective_label_count": 4.340806687339691,
+        "simpson_diversity": 0.7472527472527473,
+        "coverage_at_k": {
+          "1": 0.875,
+          "4": 2.5807692307692305,
+          "8": 4.032634032634032,
+          "16": 6.0
+        },
+        "correct_matched_coverage": 2.833166833166833,
+        "correct_matched_coverage_at_budgets": {
+          "4": 2.833166833166833,
+          "8": 4.384615384615385,
+          "16": null
+        },
+        "correct_label_entropy": 1.468060203499046
+      },
+      "Plain": {
+        "status": "complete",
+        "counts": {
+          "4953ffaf3dba5278205f63f731a51fdf331a17e6bb93c17b0cd69f9d2c80561c": 1,
+          "5ce7ebe607bab6ea4e055bcb938eab9e4345e3512449f0c88843431df345b6f8": 5,
+          "795a6e2d940a694dc5ca1e9e55883937b09c196548fadf92dd7f7cb641597e6e": 1,
+          "dce68095b4cecf75730cadc26e21e79c79cb5c9bffaaf0dfa416e2e6a9183e56": 1,
+          "e6459a6e195ccb3c41954fac281d5211b894fa565b7ec646f128f706a3f51849": 1,
+          "f2e35dc015700a49c6c7af41cc32500cf48e322706849d133925e8a998cbaafe": 2,
+          "fa74ccca334763d06e47cb131304ea85ef68b7ea2d25e187657e387d133071df": 3
+        },
+        "labeled_correct_count": 14,
+        "unique_label_count": 7,
+        "unique_fraction": 0.5,
+        "effective_label_count": 5.639639417393609,
+        "simpson_diversity": 0.8461538461538461,
+        "coverage_at_k": {
+          "1": 0.875,
+          "4": 2.8758241758241754,
+          "8": 4.653846153846154,
+          "16": 7.0
+        },
+        "correct_matched_coverage": 3.1928071928071926,
+        "correct_matched_coverage_at_budgets": {
+          "4": 3.1928071928071926,
+          "8": 5.0629370629370625,
+          "16": null
+        },
+        "correct_label_entropy": 1.7298201303799212
+      }
+    }
+  },
+  "training_resources": {
+    "plain": {
+      "rounds": 5,
+      "candidates": 23280,
+      "generation_tokens": 4859928,
+      "mean_tokens": 208.75979381443298,
+      "length_capped_samples": 617,
+      "supervised_tokens": 6373288
+    },
+    "spd_hard": {
+      "rounds": 5,
+      "candidates": 23280,
+      "generation_tokens": 4727089,
+      "mean_tokens": 203.05365120274914,
+      "length_capped_samples": 619,
+      "supervised_tokens": 6240449
+    },
+    "spectral_soft": {
+      "rounds": 5,
+      "candidates": 23280,
+      "generation_tokens": 5342368,
+      "mean_tokens": 229.4831615120275,
+      "length_capped_samples": 833,
+      "supervised_tokens": 6855728
+    },
+    "ssd": {
+      "rounds": 5,
+      "candidates": 23280,
+      "generation_tokens": 5812400,
+      "mean_tokens": 249.67353951890036,
+      "length_capped_samples": 1498,
+      "supervised_tokens": 7325760
+    }
+  }
+}

@@ -1,110 +1,73 @@
-# Figure 1 — Correctness and breadth separate
+# Figure 1 — Can increasing correctness conceal contraction within correct outputs?
 
-## A. Evidence inventory / scientific ground truth
+## A. Evidence Inventory
 
-**Principal question.** Can correctness improve while the distribution of correct implementations becomes narrower?
+**Question:** Can increasing correctness conceal contraction within correct outputs?
 
-**Source-supported answer.** Both measured looped arms increase final pass@1 and decrease correct AST richness; SPECTRUM retains more breadth than Plain.
+**Supported answer:** In the saved five-round MBPP run, Plain and SPECTRUM increase pass@1 while losing AST richness; SPECTRUM loses less.
 
-**Source.** `results/retention_5round_train16_eval16_seed43/report.json`; exact data also appear in `figures/figure_data.json`.
+**Fact lock:** {"plain":{"pass1_percent":[37.925,38.425,39.15,39.65,40.7875,41.3],"C16":[4.016,3.808,3.634,3.372,3.19,3.09],"Simpson":[0.84297,0.802178,0.781279,0.738599,0.707753,0.691991],"paired_D4_change":[-0.138258,-0.220248,-0.376093,-0.500308,-0.574162],"paired_D4_ci95":[[-0.207978,-0.068049],[-0.293476,-0.14518],[-0.452677,-0.298745],[-0.573634,-0.429593],[-0.653711,-0.498749]],"paired_D4_n":[245,246,240,244,241]},"spectral_soft":{"pass1_percent":[37.925,37.8375,38.3625,39.05,39.775,40.175],"C16":[4.016,3.848,3.768,3.662,3.588,3.606],"Simpson":[0.84297,0.822225,0.809408,0.773249,0.75196,0.765747],"paired_D4_change":[-0.099678,-0.139992,-0.221023,-0.3163,-0.315297],"paired_D4_ci95":[[-0.166006,-0.035438],[-0.211323,-0.069725],[-0.304755,-0.145722],[-0.391983,-0.243946],[-0.394451,-0.239572]],"paired_D4_n":[242,236,244,242,245]}}
 
-MEASURED: two six-point trajectories, 500 common MBPP tasks, n=16 sampled programs per task, one seed. CONCEPTUAL: a=.4, q uniform on four classes versus concentrated on one class. DERIVED: expected richness among four correct samples = sum_j[1-(1-q_j)^4], giving 2.734375 versus 1. MISSING: per-task program/class histograms, which must never be reconstructed from these aggregate means.
+**Missing/boundary:** Independent training seeds and intermediate 64-sample pools; no global semantic diversity measurement.
 
-## B. Three candidates
+**Design skill:** `designing-experiment-figures`. **Production:** `programmatic-figure-spec`.
 
-| Option | Evidence organization / topology | Emphasis and main risk |
+## B. Three candidate designs
+
+| Option | Reading path | Main risk |
 |---|---|---|
-| 1 | Two-objective trajectory with probability inset | It directly reveals the two-objective movement; it compresses the x-as-round reading path. Risk: connecting temporal points must not imply an optimization frontier. |
-| 2 | Round-indexed breadth with a correctness strip | The shared round index makes the recursive trajectory explicit; it compresses the direct trade-off view. Risk: keep metric axes separate and prohibit dual y axes. |
-| 3 | Endpoint displacement with full trajectory microplot | The endpoint contrast is immediate and the small plot preserves the temporal evidence; it compresses intermediate correctness values, which remain numerically included in its production data. Risk: endpoint displacement alone must not suggest an independently repeated training sample. |
+| 1 | Phase trajectory with conditional checks | Misreading local/conditional evidence as a global guarantee. |
+| 2 | Longitudinal retention with aligned diagnostics | Misreading local/conditional evidence as a global guarantee. |
+| 3 | Conditional retention as the focal evidence | Misreading local/conditional evidence as a global guarantee. |
 
-**Recommendation:** Option 1, which is supplied as the completed vector PDF. Every option preserves the same evidence and uses a dominant region of at least half the usable area.
+**Recommendation:** Option 1, used in the supplied manuscript, gives the principal relationship the largest area and matches the available evidence.
 
-## C. Option 1 — Two-objective trajectory with probability inset
+## C. Option 1 — Phase trajectory with conditional checks
 
-### Design rationale
-It directly reveals the two-objective movement; it compresses the x-as-round reading path. Risk: connecting temporal points must not imply an optimization frontier.
+**Rationale:** Place pass@1 (%) on x and C16 on y in the left 58% panel. Connect rounds 0 through 5 in order and label their numbers. Put paired D4 change from initialization versus rounds 1--5, including CI bars, in the middle 21%; place Simpson diversity versus rounds 0--5 in the right 21%. A shared legend maps plain to Plain and spectral_soft to SPECTRUM. Label panels (a) Accuracy and breadth, (b) Equal correct draws, (c) Concentration. This prioritizes the accuracy/breadth separation.
 
-### Standalone production prompt
+### Standalone English production prompt (3094 characters)
 
-Create Figure 1 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: Can correctness improve while the distribution of correct implementations becomes narrower? The three-second takeaway is: Both measured looped arms increase final pass@1 and decrease correct AST richness; SPECTRUM retains more breadth than Plain.
+```text
+Create Figure 1 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: In the saved five-round MBPP run, Plain and SPECTRUM increase pass@1 while losing AST richness; SPECTRUM loses less. Place pass@1 (%) on x and C16 on y in the left 58% panel. Connect rounds 0 through 5 in order and label their numbers. Put paired D4 change from initialization versus rounds 1--5, including CI bars, in the middle 21%; place Simpson diversity versus rounds 0--5 in the right 21%. A shared legend maps plain to Plain and spectral_soft to SPECTRUM. Label panels (a) Accuracy and breadth, (b) Equal correct draws, (c) Concentration. This prioritizes the accuracy/breadth separation. Locked facts: All arrays below are saved measurements (six round-0--5 entries, or five round-1--5 paired changes). {"plain":{"pass1_percent":[37.925,38.425,39.15,39.65,40.7875,41.3],"C16":[4.016,3.808,3.634,3.372,3.19,3.09],"Simpson":[0.84297,0.802178,0.781279,0.738599,0.707753,0.691991],"paired_D4_change":[-0.138258,-0.220248,-0.376093,-0.500308,-0.574162],"paired_D4_ci95":[[-0.207978,-0.068049],[-0.293476,-0.14518],[-0.452677,-0.298745],[-0.573634,-0.429593],[-0.653711,-0.498749]],"paired_D4_n":[245,246,240,244,241]},"spectral_soft":{"pass1_percent":[37.925,37.8375,38.3625,39.05,39.775,40.175],"C16":[4.016,3.848,3.768,3.662,3.588,3.606],"Simpson":[0.84297,0.822225,0.809408,0.773249,0.75196,0.765747],"paired_D4_change":[-0.099678,-0.139992,-0.221023,-0.3163,-0.315297],"paired_D4_ci95":[[-0.166006,-0.035438],[-0.211323,-0.069725],[-0.304755,-0.145722],[-0.391983,-0.243946],[-0.394451,-0.239572]],"paired_D4_n":[242,236,244,242,245]}} Paired D4 intervals resample evaluation tasks 2,000 times; eligibility varies by contrast. Simpson uses tasks with at least two correct outputs. No uncertainty is plotted for phase or Simpson points. Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies. Alt text: Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain. Boundary: Independent training seeds and intermediate 64-sample pools; no global semantic diversity measurement. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-Use 65% of the canvas for a direct two-objective scatter: x is pass@1 in percent and y is Correct AST richness@16. Connect rounds only within each method, label rounds 0 through 5, mark the shared initial point once, and emphasize both round-5 endpoints. Use the remaining 35% for grouped bars of the two illustrative q distributions, with classes A–D on x and conditional probability from zero to one on y. Mark the panel Analytic example, label Broad and Concentrated, and state Both: pass@1 = 40%.
+**Caption:** Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies.
 
-Exact evidence and mathematical inputs to preserve:
-Plain rounds 0–5: pass@1 (%) = [37.925, 38.425, 39.15, 39.65, 40.7875, 41.3]; Correct AST richness@16 = [4.016, 3.808, 3.634, 3.372, 3.19, 3.09]. SPECTRUM rounds 0–5: pass@1 (%) = [37.925, 37.8375, 38.3625, 39.05, 39.775, 40.175]; Correct AST richness@16 = [4.016, 3.848, 3.768, 3.662, 3.588, 3.606].
+**Alt text:** Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain.
 
-The probability panel is explicitly illustrative, not measured. Both distributions have a=0.4; their entire pass@k curves agree for every k, while their conditional distributions differ. Bars start at zero. Plot no uncertainty ellipses in the trajectory, no fabricated empirical class counts, and no unobserved histories. Round curves use the same 500 tasks, but they are one evolving run, not independent seeds.
+## D. Option 2 — Longitudinal retention with aligned diagnostics
 
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
+**Rationale:** Use the left 55% for C16 against rounds 0--5. In the right 45%, stack three aligned strips for pass@1 (%), paired D4 changes with CI bars, and Simpson diversity. Each strip has its own labeled y-axis and shares round order. Show all initial and final values beside their respective points. This emphasizes accumulation across rounds; do not add a fitted decay rate.
 
-Exact text required: “Correct AST richness@16”, “pass@1 (%)”, “Plain”, “SPECTRUM”, “Initial”, “Analytic example”, “Broad”, “Concentrated”, “Correct implementation class”.
+### Standalone English production prompt (2981 characters)
 
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
+```text
+Create Figure 1 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: In the saved five-round MBPP run, Plain and SPECTRUM increase pass@1 while losing AST richness; SPECTRUM loses less. Use the left 55% for C16 against rounds 0--5. In the right 45%, stack three aligned strips for pass@1 (%), paired D4 changes with CI bars, and Simpson diversity. Each strip has its own labeled y-axis and shares round order. Show all initial and final values beside their respective points. This emphasizes accumulation across rounds; do not add a fitted decay rate. Locked facts: All arrays below are saved measurements (six round-0--5 entries, or five round-1--5 paired changes). {"plain":{"pass1_percent":[37.925,38.425,39.15,39.65,40.7875,41.3],"C16":[4.016,3.808,3.634,3.372,3.19,3.09],"Simpson":[0.84297,0.802178,0.781279,0.738599,0.707753,0.691991],"paired_D4_change":[-0.138258,-0.220248,-0.376093,-0.500308,-0.574162],"paired_D4_ci95":[[-0.207978,-0.068049],[-0.293476,-0.14518],[-0.452677,-0.298745],[-0.573634,-0.429593],[-0.653711,-0.498749]],"paired_D4_n":[245,246,240,244,241]},"spectral_soft":{"pass1_percent":[37.925,37.8375,38.3625,39.05,39.775,40.175],"C16":[4.016,3.848,3.768,3.662,3.588,3.606],"Simpson":[0.84297,0.822225,0.809408,0.773249,0.75196,0.765747],"paired_D4_change":[-0.099678,-0.139992,-0.221023,-0.3163,-0.315297],"paired_D4_ci95":[[-0.166006,-0.035438],[-0.211323,-0.069725],[-0.304755,-0.145722],[-0.391983,-0.243946],[-0.394451,-0.239572]],"paired_D4_n":[242,236,244,242,245]}} Paired D4 intervals resample evaluation tasks 2,000 times; eligibility varies by contrast. Simpson uses tasks with at least two correct outputs. No uncertainty is plotted for phase or Simpson points. Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies. Alt text: Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain. Boundary: Independent training seeds and intermediate 64-sample pools; no global semantic diversity measurement. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-### Caption and statistical disclosure
+**Caption:** Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies.
 
-Correctness does not determine correct-implementation breadth. (a) Over five rounds, Plain and SPECTRUM move toward higher pass@1 but lower correct AST richness@16 than the initial model; SPECTRUM retains more breadth. Points are task means over the same 500 MBPP tasks, with 16 samples per task and one training seed. Labels denote rounds, and connecting segments only indicate temporal order. Point estimates are shown here; task-bootstrap intervals are reported in Figure 4 and the tables. (b) An analytic example, not an empirical histogram: both distributions have correctness probability a=0.4, but conditional implementation probabilities q=(1/4,1/4,1/4,1/4) and q=(1,0,0,0), respectively. Their expected richness among four correct samples is 2.734375 and 1.
+**Alt text:** Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain.
 
-## D. Option 2 — Round-indexed breadth with a correctness strip
+## E. Option 3 — Conditional retention as the focal evidence
 
-### Design rationale
-The shared round index makes the recursive trajectory explicit; it compresses the direct trade-off view. Risk: keep metric axes separate and prohibit dual y axes.
+**Rationale:** Use the upper 55% for paired D4 change from initialization against rounds 1--5 with exact CI bars and zero reference. Below it, use 30% for the measured pass@1-versus-C16 trajectories and 15% for Simpson-versus-round. Keep each plot independent; no linking axes with arrows implying causality. This emphasizes the within-correct result while retaining every source series.
 
-### Standalone production prompt
+### Standalone English production prompt (2988 characters)
 
-Create Figure 1 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: Can correctness improve while the distribution of correct implementations becomes narrower? The three-second takeaway is: Both measured looped arms increase final pass@1 and decrease correct AST richness; SPECTRUM retains more breadth than Plain.
+```text
+Create Figure 1 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: In the saved five-round MBPP run, Plain and SPECTRUM increase pass@1 while losing AST richness; SPECTRUM loses less. Use the upper 55% for paired D4 change from initialization against rounds 1--5 with exact CI bars and zero reference. Below it, use 30% for the measured pass@1-versus-C16 trajectories and 15% for Simpson-versus-round. Keep each plot independent; no linking axes with arrows implying causality. This emphasizes the within-correct result while retaining every source series. Locked facts: All arrays below are saved measurements (six round-0--5 entries, or five round-1--5 paired changes). {"plain":{"pass1_percent":[37.925,38.425,39.15,39.65,40.7875,41.3],"C16":[4.016,3.808,3.634,3.372,3.19,3.09],"Simpson":[0.84297,0.802178,0.781279,0.738599,0.707753,0.691991],"paired_D4_change":[-0.138258,-0.220248,-0.376093,-0.500308,-0.574162],"paired_D4_ci95":[[-0.207978,-0.068049],[-0.293476,-0.14518],[-0.452677,-0.298745],[-0.573634,-0.429593],[-0.653711,-0.498749]],"paired_D4_n":[245,246,240,244,241]},"spectral_soft":{"pass1_percent":[37.925,37.8375,38.3625,39.05,39.775,40.175],"C16":[4.016,3.848,3.768,3.662,3.588,3.606],"Simpson":[0.84297,0.822225,0.809408,0.773249,0.75196,0.765747],"paired_D4_change":[-0.099678,-0.139992,-0.221023,-0.3163,-0.315297],"paired_D4_ci95":[[-0.166006,-0.035438],[-0.211323,-0.069725],[-0.304755,-0.145722],[-0.391983,-0.243946],[-0.394451,-0.239572]],"paired_D4_n":[242,236,244,242,245]}} Paired D4 intervals resample evaluation tasks 2,000 times; eligibility varies by contrast. Simpson uses tasks with at least two correct outputs. No uncertainty is plotted for phase or Simpson points. Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies. Alt text: Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain. Boundary: Independent training seeds and intermediate 64-sample pools; no global semantic diversity measurement. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-Use a dominant top-left panel occupying 55% of usable area: x is learning round 0–5, y is Correct AST richness@16. Below it put a short aligned pass@1-percent strip with the same rounds and method identities, occupying 20%. Allocate the remaining 25% to a compact two-row probability mosaic of q=(.25,.25,.25,.25) versus q=(1,0,0,0); each row must sum to one, with equal-width outlined class cells and no fake empirical image. Print the same-a statement and the two analytic richness values.
+**Caption:** Five MBPP self-distillation rounds, 500 tasks and 16 samples per task. Native-student point estimates; paired D4 changes are relative to initialization on common eligible tasks, with archived pointwise 95% task-bootstrap intervals. One training seed. AST classes are structural proxies.
 
-Exact evidence and mathematical inputs to preserve:
-Plain rounds 0–5: pass@1 (%) = [37.925, 38.425, 39.15, 39.65, 40.7875, 41.3]; Correct AST richness@16 = [4.016, 3.808, 3.634, 3.372, 3.19, 3.09]. SPECTRUM rounds 0–5: pass@1 (%) = [37.925, 37.8375, 38.3625, 39.05, 39.775, 40.175]; Correct AST richness@16 = [4.016, 3.848, 3.768, 3.662, 3.588, 3.606].
+**Alt text:** Accuracy rises as correct AST richness falls. SPECTRUM retains more richness and more dispersed correct outputs than Plain.
 
-The probability panel is explicitly illustrative, not measured. Both distributions have a=0.4; their entire pass@k curves agree for every k, while their conditional distributions differ. Bars start at zero. Plot no uncertainty ellipses in the trajectory, no fabricated empirical class counts, and no unobserved histories. Round curves use the same 500 tasks, but they are one evolving run, not independent seeds.
+## F. Fidelity and QA
 
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
-
-Exact text required: “Correct AST richness@16”, “pass@1 (%)”, “Plain”, “SPECTRUM”, “Initial”, “Analytic example”, “Broad”, “Concentrated”, “Correct implementation class”.
-
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
-
-### Caption and statistical disclosure
-
-Correctness does not determine correct-implementation breadth. (a) Over five rounds, Plain and SPECTRUM move toward higher pass@1 but lower correct AST richness@16 than the initial model; SPECTRUM retains more breadth. Points are task means over the same 500 MBPP tasks, with 16 samples per task and one training seed. Labels denote rounds, and connecting segments only indicate temporal order. Point estimates are shown here; task-bootstrap intervals are reported in Figure 4 and the tables. (b) An analytic example, not an empirical histogram: both distributions have correctness probability a=0.4, but conditional implementation probabilities q=(1/4,1/4,1/4,1/4) and q=(1,0,0,0), respectively. Their expected richness among four correct samples is 2.734375 and 1.
-
-## E. Option 3 — Endpoint displacement with full trajectory microplot
-
-### Design rationale
-The endpoint contrast is immediate and the small plot preserves the temporal evidence; it compresses intermediate correctness values, which remain numerically included in its production data. Risk: endpoint displacement alone must not suggest an independently repeated training sample.
-
-### Standalone production prompt
-
-Create Figure 1 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: Can correctness improve while the distribution of correct implementations becomes narrower? The three-second takeaway is: Both measured looped arms increase final pass@1 and decrease correct AST richness; SPECTRUM retains more breadth than Plain.
-
-Use 60% for a paired initial-to-round-5 displacement view: two horizontal native-unit axes in aligned rows, pass@1 (%) and Correct AST richness@16, with Initial, Plain round5 and SPECTRUM round5 dots and numerical values. Inside this dominant block, a small round0–5 richness line plot retains all intermediate measurements. Use the remaining 40% for the analytic four-class conditional probability example, showing q exactly and expected richness values. Do not turn the endpoint result into a retention-identity or survival diagram.
-
-Exact evidence and mathematical inputs to preserve:
-Plain rounds 0–5: pass@1 (%) = [37.925, 38.425, 39.15, 39.65, 40.7875, 41.3]; Correct AST richness@16 = [4.016, 3.808, 3.634, 3.372, 3.19, 3.09]. SPECTRUM rounds 0–5: pass@1 (%) = [37.925, 37.8375, 38.3625, 39.05, 39.775, 40.175]; Correct AST richness@16 = [4.016, 3.848, 3.768, 3.662, 3.588, 3.606].
-
-The probability panel is explicitly illustrative, not measured. Both distributions have a=0.4; their entire pass@k curves agree for every k, while their conditional distributions differ. Bars start at zero. Plot no uncertainty ellipses in the trajectory, no fabricated empirical class counts, and no unobserved histories. Round curves use the same 500 tasks, but they are one evolving run, not independent seeds.
-
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
-
-Exact text required: “Correct AST richness@16”, “pass@1 (%)”, “Plain”, “SPECTRUM”, “Initial”, “Analytic example”, “Broad”, “Concentrated”, “Correct implementation class”.
-
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
-
-### Caption and statistical disclosure
-
-Correctness does not determine correct-implementation breadth. (a) Over five rounds, Plain and SPECTRUM move toward higher pass@1 but lower correct AST richness@16 than the initial model; SPECTRUM retains more breadth. Points are task means over the same 500 MBPP tasks, with 16 samples per task and one training seed. Labels denote rounds, and connecting segments only indicate temporal order. Point estimates are shown here; task-bootstrap intervals are reported in Figure 4 and the tables. (b) An analytic example, not an empirical histogram: both distributions have correctness probability a=0.4, but conditional implementation probabilities q=(1/4,1/4,1/4,1/4) and q=(1,0,0,0), respectively. Their expected richness among four correct samples is 2.734375 and 1.
-
-## F. Cross-option fidelity checklist
-
-- Exactly three distinct evidence organizations or topologies, with the same source-supported content.
-- One dominant region occupies at least half the usable area.
-- Every numerical mark comes from the printed ledger or a labeled analytic example.
-- Reported uncertainty is task uncertainty, not training-seed uncertainty.
-- Measured aggregates are never reconstructed as fabricated empirical histograms.
-- No projection comparator appears before the ablation experiment.
-- Correct AST richness counts normalized syntax classes, not proven semantic strategies.
-- Native student evaluation, raw-data learning and temporary generation modulation remain distinct.
+- Exactly three designs encode the same facts; layout changes do not change evidence.
+- Quantitative marks come from saved measurements or explicitly defined calculations.
+- One dominant scientific panel owns at least half the usable canvas.
+- Preserve single-seed scope, pairing, eligibility, and missing information.
+- Check legibility, clipping, arrow/text collisions, units, and grayscale reproduction at final paper width.

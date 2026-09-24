@@ -1,119 +1,73 @@
-# Figure 4 — Longitudinal preservation on reported task cohorts
+# Figure 4 — Can actual samples have equal estimated pass curves but unequal correct AST counts?
 
-## A. Evidence inventory / scientific ground truth
+## A. Evidence Inventory
 
-**Principal question.** How does breadth loss evolve after subsequent student learning?
+**Question:** Can actual samples have equal estimated pass curves but unequal correct AST counts?
 
-**Source-supported answer.** Reported paired changes from the initial model become more negative for Plain; SPECTRUM shows smaller later-round losses and higher all-task richness.
+**Supported answer:** The saved HumanEval/3 example is broader under SPECTRUM, while HumanEval/2 shows the reverse at the same number of correct samples.
 
-**Source.** `results/retention_5round_train16_eval16_seed43/report.json`; exact data also appear in `figures/figure_data.json`.
+**Fact lock:** MEASURED: 16 samples per method at round five. HumanEval/3: 16 correct under both; Plain AST counts [16], SPECTRUM [15,1]. HumanEval/2: 12 correct under both; Plain counts [1,1,1,1,1,1,1,1,1,1,1,1], SPECTRUM [2,1,1,1,1,1,1,1,1,1,1]. DERIVED: D4 on HumanEval/3 is 1 versus 1.25; on HumanEval/2 it is 4 versus 3.909091. Formula D_b=sum_j[1-comb(m-m_j,b)/comb(m,b)]. Classes are ranked separately, with no cross-model identity matching. Selection: for each sign of SPECTRUM-minus-Plain AST-count difference, choose lowest numerical HumanEval ID among tasks with equal correct counts >=4. Selection is sign-conditioned; no prevalence claim.
 
-MEASURED: five per-method paired changes from Initial model with pointwise 95% CIs and exact eligible counts, plus all-task C16 trajectories and CIs over rounds 0–5. Task-bootstrap unit is paired tasks for changes and tasks for absolute levels; 2,000 resamples; one training seed; 16 samples per task. MISSING: paired SPECTRUM-minus-Plain per-round CIs and fixed-intersection raw task values. They must not be inferred by subtracting endpoints or intervals. Correct-conditioned cohorts vary by round and arm.
+**Missing/boundary:** Program text was removed from the compact archive; do not invent code, algorithm names, prompt text, or semantic labels.
 
-## B. Three candidates
+**Design skill:** `designing-experiment-figures`. **Production:** `programmatic-figure-spec`.
 
-| Option | Evidence organization / topology | Emphasis and main risk |
+## B. Three candidate designs
+
+| Option | Reading path | Main risk |
 |---|---|---|
-| 1 | Paired change as the dominant trajectory | This is the implemented recommendation. It centers inference on actual reported paired quantities, while absolute levels anchor scale. Risk: the two per-method paired subsets differ and their gap is not a paired between-method CI. |
-| 2 | Round-wise paired forest with an absolute-scale footer | Exact round-specific eligible counts are easy to audit. It compresses the temporal line pattern. Risk: do not rank rounds by effect; preserve their chronological order. |
-| 3 | Raw trajectory dominant with paired evidence strip | The absolute breadth is immediately readable, while the paired strip resolves sample-count conditioning. It compresses the richer paired trajectory. Risk: avoid interpreting marginal band overlap as a test of method difference. |
+| 1 | Two frequency-rank panels | Misreading local/conditional evidence as a global guarantee. |
+| 2 | Sample occupancy blocks | Misreading local/conditional evidence as a global guarantee. |
+| 3 | Conditional rarefaction with observed-count evidence | Misreading local/conditional evidence as a global guarantee. |
 
-**Recommendation:** Option 1, which is supplied as the completed vector PDF. Every option preserves the same evidence and uses a dominant region of at least half the usable area.
+**Recommendation:** Option 1, used in the supplied manuscript, gives the principal relationship the largest area and matches the available evidence.
 
-## C. Option 1 — Paired change as the dominant trajectory
+## C. Option 1 — Two frequency-rank panels
 
-### Design rationale
-This is the implemented recommendation. It centers inference on actual reported paired quantities, while absolute levels anchor scale. Risk: the two per-method paired subsets differ and their gap is not a paired between-method CI.
+**Rationale:** Canvas 6.65 by 2.35 inches. Allocate 58% to HumanEval/3 and 42% to HumanEval/2. In each panel, plot zero-baseline paired bars of counts against within-model frequency rank, with Plain gray and SPECTRUM black. Fill absent ranks with zero only for layout. Print Both: 16/16 correct or Both: 12/16 correct. Use y ranges 0--18 and 0--3 respectively and label them; different scales must be obvious.
 
-### Standalone production prompt
+### Standalone English production prompt (2571 characters)
 
-Create Figure 4 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: How does breadth loss evolve after subsequent student learning? The three-second takeaway is: Reported paired changes from the initial model become more negative for Plain; SPECTRUM shows smaller later-round losses and higher all-task richness.
+```text
+Create Figure 4 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: The saved HumanEval/3 example is broader under SPECTRUM, while HumanEval/2 shows the reverse at the same number of correct samples. Canvas 6.65 by 2.35 inches. Allocate 58% to HumanEval/3 and 42% to HumanEval/2. In each panel, plot zero-baseline paired bars of counts against within-model frequency rank, with Plain gray and SPECTRUM black. Fill absent ranks with zero only for layout. Print Both: 16/16 correct or Both: 12/16 correct. Use y ranges 0--18 and 0--3 respectively and label them; different scales must be obvious. Locked facts: MEASURED: 16 samples per method at round five. HumanEval/3: 16 correct under both; Plain AST counts [16], SPECTRUM [15,1]. HumanEval/2: 12 correct under both; Plain counts [1,1,1,1,1,1,1,1,1,1,1,1], SPECTRUM [2,1,1,1,1,1,1,1,1,1,1]. DERIVED: D4 on HumanEval/3 is 1 versus 1.25; on HumanEval/2 it is 4 versus 3.909091. Formula D_b=sum_j[1-comb(m-m_j,b)/comb(m,b)]. Classes are ranked separately, with no cross-model identity matching. Selection: for each sign of SPECTRUM-minus-Plain AST-count difference, choose lowest numerical HumanEval ID among tasks with equal correct counts >=4. Selection is sign-conditioned; no prevalence claim. Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities. Alt text: HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs. Boundary: Program text was removed from the compact archive; do not invent code, algorithm names, prompt text, or semantic labels. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-Use 65% of the canvas for changes in Correct-conditioned AST richness@4 relative to the Initial model, with learning round 1–5 on x, two line-and-whisker series, and a zero reference line. Whiskers are the provided paired-task 95% intervals. Use 35% for absolute Correct AST richness@16 over rounds0–5 on all500tasks, with provided marginal CI bands. State n=236–246 in the first panel and put the exact per-round counts in the caption.
+**Caption:** Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities.
 
-Exact evidence and mathematical inputs to preserve:
-Plain, paired correct-conditioned AST richness@4 change relative to Initial model, rounds 1–5: r=1: -0.13825759 [-0.20797811, -0.06804864], n=245; r=2: -0.22024800 [-0.29347575, -0.14517954], n=246; r=3: -0.37609344 [-0.45267750, -0.29874511], n=240; r=4: -0.50030750 [-0.57363409, -0.42959306], n=244; r=5: -0.57416180 [-0.65371073, -0.49874934], n=241.
-Plain, all-task Correct AST richness@16, rounds 0–5: r=0: 4.01600000 [3.66400000, 4.37405000]; r=1: 3.80800000 [3.47200000, 4.15810000]; r=2: 3.63400000 [3.30195000, 3.96620000]; r=3: 3.37200000 [3.06795000, 3.69010000]; r=4: 3.19000000 [2.88595000, 3.50600000]; r=5: 3.09000000 [2.80395000, 3.39800000].
-SPECTRUM, paired correct-conditioned AST richness@4 change relative to Initial model, rounds 1–5: r=1: -0.09967773 [-0.16600567, -0.03543752], n=242; r=2: -0.13999219 [-0.21132327, -0.06972499], n=236; r=3: -0.22102294 [-0.30475451, -0.14572165], n=244; r=4: -0.31629952 [-0.39198348, -0.24394556], n=242; r=5: -0.31529659 [-0.39445073, -0.23957211], n=245.
-SPECTRUM, all-task Correct AST richness@16, rounds 0–5: r=0: 4.01600000 [3.66400000, 4.37405000]; r=1: 3.84800000 [3.50395000, 4.20200000]; r=2: 3.76800000 [3.43600000, 4.10405000]; r=3: 3.66200000 [3.32995000, 4.00000000]; r=4: 3.58800000 [3.26800000, 3.93005000]; r=5: 3.60600000 [3.27395000, 3.95400000].
+**Alt text:** HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs.
 
-All bracketed intervals are the source-reported pointwise 95% confidence intervals from 2,000 task bootstrap resamples, not SD across seeds. Do not generate new tests, stars, uncertainty, or pseudo-replicates. Measurements derive from one training seed. No simultaneous interval guarantee is claimed. The exact sample unit, conditional eligibility and compared quantity must appear in the caption.
+## D. Option 2 — Sample occupancy blocks
 
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
+**Rationale:** Canvas 6.65 by 2.8 inches. Use an upper 55% HumanEval/3 panel with two method lanes of 16 correct-sample tiles, grouped by AST frequency class. In the lower 45% show the 12 correct tiles for HumanEval/2 and a separate four-failed-draw block for each method. Assign local class labels j1,j2,... within each model, never aligned semantic labels. Print class counts and exact D4 beside lanes. Group borders and text distinguish classes without relying on color.
 
-Exact text required: “Change in correct-conditioned AST richness@4”, “Correct AST richness@16”, “Learning round”, “Plain”, “SPECTRUM”, “Initial model”, “95% task-bootstrap CIs”.
+### Standalone English production prompt (2635 characters)
 
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
+```text
+Create Figure 4 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: The saved HumanEval/3 example is broader under SPECTRUM, while HumanEval/2 shows the reverse at the same number of correct samples. Canvas 6.65 by 2.8 inches. Use an upper 55% HumanEval/3 panel with two method lanes of 16 correct-sample tiles, grouped by AST frequency class. In the lower 45% show the 12 correct tiles for HumanEval/2 and a separate four-failed-draw block for each method. Assign local class labels j1,j2,... within each model, never aligned semantic labels. Print class counts and exact D4 beside lanes. Group borders and text distinguish classes without relying on color. Locked facts: MEASURED: 16 samples per method at round five. HumanEval/3: 16 correct under both; Plain AST counts [16], SPECTRUM [15,1]. HumanEval/2: 12 correct under both; Plain counts [1,1,1,1,1,1,1,1,1,1,1,1], SPECTRUM [2,1,1,1,1,1,1,1,1,1,1]. DERIVED: D4 on HumanEval/3 is 1 versus 1.25; on HumanEval/2 it is 4 versus 3.909091. Formula D_b=sum_j[1-comb(m-m_j,b)/comb(m,b)]. Classes are ranked separately, with no cross-model identity matching. Selection: for each sign of SPECTRUM-minus-Plain AST-count difference, choose lowest numerical HumanEval ID among tasks with equal correct counts >=4. Selection is sign-conditioned; no prevalence claim. Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities. Alt text: HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs. Boundary: Program text was removed from the compact archive; do not invent code, algorithm names, prompt text, or semantic labels. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-### Caption and statistical disclosure
+**Caption:** Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities.
 
-Breadth retention across repeated learning. The dominant panel shows paired changes in correct-conditioned AST richness@4 from the initial model; each estimate uses only tasks with at least four correct samples in both the current and initial evaluation. Plain has n=(245,246,240,244,241) eligible pairs and SPECTRUM has n=(242,236,244,242,245) across rounds 1–5. These are changing paired subsets, not a fixed longitudinal cohort. The supporting panel reports correct AST richness@16 on all 500 tasks. Every round uses 16 samples per task. Whiskers and bands are the reported pointwise 95% task-bootstrap confidence intervals, based on 2,000 resamples and one training seed. Differences between the two paired-to-initial curves are descriptive and are not themselves paired SPECTRUM-minus-Plain confidence intervals.
+**Alt text:** HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs.
 
-## D. Option 2 — Round-wise paired forest with an absolute-scale footer
+## E. Option 3 — Conditional rarefaction with observed-count evidence
 
-### Design rationale
-Exact round-specific eligible counts are easy to audit. It compresses the temporal line pattern. Risk: do not rank rounds by effect; preserve their chronological order.
+**Rationale:** Canvas 6.65 by 2.8 inches. Use 55% for two clearly separated per-task D_b curves for integer b=1,2,3,4 computed exactly from the supplied class counts. Put the measured class-count vectors in a 45% adjacent table with correct counts and task IDs. All curves are DERIVED rarefaction of the existing samples, not new model runs. Mark the opposite signs at b=4 without generalizing their frequency.
 
-### Standalone production prompt
+### Standalone English production prompt (2572 characters)
 
-Create Figure 4 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: How does breadth loss evolve after subsequent student learning? The three-second takeaway is: Reported paired changes from the initial model become more negative for Plain; SPECTRUM shows smaller later-round losses and higher all-task richness.
+```text
+Create Figure 4 for an anonymous ICLR paper using programmatic-figure-spec. The immediate takeaway is: The saved HumanEval/3 example is broader under SPECTRUM, while HumanEval/2 shows the reverse at the same number of correct samples. Canvas 6.65 by 2.8 inches. Use 55% for two clearly separated per-task D_b curves for integer b=1,2,3,4 computed exactly from the supplied class counts. Put the measured class-count vectors in a 45% adjacent table with correct counts and task IDs. All curves are DERIVED rarefaction of the existing samples, not new model runs. Mark the opposite signs at b=4 without generalizing their frequency. Locked facts: MEASURED: 16 samples per method at round five. HumanEval/3: 16 correct under both; Plain AST counts [16], SPECTRUM [15,1]. HumanEval/2: 12 correct under both; Plain counts [1,1,1,1,1,1,1,1,1,1,1,1], SPECTRUM [2,1,1,1,1,1,1,1,1,1,1]. DERIVED: D4 on HumanEval/3 is 1 versus 1.25; on HumanEval/2 it is 4 versus 3.909091. Formula D_b=sum_j[1-comb(m-m_j,b)/comb(m,b)]. Classes are ranked separately, with no cross-model identity matching. Selection: for each sign of SPECTRUM-minus-Plain AST-count difference, choose lowest numerical HumanEval ID among tasks with equal correct counts >=4. Selection is sign-conditioned; no prevalence claim. Use vector plotting/code, white background, black SPECTRUM circles/solid lines, gray Plain squares/dashed lines, and light-gray Initial-model diamonds/dotted lines. At 6.65-inch paper width, retain readable horizontal type (8 pt labels), thin rules, and no colored fills. Bars start at zero; point axes may be cropped only with explicit ticks. No gradients, 3D, invented observations, extra datasets, significance stars, fitted curves, or dual axes. Export PDF and 240-dpi PNG.  Exact method labels are Initial model, Plain, SPECTRUM where present. Caption: Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities. Alt text: HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs. Boundary: Program text was removed from the compact archive; do not invent code, algorithm names, prompt text, or semantic labels. Preserve values, comparison sets, sample budgets, uncertainty meaning, eligibility, and selection rules; never turn unavailable evidence into plotted facts.
+```
 
-Use a dominant 65% forest plot with five rows for learning rounds and a horizontal x axis of paired Correct-conditioned AST richness@4 change vs Initial. Draw paired method offsets with exact whiskers and n labels for every row. Use the remaining 35% as an absolute-richness trajectory strip on the common 500-task cohort. Use a zero vertical line in the forest plot, never a truncated quantitative bar.
+**Caption:** Actual saved equal-correct-count examples, selected by the same lowest-ID rule for each sign. Frequency ranks are within-model, not aligned semantic classes. Both positive and negative examples are shown. These sample-level equalities do not establish equality of true success probabilities.
 
-Exact evidence and mathematical inputs to preserve:
-Plain, paired correct-conditioned AST richness@4 change relative to Initial model, rounds 1–5: r=1: -0.13825759 [-0.20797811, -0.06804864], n=245; r=2: -0.22024800 [-0.29347575, -0.14517954], n=246; r=3: -0.37609344 [-0.45267750, -0.29874511], n=240; r=4: -0.50030750 [-0.57363409, -0.42959306], n=244; r=5: -0.57416180 [-0.65371073, -0.49874934], n=241.
-Plain, all-task Correct AST richness@16, rounds 0–5: r=0: 4.01600000 [3.66400000, 4.37405000]; r=1: 3.80800000 [3.47200000, 4.15810000]; r=2: 3.63400000 [3.30195000, 3.96620000]; r=3: 3.37200000 [3.06795000, 3.69010000]; r=4: 3.19000000 [2.88595000, 3.50600000]; r=5: 3.09000000 [2.80395000, 3.39800000].
-SPECTRUM, paired correct-conditioned AST richness@4 change relative to Initial model, rounds 1–5: r=1: -0.09967773 [-0.16600567, -0.03543752], n=242; r=2: -0.13999219 [-0.21132327, -0.06972499], n=236; r=3: -0.22102294 [-0.30475451, -0.14572165], n=244; r=4: -0.31629952 [-0.39198348, -0.24394556], n=242; r=5: -0.31529659 [-0.39445073, -0.23957211], n=245.
-SPECTRUM, all-task Correct AST richness@16, rounds 0–5: r=0: 4.01600000 [3.66400000, 4.37405000]; r=1: 3.84800000 [3.50395000, 4.20200000]; r=2: 3.76800000 [3.43600000, 4.10405000]; r=3: 3.66200000 [3.32995000, 4.00000000]; r=4: 3.58800000 [3.26800000, 3.93005000]; r=5: 3.60600000 [3.27395000, 3.95400000].
+**Alt text:** HumanEval/3 shows counts 16 versus 15+1 at equal success; HumanEval/2 shows fewer structures for SPECTRUM despite the same 12 correct outputs.
 
-All bracketed intervals are the source-reported pointwise 95% confidence intervals from 2,000 task bootstrap resamples, not SD across seeds. Do not generate new tests, stars, uncertainty, or pseudo-replicates. Measurements derive from one training seed. No simultaneous interval guarantee is claimed. The exact sample unit, conditional eligibility and compared quantity must appear in the caption.
+## F. Fidelity and QA
 
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
-
-Exact text required: “Change in correct-conditioned AST richness@4”, “Correct AST richness@16”, “Learning round”, “Plain”, “SPECTRUM”, “Initial model”, “95% task-bootstrap CIs”.
-
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
-
-### Caption and statistical disclosure
-
-Breadth retention across repeated learning. The dominant panel shows paired changes in correct-conditioned AST richness@4 from the initial model; each estimate uses only tasks with at least four correct samples in both the current and initial evaluation. Plain has n=(245,246,240,244,241) eligible pairs and SPECTRUM has n=(242,236,244,242,245) across rounds 1–5. These are changing paired subsets, not a fixed longitudinal cohort. The supporting panel reports correct AST richness@16 on all 500 tasks. Every round uses 16 samples per task. Whiskers and bands are the reported pointwise 95% task-bootstrap confidence intervals, based on 2,000 resamples and one training seed. Differences between the two paired-to-initial curves are descriptive and are not themselves paired SPECTRUM-minus-Plain confidence intervals.
-
-## E. Option 3 — Raw trajectory dominant with paired evidence strip
-
-### Design rationale
-The absolute breadth is immediately readable, while the paired strip resolves sample-count conditioning. It compresses the richer paired trajectory. Risk: avoid interpreting marginal band overlap as a test of method difference.
-
-### Standalone production prompt
-
-Create Figure 4 for an ICLR research paper at 6.7 × 2.25 inches, full text width, as a precise vector scientific figure. Scientific question: How does breadth loss evolve after subsequent student learning? The three-second takeaway is: Reported paired changes from the initial model become more negative for Plain; SPECTRUM shows smaller later-round losses and higher all-task richness.
-
-Use 60% for full-cohort Correct AST richness@16 trajectories of Plain and SPECTRUM with the common Initial point and exact task-bootstrap bands over rounds0–5. Below or to the right, use 40% for a compact paired-change interval matrix with rounds1–5 and the two methods. Include exact per-round eligible counts beside each interval. Both panels answer how much breadth survives student updates.
-
-Exact evidence and mathematical inputs to preserve:
-Plain, paired correct-conditioned AST richness@4 change relative to Initial model, rounds 1–5: r=1: -0.13825759 [-0.20797811, -0.06804864], n=245; r=2: -0.22024800 [-0.29347575, -0.14517954], n=246; r=3: -0.37609344 [-0.45267750, -0.29874511], n=240; r=4: -0.50030750 [-0.57363409, -0.42959306], n=244; r=5: -0.57416180 [-0.65371073, -0.49874934], n=241.
-Plain, all-task Correct AST richness@16, rounds 0–5: r=0: 4.01600000 [3.66400000, 4.37405000]; r=1: 3.80800000 [3.47200000, 4.15810000]; r=2: 3.63400000 [3.30195000, 3.96620000]; r=3: 3.37200000 [3.06795000, 3.69010000]; r=4: 3.19000000 [2.88595000, 3.50600000]; r=5: 3.09000000 [2.80395000, 3.39800000].
-SPECTRUM, paired correct-conditioned AST richness@4 change relative to Initial model, rounds 1–5: r=1: -0.09967773 [-0.16600567, -0.03543752], n=242; r=2: -0.13999219 [-0.21132327, -0.06972499], n=236; r=3: -0.22102294 [-0.30475451, -0.14572165], n=244; r=4: -0.31629952 [-0.39198348, -0.24394556], n=242; r=5: -0.31529659 [-0.39445073, -0.23957211], n=245.
-SPECTRUM, all-task Correct AST richness@16, rounds 0–5: r=0: 4.01600000 [3.66400000, 4.37405000]; r=1: 3.84800000 [3.50395000, 4.20200000]; r=2: 3.76800000 [3.43600000, 4.10405000]; r=3: 3.66200000 [3.32995000, 4.00000000]; r=4: 3.58800000 [3.26800000, 3.93005000]; r=5: 3.60600000 [3.27395000, 3.95400000].
-
-All bracketed intervals are the source-reported pointwise 95% confidence intervals from 2,000 task bootstrap resamples, not SD across seeds. Do not generate new tests, stars, uncertainty, or pseudo-replicates. Measurements derive from one training seed. No simultaneous interval guarantee is claimed. The exact sample unit, conditional eligibility and compared quantity must appear in the caption.
-
-Use white background, flat vector marks, no shadows, 7–8 pt horizontal text at a 6.7-inch paper width. SPECTRUM is teal #147C80 with circle markers; Plain is restrained rust #A35E3C with square markers; Initial model is gray #687382 with diamonds and dashed lines where appropriate. Use light horizontal grid lines, no top/right spines, explicit axis units and readable ticks. Color must be reinforced by shapes and direct labels. Do not introduce SPD, a hard-projection comparator, UA-RL measurements, additional datasets, new runs, significance stars, smoothed curves, fitted laws, or invented values.
-
-Exact text required: “Change in correct-conditioned AST richness@4”, “Correct AST richness@16”, “Learning round”, “Plain”, “SPECTRUM”, “Initial model”, “95% task-bootstrap CIs”.
-
-Final fidelity requirement: preserve every measured value, comparison, metric direction, conditional cohort, uncertainty definition, conceptual-versus-measured distinction, and confirmed state-update dependency exactly; leave unavailable information unplotted.
-
-### Caption and statistical disclosure
-
-Breadth retention across repeated learning. The dominant panel shows paired changes in correct-conditioned AST richness@4 from the initial model; each estimate uses only tasks with at least four correct samples in both the current and initial evaluation. Plain has n=(245,246,240,244,241) eligible pairs and SPECTRUM has n=(242,236,244,242,245) across rounds 1–5. These are changing paired subsets, not a fixed longitudinal cohort. The supporting panel reports correct AST richness@16 on all 500 tasks. Every round uses 16 samples per task. Whiskers and bands are the reported pointwise 95% task-bootstrap confidence intervals, based on 2,000 resamples and one training seed. Differences between the two paired-to-initial curves are descriptive and are not themselves paired SPECTRUM-minus-Plain confidence intervals.
-
-## F. Cross-option fidelity checklist
-
-- Exactly three distinct evidence organizations or topologies, with the same source-supported content.
-- One dominant region occupies at least half the usable area.
-- Every numerical mark comes from the printed ledger or a labeled analytic example.
-- Reported uncertainty is task uncertainty, not training-seed uncertainty.
-- Measured aggregates are never reconstructed as fabricated empirical histograms.
-- No projection comparator appears before the ablation experiment.
-- Correct AST richness counts normalized syntax classes, not proven semantic strategies.
-- Native student evaluation, raw-data learning and temporary generation modulation remain distinct.
+- Exactly three designs encode the same facts; layout changes do not change evidence.
+- Quantitative marks come from saved measurements or explicitly defined calculations.
+- One dominant scientific panel owns at least half the usable canvas.
+- Preserve single-seed scope, pairing, eligibility, and missing information.
+- Check legibility, clipping, arrow/text collisions, units, and grayscale reproduction at final paper width.
