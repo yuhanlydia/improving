@@ -1,6 +1,8 @@
 # SPECTRUM — manuscript based on completed results
 
-**Current revision: 2026-09-24.** The full paper is in `main.tex`, with references in `references.bib` and all appendices in the same main file. `main.pdf` is the compiled anonymous ICLR 2027 version.
+**Current revision: 2026-09-24, nine-page main text.** The full paper is in `main.tex`, with references in `references.bib` and all appendices in the same main file. `main.pdf` is the compiled anonymous ICLR 2027 version: main text on pages 1–9, statements/references from page 10, and appendices from page 13 (20 pages total).
+
+The latest revision expands SPECTRUM's calibration interpretation, numerical gain example, explicit student objective, and generation-to-learning mechanism. Related Work now has four substantive themes. Independent **Limitations** and **Conclusion and future work** sections close the main text. Figures, experimental values, and the official template remain unchanged.
 
 The positioning is **Looped Self-Distillation with a fixed reference anchor**. The same calibration examples are reused each round; geometry is re-estimated on the current model. SPECTRUM retains every raw generated completion for single-LoRA learning. It uses fixed external reference supervision, without scoring or filtering generated samples.
 

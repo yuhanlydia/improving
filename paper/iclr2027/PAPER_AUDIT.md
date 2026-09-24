@@ -13,10 +13,13 @@ Looped Self-Distillation 是本文明确研究的外循环设置；SPECTRUM 是�
 1. **Introduction**：先讲“今天的学生会成为明天的教师”，从实验现象提出问题。Figure 1 展示准确率上升、正确 AST 广度下降，以及固定正确样本数后的收缩与正确输出的集中化。承认迭代自蒸馏和多样性损失已有研究，将缺口落在无样本筛选的外循环、生成结构干预与原生学生保留效果的结合上。
 2. **What should a self-distillation loop retain?**：用 `P(correct,class)=P(correct)P(class|correct)` 区分成功概率和成功内部的分布。解释 pass@k、总预算 richness Ck、正确数匹配 richness Db 分别回答什么；不把基础概率恒等式包装成新的数学定理体系。
 3. **Looped Self-Distillation with a fixed reference anchor**：定义“构造生成策略 → 生成完整数据集 → 单学生学习 → 重新生成”的学习循环，解释为何单轮不能回答后续保留问题。说明固定参考信息和不断变化的几何，并与推理内部的 looped transformer 区分。Figure 2 是这部分与方法部分共同的主图。
-4. **SPECTRUM**：从 reference-completion loss 的 K/V 输出梯度二阶矩，推到近端目标、闭式谱增益、局部可逆性与稳定性，再回到临时权重折叠、全部原始样本、单 LoRA 和标准推理。局部性质解释设计，不替代输出分布实验。
+4. **SPECTRUM**：从 reference-completion loss 的 K/V 输出梯度二阶矩，推到近端目标、闭式谱增益、局部可逆性与稳定性，再回到临时权重折叠、全部原始样本、单 LoRA 和标准推理。新增方向导数解释、每轮重新估计几何的原因、三个特征值对应增益的计算例子，以及完整的学生交叉熵目标。最后解释 K/V 各自如何改变生成计算，和临时谱调制如何通过合成语料进入下一轮学生。局部性质解释设计，不替代输出分布实验。
 5. **Experiments**：按 RQ1 保留结果、RQ2 成功数与采样预算解释、RQ3 生成设计取舍、RQ4 迁移范围排序。正文三个表只放已完成结果。Figure 3 把总预算与正确数匹配放在同一证据链里。
-6. **Related work**：围绕迭代学习、正确内部多样性、谱生成控制三个维度比较；纳入 SCoder、2023 的迭代自蒸馏、SSD、SD-Zero、CRISP 与 sampled-demonstration diversity 工作。不以是否会议录用来否认先前工作。
-7. **Discussion and conclusion**：收束到“反复学习应关注保留下来的正确解分布”。保留影响结论的准确率代价、APPS 转移边界、单训练 seed、AST 代理、固定参考监督预算和长度差异。
+6. **Related work**：四个主题依次是迭代自训练与自蒸馏、反馈从哪里来、递归学习中的多样性、谱控制与学生保留。逐项比较 SCoder、2023 的迭代自蒸馏、SSD、SD-Zero、CRISP、sampled-demonstration diversity、UA-RL、递归数据坍缩与谱干预。不以是否会议录用来否认先前工作。
+7. **Limitations**：独立说明证据范围和机制边界：单训练 seed/模型、AST 结构代理、固定参考监督预算、未隔离的方向与强度因素、token 数差异、局部算子结论和整体行为的区别，以及已报告的准确率与 APPS 代价。
+8. **Conclusion and future work**：总结循环中“准确率与正确实现广度分离”的发现、SPECTRUM 的干预位置和 89.9% 保留结果；再给出生成到学生的传递分析、matched-token/固定几何/方向对照、跨模型与可验证推理任务的后续方向。未来方向不充当已经完成的证据。
+
+最新排版：正文恰好 9 页（包含 Limitations 和 Conclusion and future work）；第 10 页起为声明与参考文献，第 13 页起为附录，完整 PDF 共 20 页。未改变官方模板的字号、页边距或行距。
 
 ### 实验如何读
 
@@ -43,7 +46,7 @@ Looped Self-Distillation 是本文明确研究的外循环设置；SPECTRUM 是�
 | C9 | Conditional richness transfers beyond MBPP | Derived paired D4 effects on HumanEval+ and APPS | 111/42 tasks; APPS overall performance decreases | RQ4, App. D |
 | C10 | Repeated SD, no correctness filtering, or SD diversity loss is first discovered here | Existing papers contradict broad priority | Removed; literature credited explicitly | Intro, Related work, App. G |
 | C11 | Every round receives no external information | Same external references are reused for recalibration | Replaced with fixed-reference guidance, no newly acquired labels or rollout judgments | Abstract, §3, Fig. 2 |
-| C12 | Larger models, many seeds, random/isotropic/tau controls validate the method | No completed archive for these claims | Omitted from results; listed as scope boundaries | Discussion, App. G |
+| C12 | Larger models, many seeds, random/isotropic/tau controls validate the method | No completed archive for these claims | Omitted from results; listed as scope boundaries | Limitations, future work, App. G |
 
 ## Evidence and derivations
 

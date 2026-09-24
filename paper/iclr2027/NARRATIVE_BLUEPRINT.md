@@ -1,29 +1,38 @@
-# Paragraph-level narrative blueprint
+# Nine-page manuscript blueprint
 
-This reverse blueprint maps the completed main text to its evidence-bearing first sentences. The section-level purposes, figure/table placements, interpretation boundaries, and transitions are specified in `PAPER_AUDIT.md`. Read the sequence as problem → identifiable endpoints → loop and information budget → operator → native-student evidence → scope.
+The main text has eight sections and ends on page 9. Statements and references start on page 10; appendices start on page 13. This revision expands the scientific explanation while keeping every experimental value and figure unchanged.
 
-| Paragraph | Section / role | Topic-sentence anchor | Evidence / citation anchors |
+| Section | Question and argumentative purpose | Paragraph sequence | Evidence and visual anchors |
 |---|---|---|---|
-| P01 | Abstract | \begin{abstract} A model that learns from its own outputs inherits more than their correctness: it inherits which solutions it produces. | local definitions / archived measurements |
-| P02 | Introduction | This distinction matters beyond code. | local definitions / archived measurements |
-| P03 | Introduction | Our experiments expose this separation during repeated learning (Figure~\ref{fig:motivation}). | local definitions / archived measurements |
-| P04 | Introduction | Iterative self-distillation itself has precedents. | rao2023iterative,zhang2025scoder,he2026sdzero,sang2026crisp,nicolicioiu2026diversity |
-| P05 | Introduction | We formulate this study as \emph{Looped Self-Distillation}: an outer learning process that repeatedly constructs a generation policy, samples a corpus, and updates one native student. | local definitions / archived measurements |
-| P06 | Introduction | The resulting student retains substantially more correct implementation breadth. | local definitions / archived measurements |
-| P07 | What should a self-distillation loop retain? | \begin{proposition}[Correctness does not identify correct-solution breadth] \label{prop:breadth} For fixed $a>0$, pass@$k=1-(1-a)^k$ is independent of $q$. | local definitions / archived measurements |
-| P08 | What should a self-distillation loop retain? | We use descriptive names: \emph{correct AST richness@$k$} for $C_k$ and \emph{correct-count-matched AST richness@$b$} for $D_b$. | hurlbert1971nonconcept |
-| P09 | What should a self-distillation loop retain? | For a sequence of students $\theta_0,\ldots,\theta_T$, the \emph{retention profile} records $(\mathrm{pass@}k,C_k,D_b)$ under a common evaluation protocol. | local definitions / archived measurements |
-| P10 | Looped Self-Distillation with a fixed reference anchor | \paragraph{Why loop?} A one-round evaluation measures a teacher--student transition. | dehghani2019universal |
-| P11 | Looped Self-Distillation with a fixed reference anchor | \paragraph{Where supervision enters.} \method\ repeatedly uses the \emph{same} reference anchor to recalibrate the evolving model. | local definitions / archived measurements |
-| P12 | SPECTRUM: proximal spectral modulation | High sensitivity indicates that the reference loss responds strongly to a direction. | local definitions / archived measurements |
-| P13 | SPECTRUM: proximal spectral modulation | \begin{proposition}[Local distinguishability and calibration stability] \label{prop:prox} For $\Cbar\succeq0$ with eigenvalues in $[0,1]$ and finite $\tau\ge0$, Equation~\eqref{eq:prox} has a unique solution. | local definitions / archived measurements |
-| P14 | Experiments | All native students use common evaluation decoding: temperature $0.8$, top-$p$ $0.95$, and no top-$k$ truncation. | local definitions / archived measurements |
-| P15 | Experiments | We ask four questions: \textbf{RQ1}, does spectral generation improve breadth retained by a native student? | local definitions / archived measurements |
-| P16 | Experiments | The accuracy profile explains what this retention buys. | local definitions / archived measurements |
-| P17 | Experiments | The 16-sample trajectory connects this endpoint to repeated learning. | local definitions / archived measurements |
-| P18 | Experiments | The budget curves reveal complementary behavior. | local definitions / archived measurements |
-| P19 | Experiments | For a decoding-based comparator, we loop SSD's temperature/truncation recipe \citep{zhang2026ssd}: training generation uses temperature $1.5$, top-$p$ $0.8$, and top-$k$ 20; evaluation returns to the common decoder. | zhang2026ssd |
-| P20 | Experiments | On HumanEval+, \method\ matches Plain's pass@16 and has a paired $D_4$ advantage of $0.080$ classes $[0.021,0.142]$ on 111 tasks. | local definitions / archived measurements |
-| P21 | Related work | \paragraph{Diversity and recursive data.} \citet{nicolicioiu2026diversity} analyze diversity loss from demonstration-conditioned self-distillation and trace it to biased teacher feedback. | nicolicioiu2026diversity,hu2026uarlacl,shumailov2024collapse,gerstgrasser2024accumulating |
-| P22 | Related work | \paragraph{Spectral generation control.} Spectral activation editing provides a means to alter model behavior \citep{qiu2024sea}; capability-selective self-policy distillation applies reference-gradient subspaces to generation \citep{hao2026spd}. | qiu2024sea,hao2026spd,parikh2014proximal |
-| P23 | Discussion and conclusion | The evidence is strongest for one 1.5B model and one training seed, with two frozen-student transfer sets. | local definitions / archived measurements |
+| 1. Introduction | Why must a self-improving model remain a useful generator for its future self? | Evolving teacher → multiple valid solutions → observed accuracy/breadth separation → prior work and narrower question → fixed-anchor method → supported contributions. | Figure 1; completed five-round MBPP endpoints; iterative-SD citations. |
+| 2. What should a self-distillation loop retain? | What information is missing from correctness alone? | Factor correctness and conditional implementation probability → occupancy proposition and concrete example → estimators and task populations → retention profile. | Proposition 1; pass@k, C_k, D_b; Appendix A. |
+| 3. Looped Self-Distillation with a fixed reference anchor | What repeats, what changes, and where does supervision enter? | Define generation/learning operators → explain the outer learning loop → identify fixed external reference information and unselected raw outputs. | Equation 3; Figure 2; exact information-flow appendix. |
+| 4. SPECTRUM: proximal spectral modulation | How does an internal generation intervention become a native-student effect? | Reference geometry → continuous proximal gain → temporary folding and single-student objective. | Equations 4–8; Proposition 2; Appendix B proofs and Appendix C protocol. |
+| 5. Experiments | What is retained, what explains it, and where does it transfer? | Protocol → RQ1 longitudinal/native endpoint → RQ2 matched-correct and sampling budget → RQ3 projection/SSD trade-offs → RQ4 frozen transfer. | Figures 1 and 3; Tables 1–3; all existing completed results. |
+| 6. Related work | How does this study differ in loop, feedback, endpoint, and intervention? | Iterative self-training/SD → feedback sources → diversity in recursive learning → spectral control and retained behavior. | Existing 22 cited sources; detailed distinctions below. |
+| 7. Limitations | What bounds the result and its interpretation? | Evidence/measurement scope → fixed supervision and unisolated mechanism factors → resource and transfer boundaries. | One backbone/seed; AST proxy; absent directional controls; resource table; APPS trade-off. |
+| 8. Conclusion and future work | What principle follows, and which concrete questions remain? | Restate separation and retained 89.9% coverage → connect future experiments to current mechanisms and scope. | Existing MBPP endpoint; matched-correct/native-inference evidence; prospective controls clearly labeled. |
+
+## Expanded method paragraphs
+
+1. **Geometry construction.** Completion-only reference NLL generates nonpadding K/V-output gradients; the loss mask and gradient-position mask are distinguished.
+2. **What sensitivity means.** A finite anchor measures squared directional response, without identifying algorithm labels or signed correctness improvements. Re-estimation tracks current parameters under a fixed information source.
+3. **Proximal design.** A quadratic objective yields bounded continuous gains. The numerical example maps eigenvalues (1, 1/2, 0) to gains (1, 2/3, 1/2) at tau = 1; it is an algebraic illustration, not an experiment.
+4. **Local guarantee.** Invertibility, distance from identity, and perturbation stability hold for the local map; output diversity is measured empirically.
+5. **Generator-to-student learning.** Temporary folded weights generate every record. Native weights are restored, and one LoRA optimizes the explicit per-example CE objective over nonpadding causal targets, including prompt targets.
+6. **Why the intervention can persist.** K/V changes modify attention computations; only the learned student is carried between rounds. Successive gains are not directly compounded into the base checkpoint. The corpus transmits the intervention into learning.
+
+## Expanded Related Work paragraphs
+
+- **Iterative learning:** STaR, ReST-EM, rationale/context self-distillation, and SCoder establish precedent. Recurrent-depth transformers concern repeated forward computation; this study tracks repeated parameter learning and corpus replacement.
+- **Feedback source:** SD-Zero, CRISP, and SSD differ in reward-conditioned revision, instruction-conditioned token KL, and raw-output CE. SPECTRUM uses fixed reference calibration and raw-output CE; absence of rollout filtering is not claimed as a first.
+- **Diversity and recursive data:** Sampled demonstrations can bias teacher feedback; UA-RL rewards rare strategies; synthetic-data recursion and accumulation address distributional degradation. Our measured conditional endpoint separates correct-output breadth from success frequency.
+- **Spectral control:** Activation editing and reference-gradient subspaces precede this work. SPECTRUM's contribution is the bounded full-rank response within a recalibrated loop, assessed in subsequent native students.
+
+## Change map and evidence lock
+
+- Expanded Sections 4 and 6.
+- Replaced the combined Discussion and conclusion with independent Sections 7 and 8.
+- Added one learner-objective equation, one algebraic example, and explicit mechanism explanations.
+- Added no result, experiment, dataset, model, seed, or figure.
+- All future experiments remain prospective. Existing accuracy and transfer costs remain visible.

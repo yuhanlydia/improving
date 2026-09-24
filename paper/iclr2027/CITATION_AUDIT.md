@@ -32,3 +32,7 @@ Citations distinguish source attribution from experimental evidence. All perform
 All citation keys resolve in the compiled paper. SCoder is a Findings paper, not a main-track paper; the official Anthology title is used despite the PDF title variation. The sampled-demonstration diversity paper is credited by its arXiv identity, with no assertion of main-conference acceptance. No claim of first-ever looping or first-ever self-distillation diversity loss remains.
 
 The source ledger in `source-data/rewrite_sources.json` separately audits numerical evidence. A valid bibliographic identifier is not used as a substitute for a result-source hash.
+
+## Nine-page expansion: additional entailment checks
+
+The expanded Related Work uses the existing bibliography. Primary full texts were rechecked on 2026-09-24: SSD §2 and §4 establish raw-output CE and the precision–exploration account; CRISP §3.2 and Appendix E specify periodic teacher refresh, instruction conditioning, reverse-KL training, and no correctness filtering; the sampled-demonstration diversity paper §2–4 analyzes compatibility-driven bias; SPD §3.3 specifies reference-loss K/V-gradient geometry. The prose distinguishes these objectives and feedback sources without attributing unmeasured multi-round results to them. The extra SPECTRUM example and student objective derive from the manuscript operator and recorded implementation, not an external performance claim.
